@@ -434,9 +434,9 @@ ul,ol{list-style:none;}
   position:relative;overflow:hidden;
 }
 .frame+.frame{margin-top:2px;}
-.fr-dk{background:var(--cl-black);color:var(--cl-white);}
-.fr-lt{background:#111;color:var(--cl-white);}
-.fr-gr{background:var(--cl-black);color:var(--cl-white);border:1px solid rgba(198,165,89,.15);}
+.fr-dk{background:rgba(10,10,10,.82);color:var(--cl-white);}
+.fr-lt{background:rgba(17,17,17,.82);color:var(--cl-white);}
+.fr-gr{background:rgba(10,10,10,.78);color:var(--cl-white);border:1px solid rgba(198,165,89,.15);}
 .fr-lv{background:linear-gradient(135deg, rgba(198,165,89,.15), rgba(230,185,121,.08));color:var(--cl-white);}
 .fr-pad{padding:clamp(5rem,10vw,12rem) clamp(3rem,6vw,8rem);}
 .fr-pad-sm{padding:clamp(3rem,6vw,6rem) clamp(3rem,6vw,8rem);}
@@ -769,20 +769,23 @@ ul,ol{list-style:none;}
 
 /* ═══ SPIRAL BACKGROUND ═══════════════════════════════ */
 .spiral-bg{
-  position:absolute;inset:0;z-index:0;overflow:hidden;
+  position:fixed;inset:0;z-index:0;overflow:hidden;
   pointer-events:none;
 }
 .spiral-bg canvas{
   position:absolute;
   top:50%;left:50%;
   transform:translate(-50%,-50%);
-  opacity:.55;
+  opacity:.45;
 }
 .hero{position:relative;z-index:1;}
 .hero>*{position:relative;z-index:2;}
 </style>
 </head>
 <body>
+
+<!-- ═══ SPIRAL BACKGROUND (full-page) ═════════════════ -->
+<div class="spiral-bg"><canvas id="spiralCanvas"></canvas></div>
 
 <!-- ═══ PRELOADER ══════════════════════════════════════ -->
 <div id="loader">
@@ -906,7 +909,6 @@ ul,ol{list-style:none;}
      HERO
      ═══════════════════════════════════════════════════ -->
 <div class="frame fr-dk" id="features" style="margin-top:0;border-radius:0 0 var(--radius) var(--radius);">
-  <div class="spiral-bg"><canvas id="spiralCanvas"></canvas></div>
   <div class="fr-pad hero">
     <div class="hero-tag rv rv-d1"><span class="hero-tag-line"></span>Quality Assurance Platform</div>
 
@@ -1327,9 +1329,8 @@ var GOLD_R = 198, GOLD_G = 165, GOLD_B = 89;
 var dpr, sz;
 
 function resize() {
-  var hero = canvas.closest('.frame');
-  var w = hero ? hero.offsetWidth : window.innerWidth;
-  var h = hero ? hero.offsetHeight : window.innerHeight;
+  var w = window.innerWidth;
+  var h = window.innerHeight;
   dpr = window.devicePixelRatio || 1;
   sz = Math.max(w, h);
   canvas.width = sz * dpr;
