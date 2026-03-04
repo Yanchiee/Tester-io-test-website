@@ -1,0 +1,5 @@
+node_modules/
+.claude/
+temporary screenshots/
+*.mjs
+CLAUDE (1).md

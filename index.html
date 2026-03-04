@@ -1,0 +1,1535 @@
+<!DOCTYPE html>
+<html lang="en" class="windows">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Tester.io — Quality Assurance, Elevated</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<style>
+/* ═══════════════════════════════════════════════════════════
+   Tester.io — Complete Design System
+   ═══════════════════════════════════════════════════════════ */
+:root {
+  --cl-black:#0a0a0a;--cl-white:#fff;
+  --cl-gold:#C6A559;--cl-gold-light:#E6B979;
+  --cl-gold-gradient:linear-gradient(135deg, #C6A559, #E6B979);
+  --cl-lavender:#C6A559;
+  --cl-error:#b83e35;--cl-blue:#E6B979;
+  --line-light:hsla(0,0%,100%,.2);--line-dark:rgba(0,0,0,.1);--line-thickness:1px;
+  --radius:1rem;--overlap:2rem;--parallax:4rem;
+  --menu-width:67px;--menu-height:51px;--menu-pad:20px;--menu-radius:10px;
+  --menu-top:calc(var(--menu-pad)+var(--menu-height));
+  --menu-bottom:var(--menu-pad);
+  --menu-left:calc(var(--menu-pad)+var(--menu-width));
+  --menu-right:var(--menu-pad);
+  --sideMargin:var(--menu-pad);
+  --headerHeight:var(--menu-height);
+  --btnHeight:5rem;--blockPadding:4rem;--borderRadius:1rem;
+  --topMargin:calc(var(--sideMargin)+var(--headerHeight));
+  --grid-columns:48;--grid-column-gap:0px;--grid-side-margin:6rem;
+  --scrollbar-width:14px;--grid-max-width:1776px;
+  --grid-width-input:calc(100vw - var(--scrollbar-width) - var(--grid-side-margin)*2);
+  --grid-width:min(var(--grid-width-input),var(--grid-max-width));
+  --ease-in-quad:cubic-bezier(.55,.085,.68,.53);
+  --ease-out-quad:cubic-bezier(.25,.46,.45,.94);
+  --ease-in-cubic:cubic-bezier(.55,.055,.675,.19);
+  --ease-out-cubic:cubic-bezier(.215,.61,.355,1);
+  --ease-in-quart:cubic-bezier(.895,.03,.685,.22);
+  --ease-out-quart:cubic-bezier(.165,.84,.44,1);
+  --ease-in-quint:cubic-bezier(.755,.05,.855,.06);
+  --ease-out-quint:cubic-bezier(.23,1,.32,1);
+  --ease-in-back:cubic-bezier(.6,-.28,.735,.045);
+  --ease-out-back:cubic-bezier(.175,.885,.32,1.275);
+  --ease-in-expo:cubic-bezier(.95,.05,.795,.035);
+  --ease-out-expo:cubic-bezier(.19,1,.22,1);
+  --ease-in-out-sine:cubic-bezier(.445,.05,.55,.95);
+  --z-frame:100;--z-footer:200;--z-overlays:300;
+  --z-resize:350;--z-loader:400;--z-menu:500;--z-console:600;
+  --vh100:100vh;--safe100min:100vh;
+}
+@media(max-width:1440px){:root{--grid-side-margin:3rem;}}
+
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;}
+
+@media(min-width:768px){
+  html{font-size:clamp(6.4px,.625vw,12px);min-height:0;}
+}
+html{
+  -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;
+  -webkit-text-size-adjust:none;font-size:10px;height:100%;
+  overscroll-behavior:none;scroll-behavior:auto;
+}
+body,html{height:100%;margin:0;}
+body{
+  font-family:'Montserrat',ui-sans-serif,system-ui,-apple-system,sans-serif;
+  background-color:var(--cl-black);color:var(--cl-white);
+  overscroll-behavior:none;transition:color .3s;line-height:1.5;
+}
+a{color:inherit;text-decoration:none;}
+img{max-width:100%;display:block;}
+button{cursor:pointer;border:none;background:none;font-family:inherit;color:inherit;}
+ul,ol{list-style:none;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+.upper{text-transform:uppercase;}
+
+/* ═══ PRELOADER ═══════════════════════════════════════════ */
+#loader{
+  position:fixed;inset:0;z-index:var(--z-loader);
+  background:var(--cl-black);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  transition:opacity .8s var(--ease-out-cubic),visibility .8s;
+}
+#loader.done{opacity:0;visibility:hidden;pointer-events:none;}
+
+.ld-status{
+  font-family:'Montserrat',sans-serif;font-size:1.1rem;font-weight:500;
+  letter-spacing:.06em;color:rgba(255,255,255,.3);
+  text-transform:uppercase;margin-bottom:3rem;text-align:center;line-height:2;
+}
+.ld-status span{color:var(--cl-gold);}
+
+.ld-wrap{width:min(87rem,80vw);position:relative;}
+.ld-track{width:100%;height:2px;background:rgba(255,255,255,.06);overflow:hidden;}
+.ld-fill{height:100%;background:var(--cl-gold-gradient);width:0%;transition:width .06s linear;}
+.ld-pct{
+  position:absolute;right:0;top:-3.5rem;
+  font-family:'IBM Plex Mono',monospace;font-size:1.3rem;
+  font-weight:600;color:var(--cl-gold);letter-spacing:.04em;
+}
+.ld-label{
+  position:absolute;left:0;top:-3.5rem;
+  font-family:'Montserrat',sans-serif;font-size:1.1rem;font-weight:500;
+  color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.08em;
+}
+
+.ld-files{
+  font-family:'IBM Plex Mono',monospace;font-size:1rem;
+  color:rgba(255,255,255,.2);margin-top:3rem;text-align:center;line-height:2.2;
+}
+
+.ld-url{
+  position:absolute;bottom:var(--menu-pad);left:var(--menu-pad);
+  font-family:'IBM Plex Mono',monospace;font-size:.9rem;
+  color:rgba(255,255,255,.12);letter-spacing:.06em;text-transform:uppercase;
+}
+.ld-cta{
+  position:absolute;bottom:var(--menu-pad);right:var(--menu-pad);
+  font-family:'Montserrat',sans-serif;font-size:.9rem;font-weight:500;
+  color:rgba(255,255,255,.2);text-align:right;line-height:2;
+  text-transform:uppercase;letter-spacing:.06em;
+}
+
+.ld-ring{
+  position:absolute;top:72vh;left:50%;transform:translate(-50%,-50%);
+  width:9rem;height:9rem;border:1px solid rgba(198,165,89,.3);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  animation:ringPulse 2.5s ease-in-out infinite;
+  opacity:0;transition:opacity .6s 1.2s;cursor:pointer;
+}
+.ld-ring.show{opacity:1;}
+.ld-ring span{
+  font-family:'Montserrat',sans-serif;font-size:.85rem;font-weight:600;
+  color:var(--cl-gold);text-transform:uppercase;letter-spacing:.15em;
+}
+@keyframes ringPulse{
+  0%,100%{transform:translate(-50%,-50%) scale(1);border-color:rgba(198,165,89,.2);}
+  50%{transform:translate(-50%,-50%) scale(1.06);border-color:rgba(198,165,89,.5);}
+}
+
+/* ═══ NAV ═════════════════════════════════════════════════ */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:var(--z-menu);
+  pointer-events:none;padding:var(--menu-pad);
+}
+.nav>*{pointer-events:auto;}
+
+.nav-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  height:var(--menu-height);
+}
+.nav-left{display:flex;align-items:center;gap:1.6rem;}
+.nav-right{display:flex;align-items:center;gap:1.2rem;}
+
+/* Hamburger */
+.ham{
+  width:var(--menu-width);height:var(--menu-height);
+  border-radius:var(--menu-radius);border:1px solid rgba(255,255,255,.1);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.45rem;
+  background:rgba(10,10,10,.9);backdrop-filter:blur(16px);
+  position:relative;overflow:hidden;transition:border-color .3s;
+  z-index:calc(var(--z-menu)+2);
+}
+.ham span{
+  display:block;width:1.6rem;height:1.5px;background:var(--cl-white);
+  transition:transform .4s var(--ease-out-cubic),opacity .3s;
+  position:relative;z-index:2;
+}
+.ham.open{background:transparent;border-color:rgba(255,255,255,.12);}
+.ham.open span{background:var(--cl-white);}
+.ham.open span:nth-child(1){transform:translateY(.32rem) rotate(45deg);}
+.ham.open span:nth-child(2){opacity:0;}
+.ham.open span:nth-child(3){transform:translateY(-.32rem) rotate(-45deg);}
+
+/* Fill hover */
+.ham::before{
+  content:'';position:absolute;inset:0;background:var(--cl-gold-gradient);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform .45s var(--ease-out-cubic);z-index:1;border-radius:inherit;
+}
+.ham:hover::before{transform:scaleX(1);}
+.ham:hover span{background:var(--cl-black);}
+
+/* Logo */
+.logo{display:flex;align-items:center;gap:.8rem;z-index:calc(var(--z-menu)+2);}
+.logo-icon{
+  width:3.2rem;height:3.2rem;object-fit:contain;
+  filter:drop-shadow(0 0 8px rgba(198,165,89,.3));
+}
+.logo-mark{
+  font-family:'Montserrat',sans-serif;font-size:1.9rem;font-weight:800;
+  letter-spacing:-.02em;
+  background:var(--cl-gold-gradient);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+/* Live */
+.live{
+  display:flex;align-items:center;gap:.6rem;
+  font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:500;
+  text-transform:uppercase;letter-spacing:.06em;color:rgba(255,255,255,.4);
+}
+.live-dot{
+  width:.55rem;height:.55rem;border-radius:50%;background:var(--cl-gold);
+  animation:livePulse 2s ease-in-out infinite;
+}
+@keyframes livePulse{
+  0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(198,165,89,.4);}
+  50%{opacity:.6;box-shadow:0 0 0 .4rem rgba(198,165,89,0);}
+}
+
+/* Nav button - fill style */
+.nav-btn{
+  height:var(--menu-height);padding:0 2.4rem;border-radius:var(--menu-radius);
+  background:var(--cl-gold-gradient);color:var(--cl-black);
+  font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:700;
+  letter-spacing:.05em;text-transform:uppercase;
+  display:flex;align-items:center;gap:.8rem;
+  position:relative;overflow:hidden;transition:color .3s,transform .2s;
+}
+.nav-btn:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(198,165,89,.3);}
+.nav-btn span,.nav-btn svg{position:relative;z-index:1;}
+
+/* Bottom submenu */
+.subnav{
+  position:fixed;bottom:var(--menu-pad);left:var(--menu-pad);right:var(--menu-pad);
+  height:var(--menu-height);display:flex;align-items:center;justify-content:center;
+  z-index:var(--z-frame);pointer-events:none;
+  transition:opacity .4s;
+}
+.subnav a{
+  pointer-events:auto;font-family:'Montserrat',sans-serif;
+  font-size:1rem;font-weight:500;text-transform:uppercase;letter-spacing:.06em;
+  color:rgba(255,255,255,.3);padding:0 1.8rem;height:100%;display:flex;align-items:center;
+  transition:color .3s;position:relative;
+}
+.subnav a:hover{color:var(--cl-gold);}
+.subnav a::after{
+  content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:0;height:2px;background:var(--cl-gold-gradient);
+  transition:width .35s var(--ease-out-cubic);
+}
+.subnav a:hover::after{width:50%;}
+.subnav-div{width:1px;height:1.2rem;background:rgba(255,255,255,.08);}
+
+/* ═══ MENU OVERLAY ════════════════════════════════════════ */
+.menu{
+  position:fixed;inset:0;z-index:var(--z-menu);
+  background:var(--cl-black);
+  display:flex;flex-direction:column;justify-content:center;
+  padding:0 var(--grid-side-margin);
+  opacity:0;visibility:hidden;
+  transition:opacity .5s var(--ease-out-cubic),visibility .5s;
+}
+.menu.open{opacity:1;visibility:visible;}
+
+.menu-links{display:flex;flex-direction:column;}
+.menu-link{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:1.8rem 0;border-bottom:1px solid rgba(255,255,255,.06);
+  transition:padding-left .4s var(--ease-out-cubic);
+}
+.menu-link:first-child{border-top:1px solid rgba(255,255,255,.06);}
+.menu-link:hover{padding-left:2rem;}
+.menu-link-text{
+  font-size:clamp(3.2rem,5.5vw,6.4rem);font-weight:800;
+  letter-spacing:-.04em;color:var(--cl-white);line-height:.94;
+  transition:color .3s;
+}
+.menu-link:hover .menu-link-text{color:var(--cl-gold);}
+.menu-link-label{
+  font-family:'IBM Plex Mono',monospace;font-size:1.1rem;
+  color:rgba(255,255,255,.2);text-transform:uppercase;letter-spacing:.1em;
+}
+
+.menu-bottom{
+  position:absolute;bottom:var(--menu-pad);
+  left:var(--grid-side-margin);right:var(--grid-side-margin);
+  display:flex;justify-content:space-between;align-items:flex-end;
+}
+.menu-bottom-group{display:flex;gap:2rem;}
+.menu-bottom-group a{
+  font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:500;
+  color:rgba(255,255,255,.25);text-transform:uppercase;letter-spacing:.08em;
+  transition:color .2s;
+}
+.menu-bottom-group a:hover{color:var(--cl-gold);}
+
+/* ═══ CONSOLE ═════════════════════════════════════════════ */
+.con-bar{
+  position:fixed;bottom:var(--menu-pad);left:50%;transform:translateX(-50%);
+  z-index:var(--z-overlays);display:flex;align-items:center;
+  height:var(--menu-height);background:rgba(20,20,20,.95);
+  border:1px solid rgba(198,165,89,.15);
+  border-radius:var(--menu-radius);overflow:hidden;
+  box-shadow:0 .4rem 3rem rgba(0,0,0,.3);
+  opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s;
+}
+.con-bar.show{opacity:1;visibility:visible;}
+.con-bar-icon{
+  width:var(--menu-height);height:var(--menu-height);display:flex;
+  align-items:center;justify-content:center;color:var(--cl-gold);
+  border-right:1px solid rgba(198,165,89,.1);flex-shrink:0;
+}
+.con-bar-text{
+  padding:0 2rem;font-family:'IBM Plex Mono',monospace;font-size:1rem;
+  color:rgba(255,255,255,.3);text-transform:uppercase;letter-spacing:.08em;
+  white-space:nowrap;
+}
+.con-bar-caret{
+  display:inline-block;width:.6rem;height:1.3rem;background:var(--cl-gold);
+  animation:blink 1s steps(2) infinite;vertical-align:middle;margin-left:.3rem;
+}
+@keyframes blink{50%{opacity:0;}}
+.con-bar-enter{
+  height:100%;padding:0 1.8rem;
+  background:var(--cl-gold-gradient);color:var(--cl-black);
+  font-family:'Montserrat',sans-serif;font-size:.9rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.06em;display:flex;align-items:center;
+  flex-shrink:0;transition:opacity .2s;
+}
+.con-bar-enter:hover{opacity:.9;}
+
+/* Console panel */
+.con-panel{
+  position:fixed;inset:0;z-index:var(--z-console);
+  background:rgba(0,0,0,.88);backdrop-filter:blur(24px);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;visibility:hidden;transition:opacity .4s,visibility .4s;
+}
+.con-panel.open{opacity:1;visibility:visible;}
+
+.con-win{
+  width:min(62rem,92vw);background:var(--cl-black);
+  border:1px solid rgba(198,165,89,.25);border-radius:var(--radius);
+  overflow:hidden;display:flex;flex-direction:column;max-height:80vh;
+}
+.con-head{
+  padding:1.5rem 2rem;border-bottom:1px solid rgba(198,165,89,.15);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+}
+.con-title{
+  font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:600;
+  color:var(--cl-gold);text-transform:uppercase;letter-spacing:.1em;
+}
+.con-close{
+  font-family:'Montserrat',sans-serif;font-size:.85rem;font-weight:500;
+  color:rgba(255,255,255,.25);text-transform:uppercase;letter-spacing:.1em;
+  padding:.5rem 1.5rem;border:1px solid rgba(255,255,255,.06);
+  border-radius:.3rem;transition:border-color .3s,color .3s;
+}
+.con-close:hover{border-color:var(--cl-gold);color:var(--cl-gold);}
+
+.con-body{
+  padding:0;flex:1;overflow-y:auto;
+  scrollbar-width:thin;scrollbar-color:rgba(255,255,255,.08) transparent;
+}
+.con-body::-webkit-scrollbar{width:4px;}
+.con-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.08);border-radius:2px;}
+
+.con-entry{
+  padding:1.5rem 2rem;border-bottom:1px solid rgba(255,255,255,.04);
+  font-family:'Montserrat',sans-serif;display:flex;align-items:center;
+  justify-content:space-between;height:4.5rem;cursor:pointer;
+  transition:background .2s;
+}
+.con-entry:last-child{border-bottom:none;}
+.con-entry:hover{background:rgba(198,165,89,.05);}
+.con-entry-cmd{font-size:1.1rem;font-weight:600;color:var(--cl-gold);text-transform:uppercase;letter-spacing:.06em;}
+.con-entry-desc{font-size:.9rem;color:rgba(255,255,255,.2);text-align:right;}
+
+.con-input{
+  padding:1.2rem 2rem;border-top:1px solid rgba(198,165,89,.15);
+  display:flex;align-items:center;gap:1rem;flex-shrink:0;
+}
+.con-prompt{color:var(--cl-gold);font-family:'IBM Plex Mono',monospace;font-size:1.3rem;}
+.con-field{
+  flex:1;background:none;border:none;color:var(--cl-white);
+  font-family:'IBM Plex Mono',monospace;font-size:1.1rem;
+  outline:none;caret-color:var(--cl-gold);
+}
+.con-field::placeholder{color:rgba(255,255,255,.12);text-transform:uppercase;}
+.con-submit{
+  padding:.6rem 1.8rem;background:var(--cl-gold-gradient);color:var(--cl-black);
+  font-family:'Montserrat',sans-serif;font-size:.85rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.06em;border-radius:.3rem;
+  transition:opacity .2s;flex-shrink:0;
+}
+.con-submit:hover{opacity:.9;}
+
+.con-foot{
+  padding:1rem 2rem;border-top:1px solid rgba(255,255,255,.04);
+  display:flex;align-items:center;justify-content:space-between;flex-shrink:0;
+}
+.con-barcode{
+  font-family:'IBM Plex Mono',monospace;font-size:.75rem;
+  color:rgba(255,255,255,.08);letter-spacing:.2em;
+}
+
+/* Console response popup */
+.con-response{
+  position:fixed;inset:0;z-index:calc(var(--z-console)+1);
+  background:rgba(0,0,0,.92);backdrop-filter:blur(30px);
+  display:flex;align-items:center;justify-content:center;
+  opacity:0;visibility:hidden;transition:opacity .3s,visibility .3s;
+}
+.con-response.open{opacity:1;visibility:visible;}
+
+.con-resp-box{
+  width:min(55rem,90vw);max-height:70vh;overflow-y:auto;
+  background:var(--cl-black);border:1px solid rgba(198,165,89,.2);
+  border-radius:var(--radius);padding:4rem;position:relative;
+}
+.con-resp-title{
+  font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:600;
+  color:var(--cl-gold);text-transform:uppercase;letter-spacing:.12em;
+  margin-bottom:2rem;
+}
+.con-resp-text{
+  font-size:1.4rem;line-height:1.9;color:rgba(255,255,255,.55);
+}
+.con-resp-close{
+  position:absolute;top:2rem;right:2rem;
+  font-family:'Montserrat',sans-serif;font-size:.85rem;font-weight:500;
+  color:rgba(255,255,255,.2);text-transform:uppercase;letter-spacing:.1em;
+  padding:.5rem 1.5rem;border:1px solid rgba(255,255,255,.06);
+  border-radius:.3rem;transition:border-color .3s,color .3s;
+}
+.con-resp-close:hover{border-color:var(--cl-gold);color:var(--cl-gold);}
+
+/* ═══ FRAMES — Rounded section blocks ═════════════════════ */
+.frame{
+  margin:0 var(--menu-pad);border-radius:var(--radius);
+  position:relative;overflow:hidden;
+}
+.frame+.frame{margin-top:2px;}
+.fr-dk{background:var(--cl-black);color:var(--cl-white);}
+.fr-lt{background:#111;color:var(--cl-white);}
+.fr-gr{background:var(--cl-black);color:var(--cl-white);border:1px solid rgba(198,165,89,.15);}
+.fr-lv{background:linear-gradient(135deg, rgba(198,165,89,.15), rgba(230,185,121,.08));color:var(--cl-white);}
+.fr-pad{padding:clamp(5rem,10vw,12rem) clamp(3rem,6vw,8rem);}
+.fr-pad-sm{padding:clamp(3rem,6vw,6rem) clamp(3rem,6vw,8rem);}
+
+/* ═══ HERO ════════════════════════════════════════════════ */
+.hero{
+  min-height:100vh;display:flex;flex-direction:column;justify-content:center;
+  padding-top:calc(var(--topMargin)+2rem);
+}
+.hero-tag{
+  font-family:'Montserrat',sans-serif;font-size:1.1rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:.12em;color:var(--cl-gold);opacity:.7;
+  margin-bottom:3rem;display:flex;align-items:center;gap:1rem;
+}
+.hero-tag-line{width:3rem;height:1px;background:var(--cl-gold);opacity:.5;}
+
+.hero-h{
+  font-size:clamp(5rem,10vw,13rem);font-weight:800;
+  line-height:.9;letter-spacing:-.055em;margin-bottom:4rem;
+}
+.hero-h .gr{
+  background:var(--cl-gold-gradient);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.hero-h .lv{color:var(--cl-gold-light);}
+
+.hero-p{
+  font-size:clamp(1.4rem,2vw,1.9rem);line-height:1.75;font-weight:400;
+  opacity:.45;max-width:58rem;margin-bottom:5rem;
+}
+
+.hero-btns{display:flex;gap:1.2rem;flex-wrap:wrap;}
+
+/* ═══ BUTTONS — Tester.io brand style ════════════════════ */
+.btn{
+  height:var(--btnHeight);padding:0 3rem;border-radius:.5rem;
+  font-family:'Montserrat',sans-serif;font-size:1.1rem;font-weight:700;
+  letter-spacing:.06em;text-transform:uppercase;
+  display:inline-flex;align-items:center;gap:.8rem;
+  position:relative;overflow:hidden;transition:all .35s var(--ease-out-cubic);
+  white-space:nowrap;
+}
+.btn>*{position:relative;z-index:2;}
+
+.btn-dk{
+  background:var(--cl-gold-gradient);color:var(--cl-black);
+  border:none;
+}
+.btn-dk:hover{
+  box-shadow:0 6px 30px rgba(198,165,89,.35);
+  transform:translateY(-2px);
+}
+
+.btn-lt{background:var(--cl-white);color:var(--cl-black);}
+.btn-lt:hover{background:var(--cl-gold);box-shadow:0 4px 20px rgba(198,165,89,.3);}
+
+.btn-ol{
+  background:transparent;border:1px solid rgba(255,255,255,.15);color:var(--cl-white);
+}
+.btn-ol:hover{border-color:var(--cl-gold);color:var(--cl-gold);}
+
+.btn-gh{background:transparent;border:1px solid rgba(255,255,255,.1);color:var(--cl-white);}
+.btn-gh:hover{border-color:var(--cl-gold);color:var(--cl-gold);}
+
+.btn-sm{height:3.8rem;padding:0 2rem;font-size:1rem;}
+
+.btn-arrow{
+  width:1.4rem;height:1.4rem;display:flex;align-items:center;justify-content:center;
+  transition:transform .3s var(--ease-out-cubic);
+}
+.btn:hover .btn-arrow{transform:translateX(.3rem);}
+
+/* ═══ SECTION UTILITIES ═══════════════════════════════════ */
+.stag{
+  font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:.12em;color:var(--cl-gold);opacity:.6;
+  margin-bottom:3rem;display:flex;align-items:center;gap:1rem;
+}
+.stag-line{width:3rem;height:1px;background:var(--cl-gold);opacity:.5;}
+
+.sh{
+  font-size:clamp(3.5rem,7vw,9rem);font-weight:800;
+  letter-spacing:-.045em;line-height:.92;margin-bottom:3rem;
+}
+.sh-md{font-size:clamp(2.8rem,5vw,6rem);}
+
+.sp{
+  font-size:clamp(1.3rem,1.8vw,1.7rem);line-height:1.8;font-weight:400;
+  opacity:.5;max-width:58rem;
+}
+
+.two-col{display:grid;grid-template-columns:1fr 1fr;gap:clamp(3rem,6vw,8rem);align-items:start;}
+
+/* Feature items */
+.flist{margin-top:4rem;}
+.fitem{
+  padding:2.2rem 0;border-bottom:1px solid;border-color:inherit;
+  display:grid;grid-template-columns:5rem 1fr;gap:2rem;align-items:start;
+  transition:padding-left .3s var(--ease-out-cubic);cursor:default;
+}
+.fr-dk .fitem{border-color:rgba(255,255,255,.06);}
+.fr-lt .fitem{border-color:rgba(255,255,255,.06);}
+.fitem:first-child{border-top:1px solid;border-top-color:inherit;}
+.fr-dk .fitem:first-child{border-top-color:rgba(255,255,255,.06);}
+.fr-lt .fitem:first-child{border-top-color:rgba(255,255,255,.06);}
+.fitem:hover{padding-left:1.5rem;}
+.fnum{
+  font-family:'IBM Plex Mono',monospace;font-size:1.1rem;font-weight:600;
+  color:var(--cl-gold);opacity:.5;padding-top:.3rem;
+}
+.ftitle{font-size:clamp(1.5rem,2.2vw,2rem);font-weight:700;letter-spacing:-.02em;margin-bottom:.8rem;}
+.fdesc{font-size:clamp(1.15rem,1.4vw,1.35rem);line-height:1.8;opacity:.45;max-width:48rem;}
+
+/* Stats row */
+.stats{display:grid;grid-template-columns:repeat(4,1fr);margin-top:5rem;}
+.stat{text-align:center;padding:3.5rem 2rem;position:relative;}
+.stat+.stat::before{
+  content:'';position:absolute;left:0;top:18%;bottom:18%;
+  width:1px;background:var(--cl-gold);opacity:.15;
+}
+.stat-val{
+  font-size:clamp(3.5rem,6vw,6rem);font-weight:900;
+  letter-spacing:-.04em;line-height:1;
+  background:var(--cl-gold-gradient);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+.stat-lbl{
+  font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:.1em;opacity:.35;margin-top:1rem;
+}
+
+/* Steps */
+.steps{display:grid;grid-template-columns:repeat(4,1fr);gap:2rem;margin-top:5rem;position:relative;}
+.steps::before{
+  content:'';position:absolute;top:3.2rem;left:3.2rem;right:3.2rem;
+  height:1px;background:rgba(198,165,89,.15);
+}
+.step{text-align:center;}
+.step-n{
+  width:6.4rem;height:6.4rem;border-radius:50%;border:1px solid rgba(198,165,89,.2);
+  display:flex;align-items:center;justify-content:center;margin:0 auto 2rem;
+  font-family:'IBM Plex Mono',monospace;font-size:1.4rem;font-weight:700;
+  background:var(--cl-black);position:relative;color:var(--cl-gold);
+  transition:background .3s,border-color .3s,color .3s;
+}
+.step:hover .step-n{
+  background:var(--cl-gold-gradient);border-color:var(--cl-gold);color:var(--cl-black);
+  background:var(--cl-gold);
+}
+.step h3{font-size:1.4rem;font-weight:700;letter-spacing:-.01em;margin-bottom:1rem;}
+.step p{font-size:1.1rem;line-height:1.8;opacity:.4;max-width:22rem;margin:0 auto;}
+
+/* Testimonials */
+.tcards{display:grid;grid-template-columns:repeat(3,1fr);gap:2px;margin-top:5rem;}
+.tcard{
+  padding:3rem;background:rgba(255,255,255,.02);
+  border:1px solid rgba(255,255,255,.05);border-radius:var(--radius);
+  transition:border-color .3s,transform .4s var(--ease-out-cubic);
+}
+.tcard:hover{border-color:rgba(198,165,89,.25);transform:translateY(-.4rem);}
+.tcard-stars{color:var(--cl-gold);font-size:1rem;letter-spacing:.04em;margin-bottom:2rem;}
+.tcard-text{font-size:1.25rem;line-height:1.85;color:rgba(255,255,255,.55);font-style:italic;margin-bottom:2.5rem;}
+.tcard-author{display:flex;align-items:center;gap:1.1rem;}
+.tcard-av{
+  width:3.8rem;height:3.8rem;border-radius:50%;display:flex;
+  align-items:center;justify-content:center;font-size:.95rem;font-weight:800;flex-shrink:0;
+}
+.tcard-name{font-weight:700;font-size:1.15rem;}
+.tcard-role{
+  font-family:'IBM Plex Mono',monospace;font-size:.9rem;
+  color:rgba(255,255,255,.2);margin-top:.2rem;
+}
+
+/* CTA */
+.cta{text-align:center;position:relative;z-index:1;}
+.cta-logo{
+  width:8rem;height:8rem;object-fit:contain;margin:0 auto 3rem;
+  animation:ctaFloat 4s ease-in-out infinite;
+  filter:drop-shadow(0 0 20px rgba(198,165,89,.4));
+}
+@keyframes ctaFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-1.2rem);}}
+
+.cta-form{
+  display:flex;gap:0;max-width:50rem;margin:4rem auto 2rem;
+  border-radius:.5rem;overflow:hidden;border:1px solid rgba(198,165,89,.15);
+}
+.fr-dk .cta-form{border-color:rgba(198,165,89,.15);}
+.cta-email{
+  flex:1;padding:0 2rem;height:var(--btnHeight);background:transparent;
+  border:none;color:inherit;font-family:'Montserrat',sans-serif;
+  font-size:1.1rem;outline:none;
+}
+.cta-email::placeholder{opacity:.2;text-transform:uppercase;}
+.cta-go{
+  height:var(--btnHeight);padding:0 3rem;
+  background:var(--cl-gold-gradient);
+  color:var(--cl-black);font-family:'Montserrat',sans-serif;
+  font-size:1rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+  position:relative;overflow:hidden;transition:opacity .3s;flex-shrink:0;
+}
+.cta-go:hover{opacity:.9;}
+.cta-go span{position:relative;z-index:1;}
+
+.cta-fine{
+  font-family:'Montserrat',sans-serif;font-size:.95rem;font-weight:500;opacity:.18;letter-spacing:.04em;
+}
+
+/* ═══ FOOTER ══════════════════════════════════════════════ */
+.ft{
+  margin:var(--menu-pad);border-radius:var(--radius);
+  background:#0f0f0f;color:var(--cl-white);overflow:hidden;
+  border:1px solid rgba(198,165,89,.08);
+}
+.ft-top{display:grid;grid-template-columns:repeat(4,1fr);min-height:35rem;}
+.ft-col{
+  padding:4rem 3rem;border-right:1px solid rgba(255,255,255,.05);
+  display:flex;flex-direction:column;
+}
+.ft-col:last-child{border-right:none;}
+.ft-col-label{
+  font-family:'Montserrat',sans-serif;font-size:.85rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:.14em;
+  color:var(--cl-gold);opacity:.5;margin-bottom:2.5rem;
+}
+.ft-col a{
+  display:block;font-size:1.25rem;font-weight:500;
+  color:rgba(255,255,255,.4);padding:.55rem 0;transition:color .2s;
+}
+.ft-col a:hover{color:var(--cl-gold);}
+.ft-email{font-size:1.3rem;color:var(--cl-white);font-weight:500;margin-bottom:1.5rem;display:block;transition:color .2s;}
+.ft-email:hover{color:var(--cl-gold);}
+.ft-desc{font-size:1.1rem;color:rgba(255,255,255,.3);line-height:1.8;}
+
+.ft-logo{
+  padding:4rem 3rem;border-top:1px solid rgba(255,255,255,.05);
+  display:flex;align-items:center;justify-content:center;gap:2rem;
+}
+.ft-logo-text{
+  font-size:clamp(8rem,20vw,20rem);font-weight:900;
+  letter-spacing:-.06em;line-height:.85;text-align:center;
+  background:linear-gradient(135deg, rgba(198,165,89,.08), rgba(230,185,121,.04));
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.ft-bottom{
+  height:8rem;padding:0 3rem;border-top:1px solid rgba(255,255,255,.05);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.ft-copy{font-family:'IBM Plex Mono',monospace;font-size:.9rem;color:rgba(255,255,255,.15);}
+.ft-links{display:flex;gap:2.4rem;}
+.ft-links a{
+  font-family:'Montserrat',sans-serif;font-size:.9rem;font-weight:500;
+  color:rgba(255,255,255,.15);transition:color .2s;
+}
+.ft-links a:hover{color:var(--cl-gold);}
+
+/* ═══ SCROLLBAR ═══════════════════════════════════════════ */
+::-webkit-scrollbar{width:6px;}
+::-webkit-scrollbar-track{background:var(--cl-black);}
+::-webkit-scrollbar-thumb{background:rgba(198,165,89,.15);border-radius:3px;}
+::-webkit-scrollbar-thumb:hover{background:rgba(198,165,89,.3);}
+
+/* ═══ REVEAL ══════════════════════════════════════════════ */
+.rv{
+  opacity:0;transform:translateY(4rem);
+  transition:opacity .8s var(--ease-out-cubic),transform .8s var(--ease-out-cubic);
+}
+.rv.vis{opacity:1;transform:translateY(0);}
+.rv-d1{transition-delay:.08s;}.rv-d2{transition-delay:.16s;}
+.rv-d3{transition-delay:.24s;}.rv-d4{transition-delay:.32s;}
+.rv-d5{transition-delay:.4s;}.rv-d6{transition-delay:.48s;}
+
+/* Split text reveal */
+.sl{overflow:hidden;display:block;}
+.sl-in{display:block;transform:translateY(115%);transition:transform .75s var(--ease-out-quart);}
+.sl.vis .sl-in{transform:translateY(0);}
+.sl-d1 .sl-in{transition-delay:.05s;}
+.sl-d2 .sl-in{transition-delay:.1s;}
+.sl-d3 .sl-in{transition-delay:.15s;}
+.sl-d4 .sl-in{transition-delay:.2s;}
+
+/* Line draw */
+.line-draw{
+  width:100%;height:1px;background:var(--cl-gold);opacity:.1;
+  transform:scaleX(0);transform-origin:left;
+  transition:transform 1.2s var(--ease-out-cubic);
+}
+.line-draw.vis{transform:scaleX(1);}
+
+/* ═══ LANDSCAPE WARN ══════════════════════════════════════ */
+.lw{
+  display:none;position:fixed;inset:0;z-index:10000;
+  background:var(--cl-black);color:var(--cl-white);
+  align-items:center;justify-content:center;flex-direction:column;
+  gap:1.5rem;text-align:center;padding:2rem;
+}
+.lw svg{opacity:.15;}
+.lw p{font-family:'Montserrat',sans-serif;font-size:1.1rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;opacity:.35;}
+@media(max-width:767px) and (orientation:landscape){.lw{display:flex;}}
+
+/* ═══ RESPONSIVE ══════════════════════════════════════════ */
+@media(max-width:768px){
+  .nav-btn,.live,.subnav{display:none;}
+  .frame{margin:0 10px;}.frame+.frame{margin-top:2px;}
+  .fr-pad{padding:4rem 2.5rem;}.fr-pad-sm{padding:3rem 2.5rem;}
+  .two-col{grid-template-columns:1fr;}
+  .fitem{grid-template-columns:1fr;gap:.3rem;}.fnum{display:none;}
+  .stats{grid-template-columns:1fr 1fr;}
+  .stat+.stat::before{display:none;}
+  .steps{grid-template-columns:1fr 1fr;}.steps::before{display:none;}
+  .tcards{grid-template-columns:1fr;}
+  .ft{margin:10px;}.ft-top{grid-template-columns:1fr;}
+  .ft-col{border-right:none;border-bottom:1px solid rgba(255,255,255,.05);min-height:auto;}
+  .ft-col:last-child{border-bottom:none;}
+  .ft-bottom{flex-direction:column;height:auto;padding:2rem 3rem;gap:1rem;text-align:center;}
+  .ft-links{flex-wrap:wrap;justify-content:center;}
+}
+@media(max-width:480px){
+  .stats{grid-template-columns:1fr;}
+  .steps{grid-template-columns:1fr;}
+}
+
+/* Gold glow utility */
+.gold-glow{
+  text-shadow:0 0 40px rgba(198,165,89,.2);
+}
+
+/* ═══ SPIRAL BACKGROUND ═══════════════════════════════ */
+.spiral-bg{
+  position:absolute;inset:0;z-index:0;overflow:hidden;
+  pointer-events:none;
+}
+.spiral-bg canvas{
+  position:absolute;
+  top:50%;left:50%;
+  transform:translate(-50%,-50%);
+  opacity:.55;
+}
+.hero{position:relative;z-index:1;}
+.hero>*{position:relative;z-index:2;}
+</style>
+</head>
+<body>
+
+<!-- ═══ PRELOADER ══════════════════════════════════════ -->
+<div id="loader">
+  <div class="ld-status">// <span>initializing</span><br>loading test environment</div>
+  <div class="ld-wrap">
+    <span class="ld-label">Loading</span>
+    <span class="ld-pct" id="ldPct">0%</span>
+    <div class="ld-track"><div class="ld-fill" id="ldFill"></div></div>
+  </div>
+  <div class="ld-files" id="ldFiles">
+    test_suite_v4.2.js<br>coverage_report_2026.json
+  </div>
+  <div class="ld-url">HTTPS://TESTER.IO/DASHBOARD/SUITE/AUTOMATED/RUN</div>
+  <div class="ld-cta">quality assurance<br>starts here...</div>
+  <div class="ld-ring" id="ldRing" onclick="skipLoader()">
+    <span>Enter</span>
+  </div>
+</div>
+
+<!-- ═══ LANDSCAPE ═════════════════════════════════════ -->
+<div class="lw">
+  <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M12 18h.01"/></svg>
+  <p>Landscape view not supported</p>
+  <p style="opacity:.5;font-size:.9rem;">Please rotate your device</p>
+</div>
+
+<!-- ═══ NAVIGATION ════════════════════════════════════ -->
+<nav class="nav">
+  <div class="nav-bar">
+    <div class="nav-left">
+      <button class="ham" id="ham"><span></span><span></span><span></span></button>
+      <a href="#" class="logo">
+        <img src="brand_assets/tester-logo.png" alt="Tester.io" class="logo-icon">
+        <span class="logo-mark">Tester.io</span>
+      </a>
+    </div>
+    <div class="nav-right">
+      <div class="live"><span class="live-dot"></span><span id="liveN">2,847 Tests Running</span></div>
+      <a href="#features" class="nav-btn"><span>Get Started</span>
+        <span class="btn-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a>
+    </div>
+  </div>
+</nav>
+
+<!-- Submenu bottom -->
+<div class="subnav" id="subnav">
+  <a href="#features">Features</a><div class="subnav-div"></div>
+  <a href="#platform">Platform</a><div class="subnav-div"></div>
+  <a href="#metrics">Metrics</a><div class="subnav-div"></div>
+  <a href="#process">Process</a><div class="subnav-div"></div>
+  <a href="#reviews">Reviews</a><div class="subnav-div"></div>
+  <a href="#start">Get Started</a>
+</div>
+
+<!-- ═══ MENU OVERLAY ══════════════════════════════════ -->
+<div class="menu" id="menu">
+  <div class="menu-links">
+    <a href="#features" class="menu-link" onclick="closeMenu()"><span class="menu-link-text">Features</span><span class="menu-link-label">001</span></a>
+    <a href="#platform" class="menu-link" onclick="closeMenu()"><span class="menu-link-text">Platform</span><span class="menu-link-label">002</span></a>
+    <a href="#metrics" class="menu-link" onclick="closeMenu()"><span class="menu-link-text">Metrics</span><span class="menu-link-label">003</span></a>
+    <a href="#process" class="menu-link" onclick="closeMenu()"><span class="menu-link-text">Process</span><span class="menu-link-label">004</span></a>
+    <a href="#reviews" class="menu-link" onclick="closeMenu()"><span class="menu-link-text">Reviews</span><span class="menu-link-label">005</span></a>
+    <a href="#start" class="menu-link" onclick="closeMenu()"><span class="menu-link-text">Get Started</span><span class="menu-link-label">006</span></a>
+  </div>
+  <div class="menu-bottom">
+    <div class="menu-bottom-group"><a href="#">Twitter</a><a href="#">GitHub</a></div>
+    <div class="menu-bottom-group"><a href="#">Privacy</a><a href="#">Terms</a></div>
+  </div>
+</div>
+
+<!-- ═══ CONSOLE TRIGGER ═══════════════════════════════ -->
+<div class="con-bar" id="conBar">
+  <div class="con-bar-icon">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><polyline points="4 17 10 11 4 5"/><line x1="12" y1="19" x2="20" y2="19"/></svg>
+  </div>
+  <div class="con-bar-text">Run Test Suite<span class="con-bar-caret"></span></div>
+  <button class="con-bar-enter" onclick="openCon()">Enter</button>
+</div>
+
+<!-- ═══ CONSOLE PANEL ═════════════════════════════════ -->
+<div class="con-panel" id="conPanel">
+  <div class="con-win">
+    <div class="con-head">
+      <span class="con-title">Test Console</span>
+      <button class="con-close" onclick="closeCon()">Close [ESC]</button>
+    </div>
+    <div class="con-body" id="conBody">
+      <div class="con-entry" data-cmd="HELP"><span class="con-entry-cmd">Help</span><span class="con-entry-desc">Available commands</span></div>
+      <div class="con-entry" data-cmd="STATUS"><span class="con-entry-cmd">Status</span><span class="con-entry-desc">Platform health check</span></div>
+      <div class="con-entry" data-cmd="TESTS"><span class="con-entry-cmd">Tests</span><span class="con-entry-desc">Active test suites</span></div>
+      <div class="con-entry" data-cmd="COVERAGE"><span class="con-entry-cmd">Coverage</span><span class="con-entry-desc">Code coverage report</span></div>
+      <div class="con-entry" data-cmd="INTEGRATIONS"><span class="con-entry-cmd">Integrations</span><span class="con-entry-desc">Connected services</span></div>
+      <div class="con-entry" data-cmd="DEPLOY"><span class="con-entry-cmd">Deploy</span><span class="con-entry-desc">Deployment pipeline</span></div>
+      <div class="con-entry" data-cmd="DOCS"><span class="con-entry-cmd">Docs</span><span class="con-entry-desc">Documentation</span></div>
+      <div class="con-entry" data-cmd="ABOUT"><span class="con-entry-cmd">About</span><span class="con-entry-desc">About Tester.io</span></div>
+    </div>
+    <div class="con-input">
+      <span class="con-prompt">&gt;</span>
+      <input type="text" class="con-field" id="conField" placeholder="Type your command" autocomplete="off">
+      <button class="con-submit" onclick="runCmd()">Enter</button>
+    </div>
+    <div class="con-foot">
+      <span class="con-barcode">||||| |||| ||||| |||| ||| ||||</span>
+      <span class="con-barcode">TESTER.IO-2026</span>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CONSOLE RESPONSE ══════════════════════════════ -->
+<div class="con-response" id="conResp">
+  <div class="con-resp-box">
+    <div class="con-resp-title" id="conRespTitle"></div>
+    <div class="con-resp-text" id="conRespText"></div>
+    <button class="con-resp-close" onclick="closeResp()">Close [ESC]</button>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     HERO
+     ═══════════════════════════════════════════════════ -->
+<div class="frame fr-dk" id="features" style="margin-top:0;border-radius:0 0 var(--radius) var(--radius);">
+  <div class="spiral-bg"><canvas id="spiralCanvas"></canvas></div>
+  <div class="fr-pad hero">
+    <div class="hero-tag rv rv-d1"><span class="hero-tag-line"></span>Quality Assurance Platform</div>
+
+    <h1 class="hero-h">
+      <span class="sl sl-d1"><span class="sl-in">Ship With</span></span>
+      <span class="sl sl-d2"><span class="sl-in"><span class="gr">Confidence</span></span></span>
+      <span class="sl sl-d3"><span class="sl-in">Every Time</span></span>
+    </h1>
+
+    <p class="hero-p rv rv-d3">
+      Automated testing, real-time coverage reports, and seamless CI/CD integration. Tester.io gives your team the tools to catch bugs before your users do.
+    </p>
+
+    <div class="hero-btns rv rv-d4">
+      <a href="#start" class="btn btn-dk">
+        <span>Get Started</span>
+        <span class="btn-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+      </a>
+      <a href="#platform" class="btn btn-ol"><span>Learn More</span></a>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ PLATFORM — Dark frame with border ════════════ -->
+<div class="frame fr-dk" id="platform" style="border:1px solid rgba(198,165,89,.08);">
+  <div class="fr-pad">
+    <div class="two-col">
+      <div>
+        <div class="stag rv"><span class="stag-line"></span>The Platform</div>
+        <h2 class="sh rv rv-d1">
+          Built for <span style="background:var(--cl-gold-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">speed</span> and <span style="color:var(--cl-gold-light)">precision</span>
+        </h2>
+        <p class="sp rv rv-d2">
+          Tester.io is the modern QA platform that integrates with your existing workflow. Run thousands of tests in parallel, get instant feedback, and deploy with confidence every single time.
+        </p>
+      </div>
+      <div></div>
+    </div>
+
+    <div class="flist">
+      <div class="fitem rv"><div class="fnum">01</div><div><div class="ftitle">Automated Test Suites</div><div class="fdesc">Write once, run everywhere. Our intelligent test runner adapts to your codebase and executes tests across browsers, devices, and environments simultaneously.</div></div></div>
+      <div class="fitem rv rv-d1"><div class="fnum">02</div><div><div class="ftitle">Real-Time Coverage</div><div class="fdesc">Live coverage dashboards show exactly which lines of code are tested and which aren't. Identify gaps instantly and prioritize what matters most.</div></div></div>
+      <div class="fitem rv rv-d2"><div class="fnum">03</div><div><div class="ftitle">CI/CD Integration</div><div class="fdesc">Plug into GitHub, GitLab, Bitbucket, and Jenkins with a single line of config. Tests run automatically on every push, every PR, every deploy.</div></div></div>
+      <div class="fitem rv rv-d3"><div class="fnum">04</div><div><div class="ftitle">Visual Regression</div><div class="fdesc">Pixel-perfect screenshot comparison catches UI changes before they reach production. AI-powered diffing filters out noise and highlights what actually changed.</div></div></div>
+      <div class="fitem rv rv-d4"><div class="fnum">05</div><div><div class="ftitle">Performance Monitoring</div><div class="fdesc">Track load times, memory usage, and runtime performance across every test run. Set thresholds that block deploys when performance degrades.</div></div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ STATS — Gold accent frame ════════════════════ -->
+<div class="frame fr-gr" id="metrics">
+  <div class="fr-pad">
+    <div class="stag rv"><span class="stag-line"></span>Platform Metrics</div>
+    <h2 class="sh sh-md rv rv-d1">Trusted by teams<br>shipping at scale</h2>
+
+    <div class="stats rv rv-d2">
+      <div class="stat"><div class="stat-val" data-count="50000">0</div><div class="stat-lbl">Tests / Day</div></div>
+      <div class="stat"><div class="stat-val" data-count="99">0</div><div class="stat-lbl">Uptime %</div></div>
+      <div class="stat"><div class="stat-val" data-count="2400">0</div><div class="stat-lbl">Teams</div></div>
+      <div class="stat"><div class="stat-val" data-count="12">0</div><div class="stat-lbl">Integrations</div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ PROCESS — Dark frame ════════════════════════ -->
+<div class="frame fr-dk" id="process" style="border:1px solid rgba(198,165,89,.05);">
+  <div class="fr-pad">
+    <div style="text-align:center;">
+      <div class="stag rv" style="justify-content:center;"><span class="stag-line"></span>How It Works</div>
+      <h2 class="sh sh-md rv rv-d1">Start testing in <span style="background:var(--cl-gold-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">minutes</span></h2>
+    </div>
+
+    <div class="steps">
+      <div class="step rv rv-d1"><div class="step-n">01</div><h3>Connect</h3><p>Link your repository. We auto-detect your framework, language, and test structure.</p></div>
+      <div class="step rv rv-d2"><div class="step-n">02</div><h3>Configure</h3><p>Set your test environments, browsers, and devices. One config file handles everything.</p></div>
+      <div class="step rv rv-d3"><div class="step-n">03</div><h3>Run</h3><p>Execute tests in parallel across our cloud infrastructure. Results stream in real-time.</p></div>
+      <div class="step rv rv-d4"><div class="step-n">04</div><h3>Ship</h3><p>Get the green light. Deploy with confidence knowing every test has passed.</p></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ QUOTE — Gold tinted frame ════════════════════ -->
+<div class="frame fr-lv">
+  <div class="fr-pad" style="padding-top:clamp(6rem,12vw,14rem);padding-bottom:clamp(6rem,12vw,14rem);">
+    <h2 class="sh rv" style="font-size:clamp(2.5rem,4.5vw,5.5rem);line-height:1.15;max-width:65rem;">
+      Quality isn't a phase. It's a culture. Tester.io gives your team the tools to make every release your best release.
+    </h2>
+  </div>
+</div>
+
+
+<!-- ═══ TESTIMONIALS — Dark frame ═════════════════════ -->
+<div class="frame fr-dk" id="reviews">
+  <div class="fr-pad">
+    <div style="text-align:center;">
+      <div class="stag rv" style="justify-content:center;"><span class="stag-line"></span>Reviews</div>
+      <h2 class="sh sh-md rv rv-d1">Loved by <span style="background:var(--cl-gold-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">developers</span></h2>
+    </div>
+
+    <div class="tcards">
+      <div class="tcard rv rv-d1">
+        <div class="tcard-stars">★★★★★</div>
+        <p class="tcard-text">"Tester.io cut our QA cycle from 3 days to 20 minutes. The parallel test execution and real-time dashboards are game-changers for our team."</p>
+        <div class="tcard-author">
+          <div class="tcard-av" style="background:var(--cl-gold-gradient);color:#000;">SM</div>
+          <div><div class="tcard-name">Sarah M.</div><div class="tcard-role">Engineering Lead, Stripe</div></div>
+        </div>
+      </div>
+      <div class="tcard rv rv-d2">
+        <div class="tcard-stars">★★★★★</div>
+        <p class="tcard-text">"The visual regression testing alone is worth it. We've caught dozens of UI bugs that would have shipped to production. Integration was seamless."</p>
+        <div class="tcard-author">
+          <div class="tcard-av" style="background:linear-gradient(135deg,#E6B979,#C6A559);color:#000;">JK</div>
+          <div><div class="tcard-name">James K.</div><div class="tcard-role">CTO, Vercel</div></div>
+        </div>
+      </div>
+      <div class="tcard rv rv-d3">
+        <div class="tcard-stars">★★★★★</div>
+        <p class="tcard-text">"We went from 60% test coverage to 94% in two months. The AI-powered test generation suggestions are incredibly accurate and save hours of work."</p>
+        <div class="tcard-author">
+          <div class="tcard-av" style="background:linear-gradient(135deg,#C6A559,#D4B86A);color:#000;">LP</div>
+          <div><div class="tcard-name">Luna P.</div><div class="tcard-role">VP Engineering, Datadog</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ CTA ═══════════════════════════════════════════ -->
+<div class="frame fr-dk" id="start" style="border:1px solid rgba(198,165,89,.08);">
+  <div class="fr-pad" style="padding-top:clamp(8rem,14vw,18rem);padding-bottom:clamp(8rem,14vw,18rem);">
+    <div class="cta">
+      <img src="brand_assets/tester-logo.png" alt="Tester.io" class="cta-logo">
+      <h2 class="sh rv" style="font-size:clamp(3.5rem,8vw,10rem);">Start<br>Testing</h2>
+      <p class="sp rv rv-d1" style="max-width:48rem;margin:0 auto 0;">
+        Join thousands of engineering teams shipping better software faster. Get started with Tester.io today — no credit card required.
+      </p>
+      <div class="cta-form rv rv-d2">
+        <input type="email" class="cta-email" placeholder="Enter your email">
+        <button class="cta-go" type="button"><span>Get Started</span></button>
+      </div>
+      <p class="cta-fine rv rv-d3">Free tier available &nbsp;·&nbsp; No credit card &nbsp;·&nbsp; Setup in 2 minutes</p>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ FOOTER ════════════════════════════════════════ -->
+<div style="height:var(--menu-pad);"></div>
+<footer class="ft">
+  <div class="ft-top">
+    <div class="ft-col">
+      <div class="ft-col-label">Contact</div>
+      <div>
+        <a href="mailto:hello@tester.io" class="ft-email">hello@tester.io</a>
+        <p class="ft-desc">Sales inquiries, partnerships, and enterprise solutions.</p>
+        <br>
+        <a href="#" class="btn btn-gh btn-sm" style="margin-top:1rem;"><span>View Documentation</span></a>
+      </div>
+    </div>
+    <div class="ft-col">
+      <div class="ft-col-label">Product</div>
+      <div>
+        <a href="#features">Features</a>
+        <a href="#platform">Platform</a>
+        <a href="#metrics">Metrics</a>
+        <a href="#process">How It Works</a>
+        <a href="#reviews">Reviews</a>
+        <a href="#start">Pricing</a>
+      </div>
+    </div>
+    <div class="ft-col">
+      <div class="ft-col-label">Social</div>
+      <div>
+        <a href="#">Twitter ↗</a>
+        <a href="#">GitHub ↗</a>
+        <a href="#">LinkedIn ↗</a>
+      </div>
+    </div>
+    <div class="ft-col">
+      <div class="ft-col-label">Status</div>
+      <div>
+        <p class="ft-desc" style="opacity:.35;font-family:'IBM Plex Mono',monospace;font-size:.95rem;line-height:2;">
+          All Systems Operational<br>v4.2.1-stable<br>99.99% Uptime
+        </p>
+      </div>
+    </div>
+  </div>
+
+  <div class="ft-logo"><span class="ft-logo-text">Tester.io</span></div>
+
+  <div class="ft-bottom">
+    <span class="ft-copy">&copy; 2026 Tester.io</span>
+    <div class="ft-links">
+      <a href="#">Privacy Policy</a>
+      <a href="#">Terms of Service</a>
+      <a href="#">Security</a>
+    </div>
+  </div>
+</footer>
+<div style="height:var(--menu-pad);"></div>
+
+
+<!-- ═══ SCRIPTS ═══════════════════════════════════════ -->
+<script>
+(function(){
+'use strict';
+
+/* ── LOADER ───────────────────────────────── */
+var ld=document.getElementById('loader'),
+    ldF=document.getElementById('ldFill'),
+    ldP=document.getElementById('ldPct'),
+    ldR=document.getElementById('ldRing'),
+    prog=0;
+
+function ldTick(){
+  var r=100-prog,sp=r>60?10:r>25?5:2;
+  prog=Math.min(prog+Math.random()*sp+.5,100);
+  ldF.style.width=prog+'%';
+  ldP.textContent=Math.round(prog)+'%';
+  if(prog<100) requestAnimationFrame(function(){setTimeout(ldTick,Math.random()*50+15);});
+  else{ldR.classList.add('show');setTimeout(finishLoad,800);}
+}
+function finishLoad(){
+  ld.classList.add('done');
+  document.body.style.overflow='';
+  initReveal();showConBar();
+}
+window.skipLoader=function(){prog=100;ldF.style.width='100%';ldP.textContent='100%';finishLoad();};
+document.body.style.overflow='hidden';
+setTimeout(ldTick,300);
+
+
+/* ── MENU ─────────────────────────────────── */
+var ham=document.getElementById('ham'),
+    menuEl=document.getElementById('menu');
+
+ham.addEventListener('click',function(){
+  if(menuEl.classList.contains('open')) closeMenu();
+  else{ham.classList.add('open');menuEl.classList.add('open');document.body.style.overflow='hidden';}
+});
+window.closeMenu=function(){
+  ham.classList.remove('open');menuEl.classList.remove('open');document.body.style.overflow='';
+};
+
+
+/* ── CONSOLE ──────────────────────────────── */
+var conPanel=document.getElementById('conPanel'),
+    conBar=document.getElementById('conBar'),
+    conField=document.getElementById('conField'),
+    conResp=document.getElementById('conResp'),
+    conRespTitle=document.getElementById('conRespTitle'),
+    conRespText=document.getElementById('conRespText');
+
+function showConBar(){setTimeout(function(){conBar.classList.add('show');},600);}
+
+window.openCon=function(){
+  conPanel.classList.add('open');conBar.classList.remove('show');
+  setTimeout(function(){conField.focus();},120);
+};
+window.closeCon=function(){
+  conPanel.classList.remove('open');conBar.classList.add('show');
+};
+window.closeResp=function(){conResp.classList.remove('open');};
+
+var cmds={
+  help:'Available commands: HELP, STATUS, TESTS, COVERAGE, INTEGRATIONS, DEPLOY, DOCS, ABOUT. Each command provides real-time platform information.',
+  status:'Platform Status: All Systems Operational. API Response Time: 42ms. Test Queue: 847 jobs. Cloud Runners: 128 active. Last Deployment: 2026-03-04T14:22:00Z. Uptime: 99.99%.',
+  tests:'Active Test Suites: 2,847 running across 412 organizations. Parallel Execution: Enabled. Average Suite Duration: 3m 42s. Pass Rate (24h): 97.8%. Flaky Test Detection: Active.',
+  coverage:'Global Coverage Report: Average across all projects: 87.3%. Lines Covered: 12.4M. Branches Covered: 8.1M. Functions Covered: 2.3M. Trend: +2.1% this month.',
+  integrations:'Connected Integrations: GitHub (Active), GitLab (Active), Bitbucket (Active), Jenkins (Active), CircleCI (Active), Slack (Active), Jira (Active), Linear (Active), PagerDuty (Active), Datadog (Active), AWS (Active), Vercel (Active).',
+  deploy:'Deployment Pipeline: Ready. Last successful deploy: 4 minutes ago. Tests passed: 1,247/1,247. Coverage threshold: Met (94.2%). Performance budget: Within limits. Approval: Automatic.',
+  docs:'Documentation: docs.tester.io — Getting Started, API Reference, CLI Tools, SDK Libraries (Node, Python, Go, Ruby), Webhooks, Enterprise Setup, Migration Guides, and Video Tutorials.',
+  about:'Tester.io is the modern quality assurance platform built for engineering teams who ship fast. Founded in 2024, we help over 2,400 teams run 50,000+ tests daily with confidence. Our mission: make every release your best release.'
+};
+
+window.runCmd=function(){
+  var v=conField.value.trim().toLowerCase();
+  if(!v)return;
+  if(cmds[v]){
+    conRespTitle.textContent='> '+v.toUpperCase();
+    conRespText.textContent=cmds[v];
+    conResp.classList.add('open');
+  }
+  conField.value='';
+};
+
+conField.addEventListener('keydown',function(e){if(e.key==='Enter')runCmd();});
+
+// Click on command list entries
+document.querySelectorAll('.con-entry').forEach(function(el){
+  el.addEventListener('click',function(){
+    var c=el.dataset.cmd.toLowerCase();
+    if(cmds[c]){
+      conRespTitle.textContent='> '+el.dataset.cmd;
+      conRespText.textContent=cmds[c];
+      conResp.classList.add('open');
+    }
+  });
+});
+
+// Also allow clicking the con-bar text area to open
+conBar.addEventListener('click',function(e){
+  if(!e.target.closest('.con-bar-enter'))openCon();
+});
+
+document.addEventListener('keydown',function(e){
+  if(e.key==='Escape'){
+    if(conResp.classList.contains('open'))closeResp();
+    else if(conPanel.classList.contains('open'))closeCon();
+    else if(menuEl.classList.contains('open'))closeMenu();
+  }
+});
+
+
+/* ── SCROLL REVEAL ────────────────────────── */
+function initReveal(){
+  var obs=new IntersectionObserver(function(entries){
+    entries.forEach(function(e){if(e.isIntersecting)e.target.classList.add('vis');});
+  },{threshold:.04,rootMargin:'0px 0px -50px 0px'});
+  document.querySelectorAll('.rv,.sl,.line-draw').forEach(function(el){obs.observe(el);});
+  // Trigger hero immediately
+  setTimeout(function(){
+    document.querySelectorAll('.hero .sl,.hero .rv').forEach(function(el){el.classList.add('vis');});
+  },150);
+}
+
+
+/* ── SCROLL EFFECTS ───────────────────────── */
+var ticking=false;
+window.addEventListener('scroll',function(){
+  if(!ticking){
+    requestAnimationFrame(function(){
+      var sy=window.scrollY,sub=document.getElementById('subnav');
+      // Subnav fade
+      if(sy>window.innerHeight*.4){sub.style.opacity='0';sub.style.pointerEvents='none';}
+      else{sub.style.opacity='1';sub.style.pointerEvents='';}
+      sub.style.transition='opacity .4s';
+      // ConBar visibility
+      if(sy<150)conBar.classList.remove('show');
+      else if(!conPanel.classList.contains('open')&&ld.classList.contains('done'))conBar.classList.add('show');
+      ticking=false;
+    });
+    ticking=true;
+  }
+},{passive:true});
+
+
+/* ── COUNTING ─────────────────────────────── */
+var cObs=new IntersectionObserver(function(entries){
+  entries.forEach(function(e){
+    if(e.isIntersecting){
+      var el=e.target,target=parseFloat(el.dataset.count),
+          isDec=target%1!==0,dur=1400,start=performance.now();
+      (function animate(now){
+        var p=Math.min((now-start)/dur,1),
+            eased=1-Math.pow(1-p,4),
+            cur=target*eased;
+        el.textContent=isDec?cur.toFixed(0):Math.round(cur).toLocaleString();
+        if(p<1)requestAnimationFrame(animate);
+      })(start);
+      cObs.unobserve(el);
+    }
+  });
+},{threshold:.4});
+document.querySelectorAll('[data-count]').forEach(function(el){cObs.observe(el);});
+
+
+/* ── SMOOTH SCROLL ────────────────────────── */
+document.querySelectorAll('a[href^="#"]').forEach(function(a){
+  a.addEventListener('click',function(e){
+    var id=a.getAttribute('href');if(id==='#')return;
+    var t=document.querySelector(id);
+    if(t){e.preventDefault();window.scrollTo({top:t.getBoundingClientRect().top+window.scrollY-20,behavior:'smooth'});}
+  });
+});
+
+
+/* ── LIVE COUNTER ─────────────────────────── */
+setInterval(function(){
+  var n=2847+Math.floor(Math.random()*200)-100;
+  var el=document.getElementById('liveN');
+  if(el)el.textContent=n.toLocaleString()+' Tests Running';
+},4000);
+
+})();
+</script>
+
+<!-- ═══ SPIRAL ANIMATION ═════════════════════════════ -->
+<script>
+(function(){
+'use strict';
+
+var canvas = document.getElementById('spiralCanvas');
+if (!canvas) return;
+var ctx = canvas.getContext('2d');
+if (!ctx) return;
+
+// ── Constants ────────────────────────────────
+var CHANGE_EVENT_TIME = 0.32;
+var CAMERA_Z = -400;
+var CAMERA_TRAVEL = 3400;
+var START_DOT_Y = 28;
+var VIEW_ZOOM = 100;
+var NUM_STARS = 5000;
+var TRAIL_LEN = 80;
+
+// ── Brand color ──────────────────────────────
+// Gold: rgb(198,165,89) → used for stars/trail
+var GOLD_R = 198, GOLD_G = 165, GOLD_B = 89;
+
+// ── Sizing ───────────────────────────────────
+var dpr, sz;
+
+function resize() {
+  var hero = canvas.closest('.frame');
+  var w = hero ? hero.offsetWidth : window.innerWidth;
+  var h = hero ? hero.offsetHeight : window.innerHeight;
+  dpr = window.devicePixelRatio || 1;
+  sz = Math.max(w, h);
+  canvas.width = sz * dpr;
+  canvas.height = sz * dpr;
+  canvas.style.width = w + 'px';
+  canvas.style.height = h + 'px';
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+resize();
+window.addEventListener('resize', resize);
+
+// ── Math helpers ─────────────────────────────
+function ease(p, g) {
+  return p < 0.5
+    ? 0.5 * Math.pow(2 * p, g)
+    : 1 - 0.5 * Math.pow(2 * (1 - p), g);
+}
+function easeOutElastic(x) {
+  var c4 = (2 * Math.PI) / 4.5;
+  if (x <= 0) return 0;
+  if (x >= 1) return 1;
+  return Math.pow(2, -8 * x) * Math.sin((x * 8 - 0.75) * c4) + 1;
+}
+function map(v, a1, b1, a2, b2) {
+  return a2 + (b2 - a2) * ((v - a1) / (b1 - a1));
+}
+function clamp(v, lo, hi) { return Math.min(Math.max(v, lo), hi); }
+function lerp(a, b, t) { return a * (1 - t) + b * t; }
+
+// ── Spiral path ──────────────────────────────
+function spiralPath(p) {
+  p = clamp(1.2 * p, 0, 1);
+  p = ease(p, 1.8);
+  var turns = 6;
+  var theta = 2 * Math.PI * turns * Math.sqrt(p);
+  var r = 170 * Math.sqrt(p);
+  return { x: r * Math.cos(theta), y: r * Math.sin(theta) + START_DOT_Y };
+}
+
+// ── Stars ────────────────────────────────────
+var stars = [];
+// Use seeded random for star generation
+var _origRandom = Math.random;
+var _seed = 1234;
+Math.random = function() {
+  _seed = (_seed * 9301 + 49297) % 233280;
+  return _seed / 233280;
+};
+
+for (var i = 0; i < NUM_STARS; i++) {
+  var angle = Math.random() * Math.PI * 2;
+  var dist = 30 * Math.random() + 15;
+  var rotDir = Math.random() > 0.5 ? 1 : -1;
+  var expRate = 1.2 + Math.random() * 0.8;
+  var finalSc = 0.7 + Math.random() * 0.6;
+  var spiralLoc = (1 - Math.pow(1 - Math.random(), 3.0)) / 1.3;
+  var zMin = 0.5 * CAMERA_Z, zMax = CAMERA_TRAVEL + CAMERA_Z;
+  var z = zMin + Math.random() * (zMax - zMin);
+  z = lerp(z, CAMERA_TRAVEL / 2, 0.3 * spiralLoc);
+  var swf = Math.pow(Math.random(), 2.0);
+
+  stars.push({
+    angle: angle, distance: dist, rotDir: rotDir,
+    expRate: expRate, finalSc: finalSc,
+    dx: dist * Math.cos(angle), dy: dist * Math.sin(angle),
+    spiralLoc: spiralLoc, z: z, swf: swf
+  });
+}
+Math.random = _origRandom;
+
+// ── Projected dot ────────────────────────────
+var animTime = { t: 0 };
+
+function projectDot(px, py, pz, sizeFactor) {
+  var t2 = clamp(map(animTime.t, CHANGE_EVENT_TIME, 1, 0, 1), 0, 1);
+  var newCamZ = CAMERA_Z + ease(Math.pow(t2, 1.2), 1.8) * CAMERA_TRAVEL;
+  if (pz > newCamZ) {
+    var depth = pz - newCamZ;
+    var x = VIEW_ZOOM * px / depth;
+    var y = VIEW_ZOOM * py / depth;
+    var sw = 400 * sizeFactor / depth;
+    ctx.beginPath();
+    ctx.arc(x, y, Math.max(sw / 2, 0.3), 0, Math.PI * 2);
+    ctx.fill();
+  }
+}
+
+// ── Star render ──────────────────────────────
+function renderStar(s, p) {
+  var sp = spiralPath(s.spiralLoc);
+  var q = p - s.spiralLoc;
+  if (q <= 0) return;
+
+  var dp = clamp(4 * q, 0, 1);
+  var linE = dp, elE = easeOutElastic(dp), powE = dp * dp;
+  var easing;
+  if (dp < 0.3) easing = lerp(linE, powE, dp / 0.3);
+  else if (dp < 0.7) easing = lerp(powE, elE, (dp - 0.3) / 0.4);
+  else easing = elE;
+
+  var sx, sy;
+  if (dp < 0.3) {
+    sx = lerp(sp.x, sp.x + s.dx * 0.3, easing / 0.3);
+    sy = lerp(sp.y, sp.y + s.dy * 0.3, easing / 0.3);
+  } else if (dp < 0.7) {
+    var mp = (dp - 0.3) / 0.4;
+    var cs = Math.sin(mp * Math.PI) * s.rotDir * 1.5;
+    var bx = sp.x + s.dx * 0.3, by = sp.y + s.dy * 0.3;
+    var tx = sp.x + s.dx * 0.7, ty = sp.y + s.dy * 0.7;
+    var perpX = -s.dy * 0.4 * cs, perpY = s.dx * 0.4 * cs;
+    sx = lerp(bx, tx, mp) + perpX * mp;
+    sy = lerp(by, ty, mp) + perpY * mp;
+  } else {
+    var fp = (dp - 0.7) / 0.3;
+    var bx2 = sp.x + s.dx * 0.7, by2 = sp.y + s.dy * 0.7;
+    var td = s.distance * s.expRate * 1.5;
+    var sTurns = 1.2 * s.rotDir;
+    var sAngle = s.angle + sTurns * fp * Math.PI;
+    var tx2 = sp.x + td * Math.cos(sAngle);
+    var ty2 = sp.y + td * Math.sin(sAngle);
+    sx = lerp(bx2, tx2, fp);
+    sy = lerp(by2, ty2, fp);
+  }
+
+  var vx = (s.z - CAMERA_Z) * sx / VIEW_ZOOM;
+  var vy = (s.z - CAMERA_Z) * sy / VIEW_ZOOM;
+
+  var sm = 1.0;
+  if (dp < 0.6) sm = 1.0 + dp * 0.2;
+  else { var tt = (dp - 0.6) / 0.4; sm = 1.2 * (1 - tt) + s.finalSc * tt; }
+
+  projectDot(vx, vy, s.z, 8.5 * s.swf * sm);
+}
+
+// ── Render frame ─────────────────────────────
+function render() {
+  ctx.fillStyle = '#0a0a0a';
+  ctx.fillRect(0, 0, sz, sz);
+
+  ctx.save();
+  ctx.translate(sz / 2, sz / 2);
+
+  var t1 = clamp(map(animTime.t, 0, CHANGE_EVENT_TIME + 0.25, 0, 1), 0, 1);
+  var t2 = clamp(map(animTime.t, CHANGE_EVENT_TIME, 1, 0, 1), 0, 1);
+
+  ctx.rotate(-Math.PI * ease(t2, 2.7));
+
+  // Trail — gold with varying alpha
+  for (var i = 0; i < TRAIL_LEN; i++) {
+    var f = map(i, 0, TRAIL_LEN, 1.1, 0.1);
+    var sw = (1.3 * (1 - t1) + 3.0 * Math.sin(Math.PI * t1)) * f;
+    var alpha = clamp(f, 0.05, 0.9);
+    ctx.fillStyle = 'rgba(' + GOLD_R + ',' + GOLD_G + ',' + GOLD_B + ',' + alpha + ')';
+
+    var pt = t1 - 0.00015 * i;
+    var pos = spiralPath(pt);
+    var offset = { x: pos.x + 5, y: pos.y + 5 };
+
+    // Rotate between pos and offset
+    var mx = (pos.x + offset.x) / 2, my = (pos.y + offset.y) / 2;
+    var ddx = pos.x - mx, ddy = pos.y - my;
+    var ang = Math.atan2(ddy, ddx);
+    var o = (i % 2 === 0) ? -1 : 1;
+    var rr = Math.sqrt(ddx * ddx + ddy * ddy);
+    var pAnimT = Math.sin(animTime.t * Math.PI * 2) * 0.5 + 0.5;
+    var bounce = Math.sin(pAnimT * Math.PI) * 0.05 * (1 - pAnimT);
+    var rx = mx + rr * (1 + bounce) * Math.cos(ang + o * Math.PI * easeOutElastic(pAnimT));
+    var ry = my + rr * (1 + bounce) * Math.sin(ang + o * Math.PI * easeOutElastic(pAnimT));
+
+    ctx.beginPath();
+    ctx.arc(rx, ry, Math.max(sw / 2, 0.3), 0, Math.PI * 2);
+    ctx.fill();
+  }
+
+  // Stars — white-gold
+  ctx.fillStyle = 'rgba(255,245,230,0.85)';
+  for (var j = 0; j < stars.length; j++) {
+    renderStar(stars[j], t1);
+  }
+
+  // Start dot
+  if (animTime.t > CHANGE_EVENT_TIME) {
+    ctx.fillStyle = 'rgba(' + GOLD_R + ',' + GOLD_G + ',' + GOLD_B + ',1)';
+    var dy = CAMERA_Z * START_DOT_Y / VIEW_ZOOM;
+    projectDot(0, dy, CAMERA_TRAVEL, 2.5);
+  }
+
+  ctx.restore();
+}
+
+// ── GSAP timeline ────────────────────────────
+gsap.to(animTime, {
+  t: 1,
+  duration: 15,
+  repeat: -1,
+  ease: 'none',
+  onUpdate: render
+});
+
+})();
+</script>
+</body>
+</html>
