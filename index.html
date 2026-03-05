@@ -1384,7 +1384,9 @@ if(cForm){
       return;
     }
 
-    fetch('/submit',{
+    var base=window.location.protocol==='file:'?'http://localhost:3000':'';
+
+    fetch(base+'/submit',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify(fd)
@@ -1392,7 +1394,7 @@ if(cForm){
     .then(function(r){return r.json();})
     .then(function(data){
       if(data.success){
-        window.location.href='/thankyou.html';
+        window.location.href=base+'/thankyou.html';
       }else{
         cStatus.textContent=data.error||'Something went wrong. Please try again.';
         cStatus.classList.add('error');
