@@ -47,8 +47,9 @@ app.post('/submit', async (req, res) => {
     return res.status(400).json({ success: false, error: 'All fields are required.' });
   }
 
-  const timestamp = new Date().toISOString();
-  const row = [timestamp, name, email, message];
+  const timestamp = new Date().toLocaleString('en-US', {
+    dateStyle: 'medium', timeStyle: 'short',
+  });
 
   // Always log to console
   console.log('New submission:', { timestamp, name, email, message });
@@ -56,9 +57,17 @@ app.post('/submit', async (req, res) => {
   // Push to Google Sheets if configured
   if (sheets && SPREADSHEET_ID) {
     try {
+      // Get current row count for the # column
+      const existing = await sheets.spreadsheets.values.get({
+        spreadsheetId: SPREADSHEET_ID,
+        range: `${SHEET_NAME}!A:A`,
+      });
+      const rowNum = (existing.data.values ? existing.data.values.length : 1);
+      const row = [rowNum, timestamp, name, email, message];
+
       await sheets.spreadsheets.values.append({
         spreadsheetId: SPREADSHEET_ID,
-        range: `${SHEET_NAME}!A:D`,
+        range: `${SHEET_NAME}!A:E`,
         valueInputOption: 'USER_ENTERED',
         requestBody: { values: [row] },
       });
