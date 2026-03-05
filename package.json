@@ -1,5 +1,13 @@
 {
+  "name": "tester-io-website",
+  "type": "module",
+  "scripts": {
+    "start": "node server.js"
+  },
   "dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "googleapis": "^144.0.0",
     "puppeteer": "^24.37.5"
   }
 }

@@ -621,6 +621,46 @@ ul,ol{list-style:none;}
 }
 @keyframes ctaFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-1.2rem);}}
 
+/* ═══ CONTACT FORM ═══════════════════════════════════════ */
+.contact-section{text-align:center;}
+.contact-section .stag{margin-bottom:2rem;}
+.contact-form{
+  max-width:56rem;margin:3rem auto 0;display:flex;flex-direction:column;gap:1.6rem;
+}
+.contact-row{display:flex;gap:1.6rem;}
+@media(max-width:600px){.contact-row{flex-direction:column;}}
+.contact-input,.contact-textarea{
+  width:100%;padding:1.4rem 2rem;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(198,165,89,.15);border-radius:.5rem;
+  color:var(--cl-white);font-family:'Montserrat',sans-serif;font-size:1.1rem;
+  outline:none;transition:border-color .3s,box-shadow .3s;
+}
+.contact-input:focus,.contact-textarea:focus{
+  border-color:var(--cl-gold);box-shadow:0 0 0 2px rgba(198,165,89,.12);
+}
+.contact-input::placeholder,.contact-textarea::placeholder{
+  color:rgba(255,255,255,.2);text-transform:uppercase;font-size:.95rem;letter-spacing:.04em;
+}
+.contact-textarea{resize:vertical;min-height:14rem;line-height:1.7;}
+.contact-submit{
+  align-self:center;height:var(--btnHeight);padding:0 4rem;
+  background:var(--cl-gold-gradient);color:var(--cl-black);
+  font-family:'Montserrat',sans-serif;font-size:1.1rem;font-weight:700;
+  text-transform:uppercase;letter-spacing:.06em;
+  border:none;border-radius:.5rem;cursor:pointer;
+  position:relative;overflow:hidden;transition:opacity .3s,transform .2s;
+}
+.contact-submit:hover{opacity:.9;transform:translateY(-1px);}
+.contact-submit:active{transform:translateY(0);}
+.contact-submit:disabled{opacity:.5;cursor:not-allowed;transform:none;}
+.contact-status{
+  font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:500;
+  margin-top:.5rem;min-height:1.5em;
+}
+.contact-status.error{color:var(--cl-error);}
+.contact-status.success{color:var(--cl-gold);}
+
 .cta-form{
   display:flex;gap:0;max-width:50rem;margin:4rem auto 2rem;
   border-radius:.5rem;overflow:hidden;border:1px solid rgba(198,165,89,.15);
@@ -929,6 +969,32 @@ ul,ol{list-style:none;}
       </a>
       <a href="#platform" class="btn btn-ol"><span>Learn More</span></a>
     </div>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     CONTACT FORM
+     ═══════════════════════════════════════════════════ -->
+<div class="frame fr-dk" id="contact" style="border:1px solid rgba(198,165,89,.08);">
+  <div class="fr-pad contact-section">
+    <div class="stag rv"><span class="stag-line"></span>Get In Touch</div>
+    <h2 class="sh rv rv-d1">
+      Let's <span style="background:var(--cl-gold-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Talk</span>
+    </h2>
+    <p class="sp rv rv-d2" style="max-width:48rem;margin:0 auto;">
+      Have a question or want to learn more about Tester.io? Drop us a message and we'll get back to you within 24 hours.
+    </p>
+
+    <form id="contactForm" class="contact-form rv rv-d3" novalidate>
+      <div class="contact-row">
+        <input type="text" name="name" class="contact-input" placeholder="Your Name" required>
+        <input type="email" name="email" class="contact-input" placeholder="Your Email" required>
+      </div>
+      <textarea name="message" class="contact-textarea" placeholder="Your Message" required></textarea>
+      <button type="submit" class="contact-submit" id="contactBtn"><span>Send Message</span></button>
+      <div class="contact-status" id="contactStatus"></div>
+    </form>
   </div>
 </div>
 
@@ -1290,6 +1356,58 @@ document.querySelectorAll('a[href^="#"]').forEach(function(a){
     if(t){e.preventDefault();window.scrollTo({top:t.getBoundingClientRect().top+window.scrollY-20,behavior:'smooth'});}
   });
 });
+
+
+/* ── CONTACT FORM SUBMIT ─────────────────── */
+var cForm=document.getElementById('contactForm'),
+    cBtn=document.getElementById('contactBtn'),
+    cStatus=document.getElementById('contactStatus');
+
+if(cForm){
+  cForm.addEventListener('submit',function(e){
+    e.preventDefault();
+    cBtn.disabled=true;
+    cBtn.querySelector('span').textContent='Sending...';
+    cStatus.textContent='';cStatus.className='contact-status';
+
+    var fd={
+      name:cForm.name.value.trim(),
+      email:cForm.email.value.trim(),
+      message:cForm.message.value.trim()
+    };
+
+    if(!fd.name||!fd.email||!fd.message){
+      cStatus.textContent='Please fill in all fields.';
+      cStatus.classList.add('error');
+      cBtn.disabled=false;
+      cBtn.querySelector('span').textContent='Send Message';
+      return;
+    }
+
+    fetch('/submit',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body:JSON.stringify(fd)
+    })
+    .then(function(r){return r.json();})
+    .then(function(data){
+      if(data.success){
+        window.location.href='/thankyou.html';
+      }else{
+        cStatus.textContent=data.error||'Something went wrong. Please try again.';
+        cStatus.classList.add('error');
+        cBtn.disabled=false;
+        cBtn.querySelector('span').textContent='Send Message';
+      }
+    })
+    .catch(function(){
+      cStatus.textContent='Network error. Please try again.';
+      cStatus.classList.add('error');
+      cBtn.disabled=false;
+      cBtn.querySelector('span').textContent='Send Message';
+    });
+  });
+}
 
 
 /* ── LIVE COUNTER ─────────────────────────── */

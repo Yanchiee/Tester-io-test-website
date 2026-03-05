@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Thank You — Tester.io</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box;}
+body{
+  background:#0a0a0a;color:#fff;
+  font-family:'Montserrat',sans-serif;
+  min-height:100vh;display:flex;align-items:center;justify-content:center;
+  text-align:center;overflow:hidden;
+}
+
+/* Spiral canvas behind content */
+canvas#spiralBg{position:fixed;top:0;left:0;width:100%;height:100%;z-index:0;pointer-events:none;}
+
+.ty-wrap{
+  position:relative;z-index:1;
+  max-width:64rem;padding:4rem 2rem;
+}
+.ty-check{
+  width:8rem;height:8rem;margin:0 auto 3rem;
+  border-radius:50%;
+  background:linear-gradient(135deg,#C6A559,#E6B979);
+  display:flex;align-items:center;justify-content:center;
+  animation:scaleIn .5s cubic-bezier(.175,.885,.32,1.275);
+}
+@keyframes scaleIn{0%{transform:scale(0);opacity:0;}100%{transform:scale(1);opacity:1;}}
+.ty-check svg{width:4rem;height:4rem;stroke:#0a0a0a;stroke-width:3;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.ty-check svg path{stroke-dasharray:60;stroke-dashoffset:60;animation:draw .6s .3s forwards;}
+@keyframes draw{to{stroke-dashoffset:0;}}
+
+h1{
+  font-size:clamp(3rem,6vw,6rem);font-weight:800;
+  letter-spacing:-.04em;line-height:1;margin-bottom:1.5rem;
+}
+h1 span{
+  background:linear-gradient(135deg,#C6A559,#E6B979);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
+}
+.ty-msg{
+  font-size:clamp(1.1rem,2vw,1.4rem);line-height:1.7;
+  opacity:.5;max-width:48rem;margin:0 auto 3rem;
+}
+.ty-countdown{
+  font-size:1.1rem;opacity:.3;letter-spacing:.04em;
+}
+.ty-countdown span{
+  display:inline-block;min-width:1.5ch;
+  font-weight:700;color:#C6A559;opacity:1;
+}
+
+/* Progress ring */
+.ty-ring{
+  width:6rem;height:6rem;margin:2rem auto 0;
+}
+.ty-ring svg{transform:rotate(-90deg);}
+.ty-ring circle{fill:none;stroke-width:3;}
+.ty-ring .ring-bg{stroke:rgba(198,165,89,.1);}
+.ty-ring .ring-fg{
+  stroke:url(#goldGrad);stroke-linecap:round;
+  stroke-dasharray:163;stroke-dashoffset:0;
+  transition:stroke-dashoffset 1s linear;
+}
+</style>
+</head>
+<body>
+
+<canvas id="spiralBg"></canvas>
+
+<div class="ty-wrap">
+  <div class="ty-check">
+    <svg viewBox="0 0 24 24"><path d="M4 12l6 6L20 6"/></svg>
+  </div>
+
+  <h1>Thank <span>You!</span></h1>
+  <p class="ty-msg">Your message has been received. We'll get back to you shortly. Redirecting you in a moment...</p>
+
+  <p class="ty-countdown">Redirecting in <span id="secs">5</span>s</p>
+
+  <div class="ty-ring">
+    <svg viewBox="0 0 56 56" width="100%" height="100%">
+      <defs><linearGradient id="goldGrad" x1="0" y1="0" x2="1" y2="1"><stop offset="0%" stop-color="#C6A559"/><stop offset="100%" stop-color="#E6B979"/></linearGradient></defs>
+      <circle class="ring-bg" cx="28" cy="28" r="26"/>
+      <circle class="ring-fg" id="ringFg" cx="28" cy="28" r="26"/>
+    </svg>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+// ── Countdown & redirect ──────────────────────
+(function(){
+  var total=5, left=total;
+  var secsEl=document.getElementById('secs');
+  var ringEl=document.getElementById('ringFg');
+  var circumference=2*Math.PI*26; // ~163
+  ringEl.style.strokeDasharray=circumference;
+  ringEl.style.strokeDashoffset='0';
+
+  var timer=setInterval(function(){
+    left--;
+    secsEl.textContent=left;
+    ringEl.style.strokeDashoffset=((total-left)/total)*circumference;
+    if(left<=0){
+      clearInterval(timer);
+      window.location.href='/presell.html';
+    }
+  },1000);
+})();
+
+
+// ── Minimal spiral background ─────────────────
+(function(){
+  var c=document.getElementById('spiralBg');
+  if(!c)return;
+  var ctx=c.getContext('2d');
+  var dpr=window.devicePixelRatio||1;
+  function resize(){
+    c.width=window.innerWidth*dpr;
+    c.height=window.innerHeight*dpr;
+    c.style.width=window.innerWidth+'px';
+    c.style.height=window.innerHeight+'px';
+    ctx.scale(dpr,dpr);
+  }
+  resize();
+  window.addEventListener('resize',resize);
+
+  var stars=[];
+  for(var i=0;i<300;i++){
+    stars.push({
+      x:Math.random()*window.innerWidth,
+      y:Math.random()*window.innerHeight,
+      r:Math.random()*1.5+.3,
+      a:Math.random()*.3+.05,
+      s:Math.random()*.3+.1
+    });
+  }
+
+  function draw(){
+    ctx.clearRect(0,0,window.innerWidth,window.innerHeight);
+    for(var i=0;i<stars.length;i++){
+      var s=stars[i];
+      s.y-=s.s;
+      if(s.y<-5){s.y=window.innerHeight+5;s.x=Math.random()*window.innerWidth;}
+      ctx.beginPath();
+      ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+      ctx.fillStyle='rgba(198,165,89,'+s.a+')';
+      ctx.fill();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+})();
+</script>
+</body>
+</html>

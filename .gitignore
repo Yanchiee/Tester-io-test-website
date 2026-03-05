@@ -3,3 +3,7 @@ node_modules/
 temporary screenshots/
 *.mjs
 CLAUDE (1).md
+.env
+.env.*
+credentials.json
+token.json
