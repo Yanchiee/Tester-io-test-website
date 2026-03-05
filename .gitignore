@@ -7,3 +7,4 @@ CLAUDE (1).md
 .env.*
 credentials.json
 token.json
+.vercel

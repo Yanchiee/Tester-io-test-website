@@ -1,4 +1,12 @@
 import { google } from 'googleapis';
+import { createClient } from '@supabase/supabase-js';
+
+function getSupabase() {
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_ANON_KEY;
+  if (!url || !key) return null;
+  return createClient(url, key);
+}
 
 function getSheets() {
   const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
@@ -75,6 +83,23 @@ export default async function handler(req, res) {
   } catch (err) {
     console.error('Google Sheets error:', err.message);
     return res.status(500).json({ success: false, error: 'Failed to save. Please try again.' });
+  }
+
+  // Also insert into Supabase
+  const supabase = getSupabase();
+  if (supabase) {
+    try {
+      const { error: sbError } = await supabase
+        .from('contact_messages')
+        .insert([{ name, email, message }]);
+      if (sbError) {
+        console.error('Supabase error:', sbError.message);
+      } else {
+        console.log('Row inserted into Supabase.');
+      }
+    } catch (err) {
+      console.error('Supabase error:', err.message);
+    }
   }
 
   return res.status(200).json({ success: true });

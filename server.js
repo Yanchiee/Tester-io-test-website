@@ -1,10 +1,19 @@
 import express from 'express';
 import { google } from 'googleapis';
+import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
 dotenv.config();
+
+// ── Supabase Client ─────────────────────────────────
+let supabase;
+if (process.env.SUPABASE_URL && process.env.SUPABASE_ANON_KEY) {
+  supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY);
+} else {
+  console.log('Supabase not configured — submissions will not be sent to Supabase.');
+}
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const app = express();
@@ -78,6 +87,22 @@ app.post('/api/submit', async (req, res) => {
     }
   } else {
     console.log('Google Sheets not configured — submission logged to console only.');
+  }
+
+  // Also insert into Supabase
+  if (supabase) {
+    try {
+      const { error: sbError } = await supabase
+        .from('contact_messages')
+        .insert([{ name, email, message }]);
+      if (sbError) {
+        console.error('Supabase error:', sbError.message);
+      } else {
+        console.log('Row inserted into Supabase.');
+      }
+    } catch (err) {
+      console.error('Supabase error:', err.message);
+    }
   }
 
   return res.json({ success: true });
