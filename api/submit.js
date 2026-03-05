@@ -39,7 +39,7 @@ export default async function handler(req, res) {
   }
 
   const timestamp = new Date().toLocaleString('en-US', {
-    dateStyle: 'medium', timeStyle: 'short',
+    timeZone: 'Asia/Manila', dateStyle: 'medium', timeStyle: 'short',
   });
 
   console.log('New submission:', { timestamp, name, email, message });

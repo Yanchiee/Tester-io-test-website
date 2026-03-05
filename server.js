@@ -48,7 +48,7 @@ app.post('/api/submit', async (req, res) => {
   }
 
   const timestamp = new Date().toLocaleString('en-US', {
-    dateStyle: 'medium', timeStyle: 'short',
+    timeZone: 'Asia/Manila', dateStyle: 'medium', timeStyle: 'short',
   });
 
   // Always log to console
