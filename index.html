@@ -622,17 +622,22 @@ ul,ol{list-style:none;}
 @keyframes ctaFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-1.2rem);}}
 
 /* ═══ CONTACT FORM ═══════════════════════════════════════ */
-.contact-section{text-align:center;}
+.contact-section{text-align:center;position:relative;}
 .contact-section .stag{margin-bottom:2rem;}
 .contact-form{
   max-width:56rem;margin:3rem auto 0;display:flex;flex-direction:column;gap:1.6rem;
+  background:rgba(10,10,10,.82);
+  border:1px solid rgba(198,165,89,.1);
+  border-radius:.75rem;
+  padding:3rem 3rem 2.5rem;
+  backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);
 }
 .contact-row{display:flex;gap:1.6rem;}
 @media(max-width:600px){.contact-row{flex-direction:column;}}
 .contact-input,.contact-textarea{
   width:100%;padding:1.4rem 2rem;
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(198,165,89,.15);border-radius:.5rem;
+  background:rgba(255,255,255,.05);
+  border:1px solid rgba(198,165,89,.18);border-radius:.5rem;
   color:var(--cl-white);font-family:'Montserrat',sans-serif;font-size:1.1rem;
   outline:none;transition:border-color .3s,box-shadow .3s;
 }
@@ -664,6 +669,7 @@ ul,ol{list-style:none;}
 .cta-form{
   display:flex;gap:0;max-width:50rem;margin:4rem auto 2rem;
   border-radius:.5rem;overflow:hidden;border:1px solid rgba(198,165,89,.15);
+  background:rgba(10,10,10,.6);
 }
 .fr-dk .cta-form{border-color:rgba(198,165,89,.15);}
 .cta-email{
@@ -791,6 +797,7 @@ ul,ol{list-style:none;}
   .stat+.stat::before{display:none;}
   .steps{grid-template-columns:1fr 1fr;}.steps::before{display:none;}
   .tcards{grid-template-columns:1fr;}
+  .contact-form{padding:2rem 1.8rem 2rem;}
   .ft{margin:10px;}.ft-top{grid-template-columns:1fr;}
   .ft-col{border-right:none;border-bottom:1px solid rgba(255,255,255,.05);min-height:auto;}
   .ft-col:last-child{border-bottom:none;}
@@ -976,7 +983,7 @@ ul,ol{list-style:none;}
 <!-- ═══════════════════════════════════════════════════
      CONTACT FORM
      ═══════════════════════════════════════════════════ -->
-<div class="frame fr-dk" id="contact" style="border:1px solid rgba(198,165,89,.08);">
+<div class="frame fr-dk" id="contact" style="border:1px solid rgba(198,165,89,.08);background:rgba(10,10,10,.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);">
   <div class="fr-pad contact-section">
     <div class="stag rv"><span class="stag-line"></span>Get In Touch</div>
     <h2 class="sh rv rv-d1">
@@ -1109,7 +1116,7 @@ ul,ol{list-style:none;}
 
 
 <!-- ═══ CTA ═══════════════════════════════════════════ -->
-<div class="frame fr-dk" id="start" style="border:1px solid rgba(198,165,89,.08);">
+<div class="frame fr-dk" id="start" style="border:1px solid rgba(198,165,89,.08);background:rgba(10,10,10,.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);">
   <div class="fr-pad" style="padding-top:clamp(8rem,14vw,18rem);padding-bottom:clamp(8rem,14vw,18rem);">
     <div class="cta">
       <img src="brand_assets/tester-logo.png" alt="Tester.io" class="cta-logo">
