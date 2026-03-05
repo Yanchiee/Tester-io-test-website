@@ -1386,7 +1386,7 @@ if(cForm){
 
     var base=window.location.protocol==='file:'?'http://localhost:3000':'';
 
-    fetch(base+'/submit',{
+    fetch(base+'/api/submit',{
       method:'POST',
       headers:{'Content-Type':'application/json'},
       body:JSON.stringify(fd)

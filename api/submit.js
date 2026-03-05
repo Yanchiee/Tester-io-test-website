@@ -1,26 +1,5 @@
-import express from 'express';
 import { google } from 'googleapis';
-import dotenv from 'dotenv';
-import path from 'path';
-import { fileURLToPath } from 'url';
 
-dotenv.config();
-
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-const app = express();
-const PORT = 3000;
-
-// ── Middleware ────────────────────────────────────────
-app.use((req, res, next) => {
-  res.header('Access-Control-Allow-Origin', '*');
-  res.header('Access-Control-Allow-Headers', 'Content-Type');
-  if (req.method === 'OPTIONS') return res.sendStatus(200);
-  next();
-});
-app.use(express.json());
-app.use(express.static(__dirname));
-
-// ── Google Sheets Auth ───────────────────────────────
 const SPREADSHEET_ID = process.env.SPREADSHEET_ID;
 const SHEET_NAME = process.env.SHEET_NAME || 'Sheet1';
 
@@ -36,11 +15,15 @@ try {
   sheets = google.sheets({ version: 'v4', auth });
 } catch (err) {
   console.error('Google Sheets auth failed:', err.message);
-  console.log('Form submissions will be logged to console instead.');
 }
 
-// ── Submit Endpoint ──────────────────────────────────
-app.post('/api/submit', async (req, res) => {
+export default async function handler(req, res) {
+  // CORS headers
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
+  if (req.method === 'OPTIONS') return res.status(200).end();
+  if (req.method !== 'POST') return res.status(405).json({ success: false, error: 'Method not allowed' });
+
   const { name, email, message } = req.body;
 
   if (!name || !email || !message) {
@@ -51,13 +34,10 @@ app.post('/api/submit', async (req, res) => {
     dateStyle: 'medium', timeStyle: 'short',
   });
 
-  // Always log to console
   console.log('New submission:', { timestamp, name, email, message });
 
-  // Push to Google Sheets if configured
   if (sheets && SPREADSHEET_ID) {
     try {
-      // Get current row count for the # column
       const existing = await sheets.spreadsheets.values.get({
         spreadsheetId: SPREADSHEET_ID,
         range: `${SHEET_NAME}!A:A`,
@@ -77,17 +57,8 @@ app.post('/api/submit', async (req, res) => {
       return res.status(500).json({ success: false, error: 'Failed to save. Please try again.' });
     }
   } else {
-    console.log('Google Sheets not configured — submission logged to console only.');
+    console.log('Google Sheets not configured — logged to console only.');
   }
 
-  return res.json({ success: true });
-});
-
-// ── Start ────────────────────────────────────────────
-app.listen(PORT, () => {
-  console.log(`Server running at http://localhost:${PORT}`);
-  if (!SPREADSHEET_ID) {
-    console.log('NOTE: SPREADSHEET_ID not set — form submissions will only log to console.');
-    console.log('See SETUP.md for Google Sheets configuration instructions.');
-  }
-});
+  return res.status(200).json({ success: true });
+}
