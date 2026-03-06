@@ -1,0 +1,897 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Admin — Tester.io</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<style>
+/*═══════════════════════════════════════════════
+  Tester.io Admin — Dark Gold Command Center
+═══════════════════════════════════════════════*/
+:root{
+  --bg:#0a0a0a;--bg-card:#111;--bg-card-hover:#161616;
+  --border:rgba(198,165,89,.1);--border-hover:rgba(198,165,89,.25);
+  --gold:#C6A559;--gold-light:#E6B979;
+  --gold-grad:linear-gradient(135deg,#C6A559,#E6B979);
+  --text:#fff;--text-dim:rgba(255,255,255,.4);--text-faint:rgba(255,255,255,.15);
+  --red:#b83e35;--green:#3eb87a;
+  --sidebar-w:260px;
+  --ease:cubic-bezier(.215,.61,.355,1);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:10px;-webkit-font-smoothing:antialiased;}
+body{
+  font-family:'Montserrat',sans-serif;background:var(--bg);color:var(--text);
+  line-height:1.5;min-height:100vh;overflow-x:hidden;
+}
+button{cursor:pointer;border:none;background:none;font-family:inherit;color:inherit;}
+input,textarea,select{font-family:inherit;color:inherit;background:transparent;}
+.mono{font-family:'IBM Plex Mono',monospace;}
+
+/*─── PASSWORD GATE ──────────────────────────*/
+#gate{
+  position:fixed;inset:0;z-index:1000;background:var(--bg);
+  display:flex;align-items:center;justify-content:center;
+  flex-direction:column;
+  transition:opacity .6s var(--ease),visibility .6s;
+}
+#gate.hidden{opacity:0;visibility:hidden;pointer-events:none;}
+.gate-box{
+  text-align:center;width:min(420px,90vw);
+}
+.gate-logo{
+  font-size:1.4rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+  margin-bottom:6rem;opacity:.25;
+}
+.gate-logo span{
+  background:var(--gold-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  opacity:1;
+}
+.gate-title{
+  font-size:clamp(2.4rem,4vw,3.6rem);font-weight:800;letter-spacing:-.03em;
+  margin-bottom:1rem;
+}
+.gate-sub{font-size:1.3rem;color:var(--text-dim);margin-bottom:4rem;}
+.gate-input{
+  width:100%;padding:1.6rem 2rem;font-size:1.4rem;font-weight:500;
+  border:1px solid var(--border);border-radius:.6rem;
+  background:rgba(255,255,255,.03);color:var(--text);
+  letter-spacing:.12em;text-align:center;text-transform:uppercase;
+  transition:border-color .3s;outline:none;
+}
+.gate-input:focus{border-color:var(--gold);}
+.gate-input::placeholder{color:var(--text-faint);letter-spacing:.08em;text-transform:uppercase;}
+.gate-btn{
+  width:100%;margin-top:2rem;padding:1.6rem;font-size:1.2rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  background:var(--gold-grad);color:#0a0a0a;border-radius:.6rem;
+  transition:opacity .3s,transform .2s;
+}
+.gate-btn:hover{opacity:.9;transform:translateY(-1px);}
+.gate-btn:active{transform:translateY(0);}
+.gate-error{
+  margin-top:1.6rem;font-size:1.1rem;color:var(--red);
+  opacity:0;transition:opacity .3s;
+}
+.gate-error.show{opacity:1;}
+.gate-lock{
+  width:6rem;height:6rem;margin:0 auto 3rem;
+  border:2px solid var(--border);border-radius:50%;
+  display:flex;align-items:center;justify-content:center;
+  animation:lockPulse 3s ease-in-out infinite;
+}
+@keyframes lockPulse{0%,100%{border-color:rgba(198,165,89,.1);}50%{border-color:rgba(198,165,89,.35);}}
+.gate-lock svg{width:2.4rem;height:2.4rem;stroke:var(--gold);stroke-width:1.5;fill:none;}
+
+/*─── DASHBOARD LAYOUT ───────────────────────*/
+#app{display:none;min-height:100vh;}
+#app.active{display:flex;}
+
+/*─── SIDEBAR ────────────────────────────────*/
+.sidebar{
+  width:var(--sidebar-w);min-height:100vh;position:fixed;top:0;left:0;
+  background:#080808;border-right:1px solid var(--border);
+  padding:3rem 0;display:flex;flex-direction:column;z-index:100;
+  transition:transform .4s var(--ease);
+}
+.sb-brand{
+  padding:0 2.4rem;margin-bottom:4rem;
+  font-size:1.1rem;font-weight:800;letter-spacing:.12em;text-transform:uppercase;
+  opacity:.3;
+}
+.sb-brand span{
+  background:var(--gold-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+}
+.sb-nav{flex:1;}
+.sb-item{
+  display:flex;align-items:center;gap:1.2rem;
+  padding:1.2rem 2.4rem;font-size:1.2rem;font-weight:500;
+  color:var(--text-dim);letter-spacing:.02em;
+  position:relative;cursor:pointer;transition:color .25s,background .25s;
+}
+.sb-item:hover{color:var(--text);background:rgba(255,255,255,.02);}
+.sb-item.active{color:var(--gold);}
+.sb-item.active::before{
+  content:'';position:absolute;left:0;top:.4rem;bottom:.4rem;width:2px;
+  background:var(--gold-grad);border-radius:0 1px 1px 0;
+}
+.sb-item svg{width:1.6rem;height:1.6rem;stroke:currentColor;stroke-width:1.5;fill:none;flex-shrink:0;}
+.sb-divider{height:1px;background:var(--border);margin:2rem 2.4rem;}
+.sb-logout{margin-top:auto;padding:0 2.4rem;}
+.sb-logout button{
+  font-size:1.1rem;font-weight:500;color:var(--text-dim);
+  letter-spacing:.04em;display:flex;align-items:center;gap:.8rem;
+  transition:color .3s;
+}
+.sb-logout button:hover{color:var(--red);}
+.sb-logout svg{width:1.4rem;height:1.4rem;stroke:currentColor;stroke-width:1.5;fill:none;}
+
+/*─── MAIN CONTENT ───────────────────────────*/
+.main{
+  flex:1;margin-left:var(--sidebar-w);padding:3rem 4rem 4rem;
+  min-height:100vh;
+}
+.page-header{
+  display:flex;align-items:center;justify-content:space-between;
+  margin-bottom:3.6rem;
+}
+.page-title{font-size:2.4rem;font-weight:800;letter-spacing:-.02em;}
+.page-sub{font-size:1.1rem;color:var(--text-dim);margin-top:.4rem;}
+.page-badge{
+  font-family:'IBM Plex Mono',monospace;font-size:1rem;font-weight:500;
+  color:var(--gold);opacity:.5;letter-spacing:.06em;
+}
+
+/*─── STAT CARDS ─────────────────────────────*/
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:2rem;margin-bottom:4rem;}
+.stat-card{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:.8rem;
+  padding:2.4rem;position:relative;overflow:hidden;
+  transition:border-color .3s,transform .3s var(--ease);
+}
+.stat-card:hover{border-color:var(--border-hover);transform:translateY(-2px);}
+.stat-label{
+  font-size:1rem;font-weight:600;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--text-dim);margin-bottom:1.2rem;
+}
+.stat-value{
+  font-family:'IBM Plex Mono',monospace;font-size:3.2rem;font-weight:700;
+  background:var(--gold-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  line-height:1;
+}
+.stat-card::after{
+  content:'';position:absolute;top:0;right:0;width:60%;height:100%;
+  background:linear-gradient(135deg,transparent 40%,rgba(198,165,89,.02));
+  pointer-events:none;
+}
+
+/*─── TABLES ─────────────────────────────────*/
+.table-wrap{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:.8rem;
+  overflow:hidden;
+}
+.table-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:2rem 2.4rem;border-bottom:1px solid var(--border);
+}
+.table-title{font-size:1.3rem;font-weight:700;letter-spacing:.02em;}
+.table-count{font-family:'IBM Plex Mono',monospace;font-size:1.1rem;color:var(--text-dim);}
+table{width:100%;border-collapse:collapse;font-size:1.2rem;}
+thead{background:rgba(255,255,255,.02);}
+th{
+  padding:1.4rem 2rem;text-align:left;font-size:1rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:.08em;color:var(--text-dim);
+  border-bottom:1px solid var(--border);
+}
+td{
+  padding:1.4rem 2rem;border-bottom:1px solid rgba(255,255,255,.03);
+  max-width:320px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+}
+tr:hover td{background:rgba(255,255,255,.015);}
+.badge{
+  display:inline-block;padding:.3rem .8rem;border-radius:.3rem;
+  font-size:.95rem;font-weight:600;letter-spacing:.04em;text-transform:uppercase;
+}
+.badge-active{background:rgba(62,184,122,.12);color:var(--green);}
+.badge-inactive{background:rgba(184,62,53,.12);color:var(--red);}
+
+/*─── TOGGLE ─────────────────────────────────*/
+.toggle{
+  width:3.6rem;height:2rem;border-radius:1rem;
+  background:rgba(255,255,255,.1);position:relative;cursor:pointer;
+  transition:background .3s;flex-shrink:0;
+}
+.toggle.on{background:rgba(198,165,89,.3);}
+.toggle::after{
+  content:'';position:absolute;top:.3rem;left:.3rem;
+  width:1.4rem;height:1.4rem;border-radius:50%;
+  background:var(--text-dim);transition:transform .3s var(--ease),background .3s;
+}
+.toggle.on::after{transform:translateX(1.6rem);background:var(--gold);}
+
+/*─── NEWSLETTER EDITOR ──────────────────────*/
+.editor-wrap{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:.8rem;
+  overflow:hidden;
+}
+.editor-toolbar{
+  display:flex;align-items:center;gap:.4rem;padding:1.2rem 1.6rem;
+  border-bottom:1px solid var(--border);flex-wrap:wrap;
+}
+.editor-toolbar button{
+  width:3.2rem;height:3.2rem;border-radius:.4rem;display:flex;align-items:center;justify-content:center;
+  color:var(--text-dim);transition:background .2s,color .2s;font-size:1.3rem;font-weight:700;
+}
+.editor-toolbar button:hover{background:rgba(255,255,255,.06);color:var(--text);}
+.editor-toolbar button.active{background:rgba(198,165,89,.15);color:var(--gold);}
+.editor-toolbar .sep{width:1px;height:2rem;background:var(--border);margin:0 .4rem;}
+.editor-field{
+  min-height:300px;padding:2.4rem;font-size:1.4rem;line-height:1.8;
+  outline:none;color:var(--text);
+}
+.editor-field:empty::before{
+  content:attr(data-placeholder);color:var(--text-faint);
+}
+.editor-field h1,.editor-field h2,.editor-field h3{margin:.8rem 0;}
+.editor-input{
+  width:100%;padding:1.4rem 2rem;font-size:1.4rem;font-weight:600;
+  border:none;border-bottom:1px solid var(--border);background:transparent;
+  color:var(--text);outline:none;letter-spacing:.01em;
+}
+.editor-input::placeholder{color:var(--text-faint);}
+.editor-actions{
+  display:flex;gap:1.2rem;padding:2rem 2.4rem;border-top:1px solid var(--border);
+}
+.btn-gold{
+  padding:1.2rem 2.4rem;font-size:1.1rem;font-weight:700;letter-spacing:.08em;
+  text-transform:uppercase;background:var(--gold-grad);color:#0a0a0a;
+  border-radius:.5rem;transition:opacity .3s,transform .2s;
+}
+.btn-gold:hover{opacity:.9;transform:translateY(-1px);}
+.btn-outline{
+  padding:1.2rem 2.4rem;font-size:1.1rem;font-weight:600;letter-spacing:.06em;
+  text-transform:uppercase;border:1px solid var(--border);color:var(--text-dim);
+  border-radius:.5rem;transition:border-color .3s,color .3s;
+}
+.btn-outline:hover{border-color:var(--border-hover);color:var(--text);}
+
+/*─── NEWSLETTER CARDS ───────────────────────*/
+.nl-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:2rem;}
+.nl-card{
+  background:var(--bg-card);border:1px solid var(--border);border-radius:.8rem;
+  padding:2.4rem;transition:border-color .3s,transform .3s var(--ease);
+}
+.nl-card:hover{border-color:var(--border-hover);transform:translateY(-2px);}
+.nl-card-title{font-size:1.4rem;font-weight:700;margin-bottom:.8rem;}
+.nl-card-preview{font-size:1.15rem;color:var(--text-dim);line-height:1.6;margin-bottom:1.6rem;
+  display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden;}
+.nl-card-meta{
+  font-family:'IBM Plex Mono',monospace;font-size:1rem;color:var(--text-faint);
+  margin-bottom:1.6rem;
+}
+.nl-card-actions{display:flex;gap:1rem;}
+.nl-card-actions button{
+  font-size:1.05rem;font-weight:600;color:var(--text-dim);
+  letter-spacing:.04em;transition:color .3s;
+}
+.nl-card-actions button:hover{color:var(--gold);}
+.nl-card-actions .del:hover{color:var(--red);}
+
+/*─── EMPTY STATE ────────────────────────────*/
+.empty{
+  text-align:center;padding:6rem 2rem;color:var(--text-dim);
+}
+.empty-icon{font-size:3.2rem;margin-bottom:1.6rem;opacity:.2;}
+.empty-text{font-size:1.3rem;font-weight:500;}
+
+/*─── SECTION VISIBILITY ─────────────────────*/
+.section{display:none;animation:fadeUp .4s var(--ease);}
+.section.active{display:block;}
+@keyframes fadeUp{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+
+/*─── LOADING SPINNER ────────────────────────*/
+.spinner{
+  width:2.4rem;height:2.4rem;border:2px solid var(--border);
+  border-top-color:var(--gold);border-radius:50%;
+  animation:spin .8s linear infinite;margin:4rem auto;
+}
+@keyframes spin{to{transform:rotate(360deg);}}
+
+/*─── MOBILE MENU TOGGLE ────────────────────*/
+.mobile-toggle{
+  display:none;position:fixed;top:1.6rem;left:1.6rem;z-index:200;
+  width:4rem;height:4rem;border-radius:.6rem;
+  background:rgba(10,10,10,.9);border:1px solid var(--border);
+  align-items:center;justify-content:center;
+}
+.mobile-toggle svg{width:2rem;height:2rem;stroke:var(--gold);stroke-width:1.5;fill:none;}
+
+/*─── RESPONSIVE ─────────────────────────────*/
+@media(max-width:900px){
+  .sidebar{transform:translateX(-100%);}
+  .sidebar.open{transform:translateX(0);}
+  .main{margin-left:0;padding:2rem;}
+  .mobile-toggle{display:flex;}
+  .stats{grid-template-columns:repeat(2,1fr);}
+  .page-header{flex-direction:column;align-items:flex-start;gap:1rem;}
+}
+@media(max-width:520px){
+  .stats{grid-template-columns:1fr;}
+  .nl-grid{grid-template-columns:1fr;}
+  td,th{padding:1rem 1.2rem;font-size:1.1rem;}
+}
+
+/*─── TOAST ──────────────────────────────────*/
+.toast{
+  position:fixed;bottom:3rem;right:3rem;z-index:9000;
+  background:var(--bg-card);border:1px solid var(--border);border-radius:.6rem;
+  padding:1.4rem 2.4rem;font-size:1.2rem;font-weight:500;
+  transform:translateY(120%);opacity:0;transition:all .4s var(--ease);
+}
+.toast.show{transform:translateY(0);opacity:1;}
+.toast.success{border-color:rgba(62,184,122,.3);}
+.toast.error{border-color:rgba(184,62,53,.3);}
+</style>
+</head>
+<body>
+
+<!-- ═══ PASSWORD GATE ══════════════════════ -->
+<div id="gate">
+  <div class="gate-box">
+    <div class="gate-logo">Tester<span>.io</span></div>
+    <div class="gate-lock">
+      <svg viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></svg>
+    </div>
+    <h1 class="gate-title">Admin Access</h1>
+    <p class="gate-sub">Enter your dashboard password</p>
+    <input type="password" class="gate-input" id="gatePass" placeholder="Password" autocomplete="off">
+    <button class="gate-btn" id="gateBtn">Access Dashboard</button>
+    <p class="gate-error" id="gateErr">Incorrect password. Try again.</p>
+  </div>
+</div>
+
+<!-- ═══ MOBILE TOGGLE ═════════════════════ -->
+<button class="mobile-toggle" id="mobileToggle" aria-label="Toggle menu">
+  <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+</button>
+
+<!-- ═══ DASHBOARD APP ═════════════════════ -->
+<div id="app">
+
+  <!-- SIDEBAR -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sb-brand">Tester<span>.io</span></div>
+    <nav class="sb-nav">
+      <div class="sb-item active" data-section="overview">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+        Overview
+      </div>
+      <div class="sb-item" data-section="submissions">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+        Form Submissions
+      </div>
+      <div class="sb-item" data-section="subscribers">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Subscribers
+      </div>
+      <div class="sb-item" data-section="emaillog">
+        <svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+        Email Log
+      </div>
+      <div class="sb-divider"></div>
+      <div class="sb-item" data-section="newsletter">
+        <svg viewBox="0 0 24 24"><line x1="17" y1="10" x2="3" y2="10"/><line x1="21" y1="6" x2="3" y2="6"/><line x1="21" y1="14" x2="3" y2="14"/><line x1="17" y1="18" x2="3" y2="18"/></svg>
+        New Newsletter
+      </div>
+      <div class="sb-item" data-section="saved">
+        <svg viewBox="0 0 24 24"><path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"/></svg>
+        Saved Newsletters
+      </div>
+    </nav>
+    <div class="sb-divider"></div>
+    <div class="sb-logout">
+      <button id="logoutBtn">
+        <svg viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+        Logout
+      </button>
+    </div>
+  </aside>
+
+  <!-- MAIN -->
+  <main class="main">
+
+    <!-- OVERVIEW -->
+    <div class="section active" id="sec-overview">
+      <div class="page-header">
+        <div><h1 class="page-title">Overview</h1><p class="page-sub">Dashboard metrics at a glance</p></div>
+        <span class="page-badge mono" id="lastUpdated"></span>
+      </div>
+      <div class="stats">
+        <div class="stat-card"><div class="stat-label">Form Submissions</div><div class="stat-value" id="statForms">—</div></div>
+        <div class="stat-card"><div class="stat-label">Subscribers</div><div class="stat-value" id="statSubs">—</div></div>
+        <div class="stat-card"><div class="stat-label">Emails Sent</div><div class="stat-value" id="statEmails">—</div></div>
+        <div class="stat-card"><div class="stat-label">Unsubscribes</div><div class="stat-value" id="statUnsubs">—</div></div>
+      </div>
+      <div class="table-wrap">
+        <div class="table-bar">
+          <span class="table-title">Recent Submissions</span>
+          <span class="table-count mono" id="recentCount"></span>
+        </div>
+        <div style="overflow-x:auto;">
+          <table><thead><tr><th>#</th><th>Name</th><th>Email</th><th>Message</th><th>Date</th></tr></thead>
+          <tbody id="recentBody"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- FORM SUBMISSIONS -->
+    <div class="section" id="sec-submissions">
+      <div class="page-header">
+        <div><h1 class="page-title">Form Submissions</h1><p class="page-sub">All contact form entries</p></div>
+        <span class="table-count mono" id="allSubsCount"></span>
+      </div>
+      <div class="table-wrap">
+        <div style="overflow-x:auto;">
+          <table><thead><tr><th>#</th><th>Name</th><th>Email</th><th>Message</th><th>Date</th></tr></thead>
+          <tbody id="allSubsBody"></tbody></table>
+        </div>
+      </div>
+      <div id="allSubsEmpty" class="empty" style="display:none;">
+        <div class="empty-icon">&#9993;</div>
+        <p class="empty-text">No submissions yet</p>
+      </div>
+    </div>
+
+    <!-- SUBSCRIBERS -->
+    <div class="section" id="sec-subscribers">
+      <div class="page-header">
+        <div><h1 class="page-title">Subscribers</h1><p class="page-sub">Newsletter opt-ins</p></div>
+        <span class="table-count mono" id="subsCount"></span>
+      </div>
+      <div class="table-wrap" id="subsTable">
+        <div style="overflow-x:auto;">
+          <table><thead><tr><th>#</th><th>Email</th><th>Name</th><th>Status</th><th>Subscribed</th><th>Toggle</th></tr></thead>
+          <tbody id="subsBody"></tbody></table>
+        </div>
+      </div>
+      <div id="subsEmpty" class="empty" style="display:none;">
+        <div class="empty-icon">&#128100;</div>
+        <p class="empty-text">No subscribers yet</p>
+      </div>
+    </div>
+
+    <!-- EMAIL LOG -->
+    <div class="section" id="sec-emaillog">
+      <div class="page-header">
+        <div><h1 class="page-title">Email Log</h1><p class="page-sub">Record of every email sent</p></div>
+        <span class="table-count mono" id="emailLogCount"></span>
+      </div>
+      <div class="table-wrap" id="emailLogTable">
+        <div style="overflow-x:auto;">
+          <table><thead><tr><th>#</th><th>To</th><th>Subject</th><th>Sent At</th><th>Status</th></tr></thead>
+          <tbody id="emailLogBody"></tbody></table>
+        </div>
+      </div>
+      <div id="emailLogEmpty" class="empty" style="display:none;">
+        <div class="empty-icon">&#128231;</div>
+        <p class="empty-text">No emails sent yet</p>
+      </div>
+    </div>
+
+    <!-- NEW NEWSLETTER -->
+    <div class="section" id="sec-newsletter">
+      <div class="page-header">
+        <div><h1 class="page-title">New Newsletter</h1><p class="page-sub">Compose and send to subscribers</p></div>
+      </div>
+      <div class="editor-wrap">
+        <input class="editor-input" id="nlSubject" placeholder="Newsletter subject line...">
+        <div class="editor-toolbar">
+          <button data-cmd="bold" title="Bold"><b>B</b></button>
+          <button data-cmd="italic" title="Italic"><i>I</i></button>
+          <button data-cmd="underline" title="Underline"><u>U</u></button>
+          <span class="sep"></span>
+          <button data-cmd="formatBlock" data-val="h2" title="Heading">H</button>
+          <button data-cmd="insertUnorderedList" title="Bullet list">&#8226;</button>
+          <button data-cmd="insertOrderedList" title="Number list">1.</button>
+          <span class="sep"></span>
+          <button data-cmd="createLink" title="Link">&#128279;</button>
+          <button data-cmd="removeFormat" title="Clear formatting">&#10005;</button>
+        </div>
+        <div class="editor-field" id="nlEditor" contenteditable="true" data-placeholder="Write your newsletter content here..."></div>
+        <div class="editor-actions">
+          <button class="btn-gold" id="nlSend">Send to All Subscribers</button>
+          <button class="btn-outline" id="nlSave">Save as Draft</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- SAVED NEWSLETTERS -->
+    <div class="section" id="sec-saved">
+      <div class="page-header">
+        <div><h1 class="page-title">Saved Newsletters</h1><p class="page-sub">Your drafted newsletters</p></div>
+        <span class="table-count mono" id="savedCount"></span>
+      </div>
+      <div class="nl-grid" id="savedGrid"></div>
+      <div id="savedEmpty" class="empty" style="display:none;">
+        <div class="empty-icon">&#128278;</div>
+        <p class="empty-text">No saved newsletters yet</p>
+      </div>
+    </div>
+
+  </main>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<script>
+(function(){
+'use strict';
+
+/* ─── SUPABASE ────────────────────────────── */
+const SUPA_URL = 'https://bcvihxvxqctmnzgitnmm.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJjdmloeHZ4cWN0bW56Z2l0bm1tIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzI3MjQzOTksImV4cCI6MjA4ODMwMDM5OX0.TEIBKLiRLyck1QkAygH_ZgkwKNXCCVyf-Y7Er22TgwI';
+const sb = supabase.createClient(SUPA_URL, SUPA_KEY);
+
+/* ─── PASSWORD GATE ───────────────────────── */
+const PASS = 'testerio2025';
+const gate = document.getElementById('gate');
+const gatePass = document.getElementById('gatePass');
+const gateBtn = document.getElementById('gateBtn');
+const gateErr = document.getElementById('gateErr');
+const app = document.getElementById('app');
+
+if (sessionStorage.getItem('dashboard_auth') === '1') {
+  gate.classList.add('hidden');
+  app.classList.add('active');
+  loadAll();
+}
+
+gateBtn.addEventListener('click', tryLogin);
+gatePass.addEventListener('keydown', function(e){ if(e.key==='Enter') tryLogin(); });
+
+function tryLogin(){
+  if (gatePass.value === PASS) {
+    sessionStorage.setItem('dashboard_auth', '1');
+    gate.classList.add('hidden');
+    app.classList.add('active');
+    loadAll();
+  } else {
+    gateErr.classList.add('show');
+    gatePass.value = '';
+    gatePass.focus();
+    setTimeout(function(){ gateErr.classList.remove('show'); }, 2500);
+  }
+}
+
+document.getElementById('logoutBtn').addEventListener('click', function(){
+  sessionStorage.removeItem('dashboard_auth');
+  gate.classList.remove('hidden');
+  app.classList.remove('active');
+  gatePass.value = '';
+});
+
+/* ─── SIDEBAR NAV ─────────────────────────── */
+var items = document.querySelectorAll('.sb-item[data-section]');
+items.forEach(function(item){
+  item.addEventListener('click', function(){
+    items.forEach(function(i){ i.classList.remove('active'); });
+    item.classList.add('active');
+    document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('active'); });
+    document.getElementById('sec-' + item.dataset.section).classList.add('active');
+    // Close mobile sidebar
+    document.getElementById('sidebar').classList.remove('open');
+  });
+});
+
+/* ─── MOBILE TOGGLE ───────────────────────── */
+document.getElementById('mobileToggle').addEventListener('click', function(){
+  document.getElementById('sidebar').classList.toggle('open');
+});
+
+/* ─── TOAST ───────────────────────────────── */
+function toast(msg, type){
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.className = 'toast ' + (type || '');
+  setTimeout(function(){ t.classList.add('show'); }, 10);
+  setTimeout(function(){ t.classList.remove('show'); }, 3000);
+}
+
+/* ─── FORMAT DATE ─────────────────────────── */
+function fmtDate(d){
+  if(!d) return '—';
+  var dt = new Date(d);
+  return dt.toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}) +
+    ' ' + dt.toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+}
+
+/* ─── LOAD ALL DATA ───────────────────────── */
+function loadAll(){
+  loadSubmissions();
+  loadSubscribers();
+  loadEmailLog();
+  loadSavedNewsletters();
+  document.getElementById('lastUpdated').textContent = 'Updated ' +
+    new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'});
+}
+
+/* ─── SUBMISSIONS ─────────────────────────── */
+async function loadSubmissions(){
+  try {
+    var { data, error } = await sb.from('contact_messages').select('*').order('created_at',{ascending:false});
+    if(error) throw error;
+    if(!data) data = [];
+
+    document.getElementById('statForms').textContent = data.length;
+    document.getElementById('allSubsCount').textContent = data.length + ' total';
+    document.getElementById('recentCount').textContent = 'Latest ' + Math.min(data.length, 5);
+
+    // Recent (top 5)
+    var rb = document.getElementById('recentBody');
+    rb.innerHTML = '';
+    data.slice(0,5).forEach(function(r,i){
+      rb.innerHTML += '<tr><td class="mono" style="color:var(--text-dim)">' + (i+1) +
+        '</td><td>' + esc(r.name) +
+        '</td><td style="color:var(--gold)">' + esc(r.email) +
+        '</td><td style="color:var(--text-dim)">' + esc(trunc(r.message,60)) +
+        '</td><td class="mono" style="font-size:1.05rem;color:var(--text-dim)">' + fmtDate(r.created_at) + '</td></tr>';
+    });
+
+    // All
+    var ab = document.getElementById('allSubsBody');
+    ab.innerHTML = '';
+    if(data.length === 0){
+      document.getElementById('allSubsEmpty').style.display = 'block';
+    } else {
+      document.getElementById('allSubsEmpty').style.display = 'none';
+      data.forEach(function(r,i){
+        ab.innerHTML += '<tr><td class="mono" style="color:var(--text-dim)">' + (i+1) +
+          '</td><td>' + esc(r.name) +
+          '</td><td style="color:var(--gold)">' + esc(r.email) +
+          '</td><td style="color:var(--text-dim)">' + esc(trunc(r.message,80)) +
+          '</td><td class="mono" style="font-size:1.05rem;color:var(--text-dim)">' + fmtDate(r.created_at) + '</td></tr>';
+      });
+    }
+  } catch(e){
+    console.warn('Submissions load error:', e.message);
+    document.getElementById('statForms').textContent = '0';
+  }
+}
+
+/* ─── SUBSCRIBERS ─────────────────────────── */
+async function loadSubscribers(){
+  try {
+    var { data, error } = await sb.from('subscribers').select('*').order('created_at',{ascending:false});
+    if(error) throw error;
+    if(!data) data = [];
+
+    var active = data.filter(function(s){ return s.subscribed !== false; }).length;
+    var unsubs = data.length - active;
+    document.getElementById('statSubs').textContent = active;
+    document.getElementById('statUnsubs').textContent = unsubs;
+    document.getElementById('subsCount').textContent = data.length + ' total';
+
+    var body = document.getElementById('subsBody');
+    body.innerHTML = '';
+
+    if(data.length === 0){
+      document.getElementById('subsEmpty').style.display = 'block';
+      document.getElementById('subsTable').style.display = 'none';
+    } else {
+      document.getElementById('subsEmpty').style.display = 'none';
+      document.getElementById('subsTable').style.display = 'block';
+      data.forEach(function(r,i){
+        var isActive = r.subscribed !== false;
+        var tr = document.createElement('tr');
+        tr.innerHTML =
+          '<td class="mono" style="color:var(--text-dim)">' + (i+1) + '</td>' +
+          '<td style="color:var(--gold)">' + esc(r.email) + '</td>' +
+          '<td>' + esc(r.name || '—') + '</td>' +
+          '<td><span class="badge ' + (isActive ? 'badge-active' : 'badge-inactive') + '">' + (isActive ? 'Active' : 'Unsubscribed') + '</span></td>' +
+          '<td class="mono" style="font-size:1.05rem;color:var(--text-dim)">' + fmtDate(r.created_at) + '</td>' +
+          '<td><div class="toggle ' + (isActive ? 'on' : '') + '" data-id="' + r.id + '"></div></td>';
+        body.appendChild(tr);
+      });
+      body.querySelectorAll('.toggle').forEach(function(t){
+        t.addEventListener('click', async function(){
+          var id = t.dataset.id;
+          var nowOn = t.classList.contains('on');
+          t.classList.toggle('on');
+          try {
+            await sb.from('subscribers').update({subscribed: !nowOn}).eq('id', id);
+            toast(nowOn ? 'Unsubscribed' : 'Re-subscribed', nowOn ? '' : 'success');
+            loadSubscribers();
+          } catch(e){
+            toast('Error updating subscriber', 'error');
+            t.classList.toggle('on');
+          }
+        });
+      });
+    }
+  } catch(e){
+    console.warn('Subscribers load error:', e.message);
+    document.getElementById('statSubs').textContent = '0';
+    document.getElementById('statUnsubs').textContent = '0';
+    document.getElementById('subsEmpty').style.display = 'block';
+    document.getElementById('subsTable').style.display = 'none';
+  }
+}
+
+/* ─── EMAIL LOG ───────────────────────────── */
+async function loadEmailLog(){
+  try {
+    var { data, error } = await sb.from('email_log').select('*').order('sent_at',{ascending:false});
+    if(error) throw error;
+    if(!data) data = [];
+
+    document.getElementById('statEmails').textContent = data.length;
+    document.getElementById('emailLogCount').textContent = data.length + ' total';
+
+    var body = document.getElementById('emailLogBody');
+    body.innerHTML = '';
+
+    if(data.length === 0){
+      document.getElementById('emailLogEmpty').style.display = 'block';
+      document.getElementById('emailLogTable').style.display = 'none';
+    } else {
+      document.getElementById('emailLogEmpty').style.display = 'none';
+      document.getElementById('emailLogTable').style.display = 'block';
+      data.forEach(function(r,i){
+        body.innerHTML +=
+          '<tr><td class="mono" style="color:var(--text-dim)">' + (i+1) + '</td>' +
+          '<td style="color:var(--gold)">' + esc(r.to_email || r.recipient || '—') + '</td>' +
+          '<td>' + esc(r.subject || '—') + '</td>' +
+          '<td class="mono" style="font-size:1.05rem;color:var(--text-dim)">' + fmtDate(r.sent_at || r.created_at) + '</td>' +
+          '<td><span class="badge badge-active">' + esc(r.status || 'Sent') + '</span></td></tr>';
+      });
+    }
+  } catch(e){
+    console.warn('Email log load error:', e.message);
+    document.getElementById('statEmails').textContent = '0';
+    document.getElementById('emailLogEmpty').style.display = 'block';
+    document.getElementById('emailLogTable').style.display = 'none';
+  }
+}
+
+/* ─── SAVED NEWSLETTERS ───────────────────── */
+async function loadSavedNewsletters(){
+  try {
+    var { data, error } = await sb.from('newsletters').select('*').order('created_at',{ascending:false});
+    if(error) throw error;
+    if(!data) data = [];
+
+    document.getElementById('savedCount').textContent = data.length + ' drafts';
+    var grid = document.getElementById('savedGrid');
+    grid.innerHTML = '';
+
+    if(data.length === 0){
+      document.getElementById('savedEmpty').style.display = 'block';
+    } else {
+      document.getElementById('savedEmpty').style.display = 'none';
+      data.forEach(function(r){
+        var card = document.createElement('div');
+        card.className = 'nl-card';
+        card.innerHTML =
+          '<div class="nl-card-title">' + esc(r.subject || 'Untitled') + '</div>' +
+          '<div class="nl-card-preview">' + (r.body || r.content || '') + '</div>' +
+          '<div class="nl-card-meta">' + fmtDate(r.created_at) + '</div>' +
+          '<div class="nl-card-actions">' +
+            '<button class="edit" data-id="' + r.id + '">Edit</button>' +
+            '<button class="del" data-id="' + r.id + '">Delete</button>' +
+          '</div>';
+        grid.appendChild(card);
+      });
+
+      grid.querySelectorAll('.edit').forEach(function(btn){
+        btn.addEventListener('click', function(){
+          var id = btn.dataset.id;
+          var nl = data.find(function(n){ return String(n.id) === id; });
+          if(!nl) return;
+          document.getElementById('nlSubject').value = nl.subject || '';
+          document.getElementById('nlEditor').innerHTML = nl.body || nl.content || '';
+          // Switch to newsletter section
+          items.forEach(function(i){ i.classList.remove('active'); });
+          document.querySelector('[data-section="newsletter"]').classList.add('active');
+          document.querySelectorAll('.section').forEach(function(s){ s.classList.remove('active'); });
+          document.getElementById('sec-newsletter').classList.add('active');
+          toast('Draft loaded for editing', 'success');
+        });
+      });
+
+      grid.querySelectorAll('.del').forEach(function(btn){
+        btn.addEventListener('click', async function(){
+          if(!confirm('Delete this newsletter draft?')) return;
+          try {
+            await sb.from('newsletters').delete().eq('id', btn.dataset.id);
+            toast('Draft deleted', '');
+            loadSavedNewsletters();
+          } catch(e){
+            toast('Error deleting draft', 'error');
+          }
+        });
+      });
+    }
+  } catch(e){
+    console.warn('Newsletters load error:', e.message);
+    document.getElementById('savedEmpty').style.display = 'block';
+  }
+}
+
+/* ─── RICH TEXT EDITOR ────────────────────── */
+document.querySelectorAll('.editor-toolbar button').forEach(function(btn){
+  btn.addEventListener('click', function(e){
+    e.preventDefault();
+    var cmd = btn.dataset.cmd;
+    if(!cmd) return;
+    if(cmd === 'createLink'){
+      var url = prompt('Enter URL:');
+      if(url) document.execCommand(cmd, false, url);
+    } else if(btn.dataset.val){
+      document.execCommand(cmd, false, btn.dataset.val);
+    } else {
+      document.execCommand(cmd, false, null);
+    }
+    document.getElementById('nlEditor').focus();
+  });
+});
+
+/* ─── SEND NEWSLETTER ─────────────────────── */
+document.getElementById('nlSend').addEventListener('click', async function(){
+  var subject = document.getElementById('nlSubject').value.trim();
+  var body = document.getElementById('nlEditor').innerHTML.trim();
+  if(!subject || !body || body === '<br>'){
+    toast('Please fill in subject and content', 'error');
+    return;
+  }
+  try {
+    // Log the send
+    var { data: subs } = await sb.from('subscribers').select('email').eq('subscribed', true);
+    if(!subs || subs.length === 0){
+      toast('No active subscribers to send to', 'error');
+      return;
+    }
+    // Log each email
+    var logs = subs.map(function(s){
+      return { to_email: s.email, subject: subject, status: 'Sent', sent_at: new Date().toISOString() };
+    });
+    await sb.from('email_log').insert(logs);
+    toast('Newsletter sent to ' + subs.length + ' subscriber(s)', 'success');
+    document.getElementById('nlSubject').value = '';
+    document.getElementById('nlEditor').innerHTML = '';
+    loadEmailLog();
+    loadAll();
+  } catch(e){
+    toast('Error sending newsletter: ' + e.message, 'error');
+  }
+});
+
+/* ─── SAVE DRAFT ──────────────────────────── */
+document.getElementById('nlSave').addEventListener('click', async function(){
+  var subject = document.getElementById('nlSubject').value.trim();
+  var body = document.getElementById('nlEditor').innerHTML.trim();
+  if(!subject){
+    toast('Please enter a subject line', 'error');
+    return;
+  }
+  try {
+    await sb.from('newsletters').insert([{ subject: subject, body: body }]);
+    toast('Draft saved', 'success');
+    document.getElementById('nlSubject').value = '';
+    document.getElementById('nlEditor').innerHTML = '';
+    loadSavedNewsletters();
+  } catch(e){
+    toast('Error saving draft: ' + e.message, 'error');
+  }
+});
+
+/* ─── HELPERS ─────────────────────────────── */
+function esc(s){ if(!s) return ''; var d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
+function trunc(s,n){ if(!s) return ''; return s.length>n ? s.slice(0,n)+'...' : s; }
+
+})();
+</script>
+</body>
+</html>
