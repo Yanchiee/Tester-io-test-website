@@ -308,7 +308,7 @@ tr:hover td{background:rgba(255,255,255,.015);}
 }
 .mobile-toggle svg{width:2rem;height:2rem;stroke:var(--gold);stroke-width:1.5;fill:none;}
 
-/*─── SIDEBAR OVERLAY (mobile) ──────────────*/
+/*─── SIDEBAR OVERLAY (mobile/tablet) ───────*/
 .sidebar-overlay{
   display:none;position:fixed;inset:0;z-index:90;
   background:rgba(0,0,0,.6);backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
@@ -316,44 +316,120 @@ tr:hover td{background:rgba(255,255,255,.015);}
 }
 .sidebar-overlay.show{display:block;opacity:1;}
 
-/*─── RESPONSIVE ─────────────────────────────*/
+/*─── DESKTOP LARGE (1400px+) ───────────────*/
+@media(min-width:1400px){
+  .main{padding:3.6rem 5rem 4rem;}
+  .stats{grid-template-columns:repeat(4,1fr);gap:2.4rem;}
+  .stat-value{font-size:3.6rem;}
+  .nl-grid{grid-template-columns:repeat(3,1fr);}
+  .page-title{font-size:2.8rem;}
+}
+
+/*─── DESKTOP STANDARD (901–1399px) ─────────*/
+/* Base styles already cover this range */
+
+/*─── TABLET (601–900px) ────────────────────*/
 @media(max-width:900px){
   .sidebar{transform:translateX(-100%);}
   .sidebar.open{transform:translateX(0);box-shadow:4px 0 24px rgba(0,0,0,.5);}
-  .main{margin-left:0;padding:6rem 1.6rem 2.4rem;}
+  .main{margin-left:0;padding:6.4rem 2.4rem 3rem;}
   .mobile-toggle{display:flex;}
+  .stats{grid-template-columns:repeat(2,1fr);gap:1.6rem;}
+  .stat-card{padding:2rem;}
+  .stat-value{font-size:2.8rem;}
+  .stat-label{font-size:.95rem;margin-bottom:1rem;}
+  .page-header{flex-direction:column;align-items:flex-start;gap:.8rem;margin-bottom:2.8rem;}
+  .page-title{font-size:2.2rem;}
+  .page-sub{font-size:1.05rem;}
+  .table-bar{padding:1.6rem 2rem;flex-wrap:wrap;gap:.6rem;}
+  .table-title{font-size:1.2rem;}
+  td,th{padding:1.2rem 1.6rem;font-size:1.1rem;}
+  td{max-width:200px;}
+  .editor-field{min-height:240px;padding:2rem;font-size:1.35rem;}
+  .editor-input{padding:1.4rem 2rem;font-size:1.35rem;}
+  .editor-actions{padding:1.8rem 2rem;}
+  .nl-grid{grid-template-columns:repeat(2,1fr);gap:1.6rem;}
+  .nl-card{padding:2rem;}
+  .nl-card-title{font-size:1.3rem;}
+  .toast{left:2rem;right:2rem;bottom:2rem;text-align:center;font-size:1.15rem;padding:1.4rem 2rem;}
+  .empty{padding:4rem 2rem;}
+}
+
+/*─── MOBILE LARGE (421–600px) ──────────────*/
+@media(max-width:600px){
+  .main{padding:6rem 1.6rem 2.4rem;}
   .stats{grid-template-columns:repeat(2,1fr);gap:1.2rem;}
-  .page-header{flex-direction:column;align-items:flex-start;gap:.8rem;margin-bottom:2.4rem;}
+  .stat-card{padding:1.6rem;}
+  .stat-value{font-size:2.4rem;}
+  .stat-label{font-size:.9rem;margin-bottom:.8rem;}
   .page-title{font-size:2rem;}
   .page-sub{font-size:1rem;}
-  .table-bar{padding:1.4rem 1.6rem;flex-wrap:wrap;gap:.6rem;}
-  .table-title{font-size:1.2rem;}
-  td,th{padding:1.2rem 1.4rem;font-size:1.1rem;}
-  .stat-card{padding:1.8rem;}
-  .stat-value{font-size:2.6rem;}
-  .stat-label{font-size:.9rem;margin-bottom:.8rem;}
+  td,th{padding:1rem 1.2rem;font-size:1.05rem;}
+  td{max-width:160px;}
   .editor-actions{flex-direction:column;gap:1rem;padding:1.6rem;}
   .btn-gold,.btn-outline{width:100%;text-align:center;}
-  .editor-field{min-height:220px;padding:1.6rem;font-size:1.3rem;}
+  .editor-field{min-height:200px;padding:1.6rem;font-size:1.3rem;}
   .editor-input{padding:1.2rem 1.6rem;font-size:1.3rem;}
   .nl-grid{grid-template-columns:1fr;}
   .nl-card{padding:1.8rem;}
-  .toast{left:1.6rem;right:1.6rem;bottom:2rem;text-align:center;font-size:1.1rem;padding:1.2rem 1.6rem;}
+  .nl-card-title{font-size:1.25rem;}
+  .table-bar{padding:1.4rem 1.6rem;}
+  .toast{left:1.6rem;right:1.6rem;bottom:2rem;font-size:1.1rem;padding:1.2rem 1.6rem;}
+  .empty{padding:3.6rem 1.6rem;}
+  .empty-icon{font-size:2.8rem;}
+  .empty-text{font-size:1.2rem;}
+  .gate-lock{width:5rem;height:5rem;margin-bottom:2.4rem;}
+  .gate-lock svg{width:2rem;height:2rem;}
+  .gate-logo{margin-bottom:4rem;}
 }
-@media(max-width:520px){
-  .main{padding:5.6rem 1.2rem 2rem;}
+
+/*─── MOBILE SMALL (≤420px) ─────────────────*/
+@media(max-width:420px){
+  .main{padding:5.6rem 1rem 2rem;}
   .stats{grid-template-columns:1fr;gap:1rem;}
-  .stat-card{padding:1.6rem;}
+  .stat-card{padding:1.4rem 1.6rem;}
   .stat-value{font-size:2.2rem;}
-  td,th{padding:.8rem 1rem;font-size:1rem;}
+  .page-header{margin-bottom:2rem;}
   .page-title{font-size:1.8rem;}
-  .editor-toolbar{padding:.8rem 1rem;}
+  .page-sub{font-size:.95rem;}
+  .page-badge{font-size:.9rem;}
+  td,th{padding:.8rem 1rem;font-size:1rem;}
+  td{max-width:120px;}
+  .table-bar{padding:1.2rem 1.4rem;}
+  .table-title{font-size:1.1rem;}
+  .table-count{font-size:1rem;}
+  .editor-toolbar{padding:.8rem 1rem;gap:.2rem;}
   .editor-toolbar button{width:2.8rem;height:2.8rem;font-size:1.1rem;}
+  .editor-toolbar .sep{margin:0 .2rem;}
+  .editor-field{min-height:180px;padding:1.4rem;font-size:1.2rem;}
+  .editor-input{padding:1rem 1.4rem;font-size:1.2rem;}
+  .editor-actions{padding:1.2rem 1.4rem;gap:.8rem;}
+  .btn-gold,.btn-outline{padding:1rem 1.6rem;font-size:1rem;}
+  .nl-card{padding:1.6rem;}
+  .nl-card-title{font-size:1.2rem;}
+  .nl-card-preview{font-size:1.05rem;}
+  .nl-card-meta{font-size:.9rem;}
+  .nl-card-actions{flex-wrap:wrap;gap:.8rem;}
+  .nl-card-actions button{font-size:1rem;}
+  .gate-box{width:min(360px,92vw);}
   .gate-title{font-size:2rem;}
   .gate-sub{font-size:1.1rem;margin-bottom:3rem;}
-  .gate-input{padding:1.4rem 1.6rem;font-size:1.2rem;}
+  .gate-input{padding:1.4rem 1.4rem;font-size:1.2rem;}
   .gate-btn{padding:1.4rem;font-size:1.1rem;}
-  .nl-card-actions{flex-wrap:wrap;gap:.8rem;}
+  .gate-lock{width:4.8rem;height:4.8rem;margin-bottom:2rem;}
+  .gate-lock svg{width:1.8rem;height:1.8rem;}
+  .gate-logo{font-size:1.2rem;margin-bottom:3rem;}
+  .badge{font-size:.85rem;padding:.2rem .6rem;}
+  .toggle{width:3.2rem;height:1.8rem;}
+  .toggle::after{width:1.2rem;height:1.2rem;}
+  .toggle.on::after{transform:translateX(1.4rem);}
+  .toast{left:1rem;right:1rem;bottom:1.6rem;font-size:1rem;padding:1rem 1.4rem;border-radius:.5rem;}
+  .empty{padding:3rem 1.2rem;}
+  .empty-icon{font-size:2.4rem;margin-bottom:1.2rem;}
+  .empty-text{font-size:1.1rem;}
+  .mobile-toggle{top:1.2rem;left:1.2rem;width:3.6rem;height:3.6rem;}
+  .mobile-toggle svg{width:1.8rem;height:1.8rem;}
+  .sidebar{width:min(260px,80vw);}
 }
 
 /*─── TOAST ──────────────────────────────────*/
