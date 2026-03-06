@@ -787,26 +787,177 @@ ul,ol{list-style:none;}
 @media(max-width:767px) and (orientation:landscape){.lw{display:flex;}}
 
 /* ═══ RESPONSIVE ══════════════════════════════════════════ */
+
+/* ── Tablet (768px and below) ─────────────────────────── */
 @media(max-width:768px){
+  /* Root: ensure readable base font on mobile */
+  html{font-size:10px !important;}
+
+  /* Nav */
   .nav-btn,.live,.subnav{display:none;}
+  .ham{width:52px;height:44px;min-width:44px;min-height:44px;}
+  .logo-icon{width:2.8rem;height:2.8rem;}
+  .logo-mark{font-size:1.6rem;}
+  .nav-left{gap:1rem;}
+
+  /* Frames */
   .frame{margin:0 10px;}.frame+.frame{margin-top:2px;}
-  .fr-pad{padding:4rem 2.5rem;}.fr-pad-sm{padding:3rem 2.5rem;}
+  .fr-pad{padding:3.5rem 2rem;}.fr-pad-sm{padding:2.5rem 2rem;}
+
+  /* Hero */
+  .hero{min-height:85vh;padding-top:calc(var(--topMargin) + 1rem);}
+  .hero-tag{font-size:.95rem;letter-spacing:.08em;margin-bottom:2rem;}
+  .hero-h{font-size:clamp(3.8rem,9vw,6rem);margin-bottom:2.5rem;letter-spacing:-.04em;}
+  .hero-p{font-size:1.5rem;line-height:1.7;margin-bottom:3rem;opacity:.5;}
+  .hero-btns{flex-direction:column;gap:1rem;width:100%;}
+  .hero-btns .btn{width:100%;justify-content:center;height:5rem;font-size:1.2rem;}
+
+  /* Section headings */
+  .sh{font-size:clamp(2.8rem,6.5vw,5rem);margin-bottom:2rem;}
+  .sh-md{font-size:clamp(2.4rem,5vw,3.6rem);}
+  .sp{font-size:1.35rem;line-height:1.75;}
+  .stag{font-size:.9rem;margin-bottom:2rem;}
+
+  /* Two column layout */
   .two-col{grid-template-columns:1fr;}
-  .fitem{grid-template-columns:1fr;gap:.3rem;}.fnum{display:none;}
-  .stats{grid-template-columns:1fr 1fr;}
+
+  /* Feature items */
+  .fitem{grid-template-columns:1fr;gap:.4rem;padding:2rem 0;}
+  .fnum{display:none;}
+  .ftitle{font-size:1.6rem;margin-bottom:.6rem;}
+  .fdesc{font-size:1.25rem;line-height:1.75;}
+
+  /* Stats */
+  .stats{grid-template-columns:1fr 1fr;margin-top:3rem;}
+  .stat{padding:2.5rem 1.5rem;}
   .stat+.stat::before{display:none;}
-  .steps{grid-template-columns:1fr 1fr;}.steps::before{display:none;}
-  .tcards{grid-template-columns:1fr;}
-  .contact-form{padding:2rem 1.8rem 2rem;}
-  .ft{margin:10px;}.ft-top{grid-template-columns:1fr;}
-  .ft-col{border-right:none;border-bottom:1px solid rgba(255,255,255,.05);min-height:auto;}
+  .stat-val{font-size:clamp(2.8rem,5vw,3.5rem);}
+  .stat-lbl{font-size:.95rem;letter-spacing:.08em;}
+
+  /* Steps */
+  .steps{grid-template-columns:1fr 1fr;gap:1.5rem;margin-top:3rem;}
+  .steps::before{display:none;}
+  .step-n{width:5rem;height:5rem;font-size:1.2rem;margin-bottom:1.5rem;}
+  .step h3{font-size:1.3rem;}
+  .step p{font-size:1.1rem;line-height:1.7;}
+
+  /* Testimonials */
+  .tcards{grid-template-columns:1fr;gap:1.2rem;margin-top:3rem;}
+  .tcard{padding:2.5rem 2rem;}
+  .tcard-text{font-size:1.3rem;line-height:1.8;margin-bottom:2rem;}
+  .tcard-name{font-size:1.15rem;}
+
+  /* Contact form */
+  .contact-form{padding:2.5rem 2rem;gap:1.4rem;margin-top:2rem;}
+  .contact-input,.contact-textarea{
+    padding:1.5rem 1.6rem;font-size:1.3rem;min-height:48px;
+  }
+  .contact-input::placeholder,.contact-textarea::placeholder{font-size:1.05rem;}
+  .contact-textarea{min-height:12rem;}
+  .contact-submit{
+    width:100%;height:5.2rem;font-size:1.2rem;align-self:stretch;
+  }
+
+  /* CTA */
+  .cta-logo{width:6rem;height:6rem;margin-bottom:2rem;}
+  .cta-form{flex-direction:column;gap:0;border-radius:.5rem;}
+  .cta-email{height:5rem;padding:0 1.6rem;font-size:1.2rem;border-bottom:1px solid rgba(198,165,89,.1);}
+  .cta-go{height:5rem;font-size:1.1rem;width:100%;}
+  .cta-fine{font-size:.9rem;}
+
+  /* Footer */
+  .ft{margin:10px;}
+  .ft-top{grid-template-columns:1fr;}
+  .ft-col{
+    border-right:none;border-bottom:1px solid rgba(255,255,255,.05);
+    min-height:auto;padding:3rem 2.5rem;
+  }
   .ft-col:last-child{border-bottom:none;}
-  .ft-bottom{flex-direction:column;height:auto;padding:2rem 3rem;gap:1rem;text-align:center;}
-  .ft-links{flex-wrap:wrap;justify-content:center;}
+  .ft-col a{font-size:1.3rem;padding:.7rem 0;min-height:44px;display:flex;align-items:center;}
+  .ft-email{font-size:1.3rem;}
+  .ft-desc{font-size:1.15rem;}
+  .ft-logo-text{font-size:clamp(5rem,15vw,10rem);}
+  .ft-bottom{
+    flex-direction:column;height:auto;padding:2rem 2.5rem;
+    gap:1rem;text-align:center;
+  }
+  .ft-links{flex-wrap:wrap;justify-content:center;gap:1.6rem;}
+  .ft-links a{font-size:1rem;min-height:44px;display:flex;align-items:center;}
+  .ft-copy{font-size:.85rem;}
+
+  /* Console bar — tighter on mobile */
+  .con-bar{
+    left:10px;right:10px;transform:none;
+    width:auto;max-width:none;
+  }
+  .con-bar-text{padding:0 1rem;font-size:.85rem;}
+  .con-bar-icon{width:44px;height:44px;}
+  .con-bar-enter{padding:0 1.2rem;font-size:.8rem;}
+
+  /* Console panel */
+  .con-win{width:95vw;}
+  .con-resp-box{padding:2.5rem;}
+  .con-resp-text{font-size:1.25rem;}
+
+  /* Menu overlay */
+  .menu{padding:0 2rem;}
+  .menu-link{padding:1.4rem 0;}
+  .menu-link-text{font-size:clamp(2.6rem,7vw,4rem);}
+  .menu-bottom{left:2rem;right:2rem;}
+  .menu-bottom-group a{font-size:1rem;min-height:44px;display:flex;align-items:center;}
+
+  /* Buttons - minimum touch targets */
+  .btn{min-height:48px;}
+  .btn-sm{min-height:44px;}
 }
+
+/* ── Small phone (480px and below) ────────────────────── */
 @media(max-width:480px){
+  .fr-pad{padding:3rem 1.6rem;}
+  .fr-pad-sm{padding:2rem 1.6rem;}
+
+  /* Hero */
+  .hero-h{font-size:clamp(3.2rem,10vw,4.2rem);margin-bottom:2rem;}
+  .hero-p{font-size:1.4rem;line-height:1.65;}
+  .hero-tag{font-size:.85rem;letter-spacing:.06em;}
+  .hero-btns .btn{height:4.8rem;font-size:1.1rem;}
+
+  /* Stats */
   .stats{grid-template-columns:1fr;}
-  .steps{grid-template-columns:1fr;}
+  .stat{padding:2rem 1rem;}
+
+  /* Steps */
+  .steps{grid-template-columns:1fr;gap:2rem;}
+  .step-n{width:4.4rem;height:4.4rem;font-size:1.1rem;}
+
+  /* Section headings */
+  .sh{font-size:clamp(2.4rem,7vw,3.5rem);}
+  .sh-md{font-size:clamp(2.2rem,6vw,3rem);}
+
+  /* Contact form */
+  .contact-form{padding:2rem 1.4rem;gap:1.2rem;}
+  .contact-input,.contact-textarea{padding:1.4rem 1.4rem;font-size:1.2rem;}
+
+  /* CTA */
+  .cta-email{padding:0 1.4rem;}
+
+  /* Footer */
+  .ft-col{padding:2.5rem 2rem;}
+  .ft-logo-text{font-size:clamp(4rem,14vw,7rem);}
+  .ft-bottom{padding:1.5rem 2rem;}
+}
+
+/* ── Tiny phone (360px and below) ─────────────────────── */
+@media(max-width:360px){
+  .hero-h{font-size:3rem;}
+  .hero-p{font-size:1.3rem;}
+  .sh{font-size:2.2rem;}
+  .sh-md{font-size:2rem;}
+  .fr-pad{padding:2.5rem 1.4rem;}
+  .stat-val{font-size:2.6rem;}
+  .contact-form{padding:1.8rem 1.2rem;}
+  .tcard{padding:2rem 1.6rem;}
+  .tcard-text{font-size:1.2rem;}
 }
 
 /* Gold glow utility */
