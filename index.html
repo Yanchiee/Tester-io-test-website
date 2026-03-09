@@ -6,6 +6,7 @@
 <title>Tester.io — Quality Assurance, Elevated</title>
 <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <style>
 /* ═══════════════════════════════════════════════════════════
    Tester.io — Complete Design System
@@ -963,26 +964,41 @@ ul,ol{list-style:none;}
   text-shadow:0 0 40px rgba(198,165,89,.2);
 }
 
-/* ═══ BEAMS BACKGROUND ═══════════════════════════════ */
-.beams-bg{
+/* ═══ DOTTED SURFACE BACKGROUND ═══════════════════════ */
+.dots-bg{
   position:fixed;inset:0;z-index:0;overflow:hidden;
   pointer-events:none;
 }
-.beams-bg canvas{
+.dots-bg canvas{
   position:absolute;inset:0;
   width:100%;height:100%;
-  filter:blur(15px);
 }
-.beams-overlay{
-  position:fixed;inset:0;z-index:0;
-  background:rgba(10,10,10,.05);
-  backdrop-filter:blur(50px);-webkit-backdrop-filter:blur(50px);
-  pointer-events:none;
-  animation:beamsOverlayPulse 10s ease-in-out infinite;
+
+/* ═══ SOCIAL PROOF — TRUSTED BY ══════════════════════ */
+.trusted-bar{
+  text-align:center;padding:4rem 3rem 2rem;
 }
-@keyframes beamsOverlayPulse{
-  0%,100%{opacity:.05;}
-  50%{opacity:.15;}
+.trusted-label{
+  font-family:'Montserrat',sans-serif;font-size:.95rem;font-weight:600;
+  text-transform:uppercase;letter-spacing:.14em;color:rgba(255,255,255,.2);
+  margin-bottom:3rem;
+}
+.trusted-logos{
+  display:flex;align-items:center;justify-content:center;gap:4rem;flex-wrap:wrap;
+}
+.trusted-logos span{
+  font-family:'Montserrat',sans-serif;font-size:1.6rem;font-weight:700;
+  color:rgba(255,255,255,.12);letter-spacing:.02em;
+  transition:color .3s;
+}
+.trusted-logos span:hover{color:rgba(255,255,255,.25);}
+@media(max-width:768px){
+  .trusted-logos{gap:2.5rem;}
+  .trusted-logos span{font-size:1.3rem;}
+}
+@media(max-width:480px){
+  .trusted-logos{gap:2rem;}
+  .trusted-logos span{font-size:1.15rem;}
 }
 .hero{position:relative;z-index:1;}
 .hero>*{position:relative;z-index:2;}
@@ -990,9 +1006,8 @@ ul,ol{list-style:none;}
 </head>
 <body>
 
-<!-- ═══ BEAMS BACKGROUND (full-page) ══════════════════ -->
-<div class="beams-bg"><canvas id="beamsCanvas"></canvas></div>
-<div class="beams-overlay"></div>
+<!-- ═══ DOTTED SURFACE BACKGROUND (full-page) ═════════ -->
+<div class="dots-bg"><canvas id="dotsCanvas"></canvas></div>
 
 <!-- ═══ PRELOADER ══════════════════════════════════════ -->
 <div id="loader">
@@ -1043,10 +1058,10 @@ ul,ol{list-style:none;}
 <div class="menu" id="menu">
   <div class="menu-links">
     <a href="#features" class="menu-link" onclick="closeMenu()"><span class="menu-link-text">Features</span><span class="menu-link-label">001</span></a>
-    <a href="#platform" class="menu-link" onclick="closeMenu()"><span class="menu-link-text">Platform</span><span class="menu-link-label">002</span></a>
-    <a href="#metrics" class="menu-link" onclick="closeMenu()"><span class="menu-link-text">Metrics</span><span class="menu-link-label">003</span></a>
+    <a href="#reviews" class="menu-link" onclick="closeMenu()"><span class="menu-link-text">Reviews</span><span class="menu-link-label">002</span></a>
+    <a href="#platform" class="menu-link" onclick="closeMenu()"><span class="menu-link-text">Platform</span><span class="menu-link-label">003</span></a>
     <a href="#process" class="menu-link" onclick="closeMenu()"><span class="menu-link-text">Process</span><span class="menu-link-label">004</span></a>
-    <a href="#reviews" class="menu-link" onclick="closeMenu()"><span class="menu-link-text">Reviews</span><span class="menu-link-label">005</span></a>
+    <a href="#contact" class="menu-link" onclick="closeMenu()"><span class="menu-link-text">Contact</span><span class="menu-link-label">005</span></a>
     <a href="#start" class="menu-link" onclick="closeMenu()"><span class="menu-link-text">Get Started</span><span class="menu-link-label">006</span></a>
     <div class="menu-divider"></div>
     <a href="product.html" class="menu-link" onclick="closeMenu()"><span class="menu-link-text">Dissection</span><span class="menu-link-label">007</span></a>
@@ -1112,131 +1127,59 @@ ul,ol{list-style:none;}
      ═══════════════════════════════════════════════════ -->
 <div class="frame fr-dk" id="features" style="margin-top:0;border-radius:0 0 var(--radius) var(--radius);">
   <div class="fr-pad hero">
-    <div class="hero-tag rv rv-d1"><span class="hero-tag-line"></span>Quality Assurance Platform</div>
+    <div class="hero-tag rv rv-d1"><span class="hero-tag-line"></span>Automated QA Platform</div>
 
     <h1 class="hero-h">
-      <span class="sl sl-d1"><span class="sl-in">Ship With</span></span>
-      <span class="sl sl-d2"><span class="sl-in"><span class="gr">Confidence</span></span></span>
-      <span class="sl sl-d3"><span class="sl-in">Every Time</span></span>
+      <span class="sl sl-d1"><span class="sl-in">Catch Bugs</span></span>
+      <span class="sl sl-d2"><span class="sl-in"><span class="gr">Before Your</span></span></span>
+      <span class="sl sl-d3"><span class="sl-in">Users Do</span></span>
     </h1>
 
     <p class="hero-p rv rv-d3">
-      Automated testing, real-time coverage reports, and seamless CI/CD integration. Tester.io gives your team the tools to catch bugs before your users do.
+      Tester.io is the automated testing platform that runs thousands of tests in parallel, gives you real-time coverage reports, and integrates directly into your CI/CD pipeline. Ship every release with confidence.
     </p>
 
     <div class="hero-btns rv rv-d4">
       <a href="#start" class="btn btn-dk">
-        <span>Get Started</span>
+        <span>Start Testing Free</span>
         <span class="btn-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
       </a>
-      <a href="#platform" class="btn btn-ol"><span>Learn More</span></a>
     </div>
   </div>
 </div>
 
 
 <!-- ═══════════════════════════════════════════════════
-     CONTACT FORM
+     SOCIAL PROOF — Trusted By + Stats
      ═══════════════════════════════════════════════════ -->
-<div class="frame fr-dk" id="contact" style="border:1px solid rgba(198,165,89,.08);background:rgba(10,10,10,.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);">
-  <div class="fr-pad contact-section">
-    <div class="stag rv"><span class="stag-line"></span>Get In Touch</div>
-    <h2 class="sh rv rv-d1">
-      Let's <span style="background:var(--cl-gold-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Talk</span>
-    </h2>
-    <p class="sp rv rv-d2" style="max-width:48rem;margin:0 auto;">
-      Have a question or want to learn more about Tester.io? Drop us a message and we'll get back to you within 24 hours.
-    </p>
-
-    <form id="contactForm" class="contact-form rv rv-d3" novalidate>
-      <div class="contact-row">
-        <input type="text" name="name" class="contact-input" placeholder="Your Name" required>
-        <input type="email" name="email" class="contact-input" placeholder="Your Email" required>
-      </div>
-      <textarea name="message" class="contact-textarea" placeholder="Your Message" required></textarea>
-      <button type="submit" class="contact-submit" id="contactBtn"><span>Send Message</span></button>
-      <div class="contact-status" id="contactStatus"></div>
-    </form>
-  </div>
-</div>
-
-
-<!-- ═══ PLATFORM — Dark frame with border ════════════ -->
-<div class="frame fr-dk" id="platform" style="border:1px solid rgba(198,165,89,.08);">
-  <div class="fr-pad">
-    <div class="two-col">
-      <div>
-        <div class="stag rv"><span class="stag-line"></span>The Platform</div>
-        <h2 class="sh rv rv-d1">
-          Built for <span style="background:var(--cl-gold-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">speed</span> and <span style="color:var(--cl-gold-light)">precision</span>
-        </h2>
-        <p class="sp rv rv-d2">
-          Tester.io is the modern QA platform that integrates with your existing workflow. Run thousands of tests in parallel, get instant feedback, and deploy with confidence every single time.
-        </p>
-      </div>
-      <div></div>
-    </div>
-
-    <div class="flist">
-      <div class="fitem rv"><div class="fnum">01</div><div><div class="ftitle">Automated Test Suites</div><div class="fdesc">Write once, run everywhere. Our intelligent test runner adapts to your codebase and executes tests across browsers, devices, and environments simultaneously.</div></div></div>
-      <div class="fitem rv rv-d1"><div class="fnum">02</div><div><div class="ftitle">Real-Time Coverage</div><div class="fdesc">Live coverage dashboards show exactly which lines of code are tested and which aren't. Identify gaps instantly and prioritize what matters most.</div></div></div>
-      <div class="fitem rv rv-d2"><div class="fnum">03</div><div><div class="ftitle">CI/CD Integration</div><div class="fdesc">Plug into GitHub, GitLab, Bitbucket, and Jenkins with a single line of config. Tests run automatically on every push, every PR, every deploy.</div></div></div>
-      <div class="fitem rv rv-d3"><div class="fnum">04</div><div><div class="ftitle">Visual Regression</div><div class="fdesc">Pixel-perfect screenshot comparison catches UI changes before they reach production. AI-powered diffing filters out noise and highlights what actually changed.</div></div></div>
-      <div class="fitem rv rv-d4"><div class="fnum">05</div><div><div class="ftitle">Performance Monitoring</div><div class="fdesc">Track load times, memory usage, and runtime performance across every test run. Set thresholds that block deploys when performance degrades.</div></div></div>
+<div class="frame fr-dk" style="border:1px solid rgba(198,165,89,.05);">
+  <div class="trusted-bar">
+    <div class="trusted-label rv">Trusted by engineering teams at</div>
+    <div class="trusted-logos rv rv-d1">
+      <span>Stripe</span>
+      <span>Vercel</span>
+      <span>Datadog</span>
+      <span>Shopify</span>
+      <span>Linear</span>
+      <span>Supabase</span>
     </div>
   </div>
-</div>
-
-
-<!-- ═══ STATS — Gold accent frame ════════════════════ -->
-<div class="frame fr-gr" id="metrics">
-  <div class="fr-pad">
-    <div class="stag rv"><span class="stag-line"></span>Platform Metrics</div>
-    <h2 class="sh sh-md rv rv-d1">Trusted by teams<br>shipping at scale</h2>
-
+  <div class="fr-pad-sm">
     <div class="stats rv rv-d2">
       <div class="stat"><div class="stat-val" data-count="50000">0</div><div class="stat-lbl">Tests / Day</div></div>
       <div class="stat"><div class="stat-val" data-count="99">0</div><div class="stat-lbl">Uptime %</div></div>
       <div class="stat"><div class="stat-val" data-count="2400">0</div><div class="stat-lbl">Teams</div></div>
-      <div class="stat"><div class="stat-val" data-count="12">0</div><div class="stat-lbl">Integrations</div></div>
+      <div class="stat"><div class="stat-val" data-count="97">0</div><div class="stat-lbl">Pass Rate %</div></div>
     </div>
   </div>
 </div>
 
 
-<!-- ═══ PROCESS — Dark frame ════════════════════════ -->
-<div class="frame fr-dk" id="process" style="border:1px solid rgba(198,165,89,.05);">
-  <div class="fr-pad">
-    <div style="text-align:center;">
-      <div class="stag rv" style="justify-content:center;"><span class="stag-line"></span>How It Works</div>
-      <h2 class="sh sh-md rv rv-d1">Start testing in <span style="background:var(--cl-gold-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">minutes</span></h2>
-    </div>
-
-    <div class="steps">
-      <div class="step rv rv-d1"><div class="step-n">01</div><h3>Connect</h3><p>Link your repository. We auto-detect your framework, language, and test structure.</p></div>
-      <div class="step rv rv-d2"><div class="step-n">02</div><h3>Configure</h3><p>Set your test environments, browsers, and devices. One config file handles everything.</p></div>
-      <div class="step rv rv-d3"><div class="step-n">03</div><h3>Run</h3><p>Execute tests in parallel across our cloud infrastructure. Results stream in real-time.</p></div>
-      <div class="step rv rv-d4"><div class="step-n">04</div><h3>Ship</h3><p>Get the green light. Deploy with confidence knowing every test has passed.</p></div>
-    </div>
-  </div>
-</div>
-
-
-<!-- ═══ QUOTE — Gold tinted frame ════════════════════ -->
-<div class="frame fr-lv">
-  <div class="fr-pad" style="padding-top:clamp(6rem,12vw,14rem);padding-bottom:clamp(6rem,12vw,14rem);">
-    <h2 class="sh rv" style="font-size:clamp(2.5rem,4.5vw,5.5rem);line-height:1.15;max-width:65rem;">
-      Quality isn't a phase. It's a culture. Tester.io gives your team the tools to make every release your best release.
-    </h2>
-  </div>
-</div>
-
-
-<!-- ═══ TESTIMONIALS — Dark frame ═════════════════════ -->
+<!-- ═══ TESTIMONIALS — Social proof continued ════════ -->
 <div class="frame fr-dk" id="reviews">
   <div class="fr-pad">
     <div style="text-align:center;">
-      <div class="stag rv" style="justify-content:center;"><span class="stag-line"></span>Reviews</div>
+      <div class="stag rv" style="justify-content:center;"><span class="stag-line"></span>What Teams Say</div>
       <h2 class="sh sh-md rv rv-d1">Loved by <span style="background:var(--cl-gold-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">developers</span></h2>
     </div>
 
@@ -1270,20 +1213,103 @@ ul,ol{list-style:none;}
 </div>
 
 
-<!-- ═══ CTA ═══════════════════════════════════════════ -->
-<div class="frame fr-dk" id="start" style="border:1px solid rgba(198,165,89,.08);background:rgba(10,10,10,.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);">
+<!-- ═══ PLATFORM — Dark frame with border ════════════ -->
+<div class="frame fr-dk" id="platform" style="border:1px solid rgba(198,165,89,.08);">
+  <div class="fr-pad">
+    <div class="two-col">
+      <div>
+        <div class="stag rv"><span class="stag-line"></span>The Platform</div>
+        <h2 class="sh rv rv-d1">
+          Built for <span style="background:var(--cl-gold-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">speed</span> and <span style="color:var(--cl-gold-light)">precision</span>
+        </h2>
+        <p class="sp rv rv-d2">
+          Tester.io is the modern QA platform that integrates with your existing workflow. Run thousands of tests in parallel, get instant feedback, and deploy with confidence every single time.
+        </p>
+      </div>
+      <div></div>
+    </div>
+
+    <div class="flist">
+      <div class="fitem rv"><div class="fnum">01</div><div><div class="ftitle">Automated Test Suites</div><div class="fdesc">Write once, run everywhere. Our intelligent test runner adapts to your codebase and executes tests across browsers, devices, and environments simultaneously.</div></div></div>
+      <div class="fitem rv rv-d1"><div class="fnum">02</div><div><div class="ftitle">Real-Time Coverage</div><div class="fdesc">Live coverage dashboards show exactly which lines of code are tested and which aren't. Identify gaps instantly and prioritize what matters most.</div></div></div>
+      <div class="fitem rv rv-d2"><div class="fnum">03</div><div><div class="ftitle">CI/CD Integration</div><div class="fdesc">Plug into GitHub, GitLab, Bitbucket, and Jenkins with a single line of config. Tests run automatically on every push, every PR, every deploy.</div></div></div>
+      <div class="fitem rv rv-d3"><div class="fnum">04</div><div><div class="ftitle">Visual Regression</div><div class="fdesc">Pixel-perfect screenshot comparison catches UI changes before they reach production. AI-powered diffing filters out noise and highlights what actually changed.</div></div></div>
+      <div class="fitem rv rv-d4"><div class="fnum">05</div><div><div class="ftitle">Performance Monitoring</div><div class="fdesc">Track load times, memory usage, and runtime performance across every test run. Set thresholds that block deploys when performance degrades.</div></div></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ PROCESS — Dark frame ════════════════════════ -->
+<div class="frame fr-dk" id="process" style="border:1px solid rgba(198,165,89,.05);">
+  <div class="fr-pad">
+    <div style="text-align:center;">
+      <div class="stag rv" style="justify-content:center;"><span class="stag-line"></span>How It Works</div>
+      <h2 class="sh sh-md rv rv-d1">Start testing in <span style="background:var(--cl-gold-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">minutes</span></h2>
+    </div>
+
+    <div class="steps">
+      <div class="step rv rv-d1"><div class="step-n">01</div><h3>Connect</h3><p>Link your repository. We auto-detect your framework, language, and test structure.</p></div>
+      <div class="step rv rv-d2"><div class="step-n">02</div><h3>Configure</h3><p>Set your test environments, browsers, and devices. One config file handles everything.</p></div>
+      <div class="step rv rv-d3"><div class="step-n">03</div><h3>Run</h3><p>Execute tests in parallel across our cloud infrastructure. Results stream in real-time.</p></div>
+      <div class="step rv rv-d4"><div class="step-n">04</div><h3>Ship</h3><p>Get the green light. Deploy with confidence knowing every test has passed.</p></div>
+    </div>
+  </div>
+</div>
+
+
+<!-- ═══ QUOTE — Gold tinted frame ════════════════════ -->
+<div class="frame fr-lv">
+  <div class="fr-pad" style="padding-top:clamp(6rem,12vw,14rem);padding-bottom:clamp(6rem,12vw,14rem);">
+    <h2 class="sh rv" style="font-size:clamp(2.5rem,4.5vw,5.5rem);line-height:1.15;max-width:65rem;">
+      Quality isn't a phase. It's a culture. Tester.io gives your team the tools to make every release your best release.
+    </h2>
+  </div>
+</div>
+
+
+<!-- ═══════════════════════════════════════════════════
+     CONTACT FORM
+     ═══════════════════════════════════════════════════ -->
+<div class="frame fr-dk" id="contact" style="border:1px solid rgba(198,165,89,.08);background:rgba(10,10,10,.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);">
+  <div class="fr-pad contact-section">
+    <div class="stag rv"><span class="stag-line"></span>Get In Touch</div>
+    <h2 class="sh rv rv-d1">
+      Let's <span style="background:var(--cl-gold-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Talk</span>
+    </h2>
+    <p class="sp rv rv-d2" style="max-width:48rem;margin:0 auto;">
+      Have a question or want to learn more about Tester.io? Drop us a message and we'll get back to you within 24 hours.
+    </p>
+
+    <form id="contactForm" class="contact-form rv rv-d3" novalidate>
+      <div class="contact-row">
+        <input type="text" name="name" class="contact-input" placeholder="Your Name" required>
+        <input type="email" name="email" class="contact-input" placeholder="Your Email" required>
+      </div>
+      <textarea name="message" class="contact-textarea" placeholder="Your Message" required></textarea>
+      <button type="submit" class="contact-submit" id="contactBtn"><span>Send Message</span></button>
+      <div class="contact-status" id="contactStatus"></div>
+    </form>
+  </div>
+</div>
+
+
+<!-- ═══ FINAL CTA — Strong closing ═══════════════════ -->
+<div class="frame fr-dk" id="start" style="border:1px solid rgba(198,165,89,.12);background:rgba(10,10,10,.75);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);">
   <div class="fr-pad" style="padding-top:clamp(8rem,14vw,18rem);padding-bottom:clamp(8rem,14vw,18rem);">
     <div class="cta">
       <img src="brand_assets/tester-logo.png" alt="Tester.io" class="cta-logo">
-      <h2 class="sh rv" style="font-size:clamp(3.5rem,8vw,10rem);">Start<br>Testing</h2>
+      <h2 class="sh rv" style="font-size:clamp(3.5rem,8vw,10rem);">Stop Shipping<br><span style="background:var(--cl-gold-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Broken Code</span></h2>
       <p class="sp rv rv-d1" style="max-width:48rem;margin:0 auto 0;">
-        Join thousands of engineering teams shipping better software faster. Get started with Tester.io today — no credit card required.
+        2,400+ teams already trust Tester.io to catch bugs before production. Set up in 2 minutes. No credit card required.
       </p>
-      <div class="cta-form rv rv-d2">
-        <input type="email" class="cta-email" placeholder="Enter your email">
-        <button class="cta-go" type="button"><span>Get Started</span></button>
+      <div class="hero-btns rv rv-d2" style="justify-content:center;margin-top:4rem;">
+        <a href="#features" class="btn btn-dk" style="height:6rem;padding:0 5rem;font-size:1.3rem;">
+          <span>Start Testing Free</span>
+          <span class="btn-arrow"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg></span>
+        </a>
       </div>
-      <p class="cta-fine rv rv-d3">Free tier available &nbsp;·&nbsp; No credit card &nbsp;·&nbsp; Setup in 2 minutes</p>
+      <p class="cta-fine rv rv-d3" style="margin-top:2rem;">Free tier available &nbsp;·&nbsp; No credit card &nbsp;·&nbsp; Setup in 2 minutes</p>
     </div>
   </div>
 </div>
@@ -1583,103 +1609,136 @@ setInterval(function(){
 })();
 </script>
 
-<!-- ═══ BEAMS ANIMATION ══════════════════════════════ -->
+<!-- ═══ DOTTED SURFACE ANIMATION (Three.js) ══════════ -->
 <script>
 (function(){
 'use strict';
 
-var canvas = document.getElementById('beamsCanvas');
-if (!canvas) return;
-var ctx = canvas.getContext('2d');
-if (!ctx) return;
+var container = document.querySelector('.dots-bg');
+var canvas = document.getElementById('dotsCanvas');
+if (!container || !canvas || typeof THREE === 'undefined') return;
 
-var MINIMUM_BEAMS = 20;
-var beams = [];
-var animFrame = 0;
+var scene = new THREE.Scene();
+var camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+var renderer = new THREE.WebGLRenderer({ canvas: canvas, alpha: true, antialias: false });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.setClearColor(0x000000, 0);
 
-function createBeam(w, h) {
-  var angle = -35 + Math.random() * 10;
-  return {
-    x: Math.random() * w * 1.5 - w * 0.25,
-    y: Math.random() * h * 1.5 - h * 0.25,
-    width: 30 + Math.random() * 60,
-    length: h * 2.5,
-    angle: angle,
-    speed: 0.6 + Math.random() * 1.2,
-    opacity: 0.12 + Math.random() * 0.16,
-    hue: 190 + Math.random() * 70,
-    pulse: Math.random() * Math.PI * 2,
-    pulseSpeed: 0.02 + Math.random() * 0.03
-  };
-}
+// Grid config
+var GRID_W = 80;
+var GRID_H = 80;
+var SPACING = 0.35;
+var DOT_SIZE = 1.8;
+var WAVE_AMP = 0.6;
+var WAVE_SPEED = 0.4;
 
-function resetBeam(beam, index) {
-  var column = index % 3;
-  var spacing = canvas.width / 3;
-  beam.y = canvas.height + 100;
-  beam.x = column * spacing + spacing / 2 + (Math.random() - 0.5) * spacing * 0.5;
-  beam.width = 100 + Math.random() * 100;
-  beam.speed = 0.5 + Math.random() * 0.4;
-  beam.hue = 190 + (index * 70) / beams.length;
-  beam.opacity = 0.2 + Math.random() * 0.1;
-  return beam;
-}
+// Create dot grid geometry
+var count = GRID_W * GRID_H;
+var positions = new Float32Array(count * 3);
+var opacities = new Float32Array(count);
+var sizes = new Float32Array(count);
 
-function resizeCanvas() {
-  var dpr = window.devicePixelRatio || 1;
-  canvas.width = window.innerWidth * dpr;
-  canvas.height = window.innerHeight * dpr;
-  canvas.style.width = window.innerWidth + 'px';
-  canvas.style.height = window.innerHeight + 'px';
-  ctx.scale(dpr, dpr);
-  var total = Math.floor(MINIMUM_BEAMS * 1.5);
-  beams = [];
-  for (var i = 0; i < total; i++) {
-    beams.push(createBeam(canvas.width, canvas.height));
+var idx = 0;
+for (var gy = 0; gy < GRID_H; gy++) {
+  for (var gx = 0; gx < GRID_W; gx++) {
+    var px = (gx - GRID_W / 2) * SPACING;
+    var py = (gy - GRID_H / 2) * SPACING;
+    positions[idx * 3] = px;
+    positions[idx * 3 + 1] = py;
+    positions[idx * 3 + 2] = 0;
+    opacities[idx] = 0.25;
+    sizes[idx] = DOT_SIZE;
+    idx++;
   }
 }
 
-resizeCanvas();
-window.addEventListener('resize', resizeCanvas);
+var geometry = new THREE.BufferGeometry();
+geometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+geometry.setAttribute('aOpacity', new THREE.BufferAttribute(opacities, 1));
+geometry.setAttribute('aSize', new THREE.BufferAttribute(sizes, 1));
 
-function drawBeam(beam) {
-  ctx.save();
-  ctx.translate(beam.x, beam.y);
-  ctx.rotate(beam.angle * Math.PI / 180);
+var vertexShader = [
+  'attribute float aOpacity;',
+  'attribute float aSize;',
+  'varying float vOpacity;',
+  'void main() {',
+  '  vOpacity = aOpacity;',
+  '  vec4 mvPos = modelViewMatrix * vec4(position, 1.0);',
+  '  gl_PointSize = aSize * (300.0 / -mvPos.z);',
+  '  gl_Position = projectionMatrix * mvPos;',
+  '}'
+].join('\n');
 
-  var pulsingOpacity = beam.opacity * (0.8 + Math.sin(beam.pulse) * 0.2);
-  var gradient = ctx.createLinearGradient(0, 0, 0, beam.length);
-  gradient.addColorStop(0, 'hsla(' + beam.hue + ', 85%, 65%, 0)');
-  gradient.addColorStop(0.1, 'hsla(' + beam.hue + ', 85%, 65%, ' + (pulsingOpacity * 0.5) + ')');
-  gradient.addColorStop(0.4, 'hsla(' + beam.hue + ', 85%, 65%, ' + pulsingOpacity + ')');
-  gradient.addColorStop(0.6, 'hsla(' + beam.hue + ', 85%, 65%, ' + pulsingOpacity + ')');
-  gradient.addColorStop(0.9, 'hsla(' + beam.hue + ', 85%, 65%, ' + (pulsingOpacity * 0.5) + ')');
-  gradient.addColorStop(1, 'hsla(' + beam.hue + ', 85%, 65%, 0)');
+var fragmentShader = [
+  'varying float vOpacity;',
+  'void main() {',
+  '  float d = length(gl_PointCoord - vec2(0.5));',
+  '  if (d > 0.5) discard;',
+  '  float alpha = smoothstep(0.5, 0.2, d) * vOpacity;',
+  '  gl_FragColor = vec4(0.776, 0.647, 0.349, alpha);',
+  '}'
+].join('\n');
 
-  ctx.fillStyle = gradient;
-  ctx.fillRect(-beam.width / 2, 0, beam.width, beam.length);
-  ctx.restore();
-}
+var material = new THREE.ShaderMaterial({
+  vertexShader: vertexShader,
+  fragmentShader: fragmentShader,
+  transparent: true,
+  depthWrite: false
+});
+
+var points = new THREE.Points(geometry, material);
+scene.add(points);
+
+camera.position.set(0, -4, 14);
+camera.lookAt(0, 0, 0);
+points.rotation.x = -0.65;
+
+var clock = new THREE.Clock();
 
 function animate() {
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  ctx.filter = 'blur(35px)';
+  requestAnimationFrame(animate);
 
-  for (var i = 0; i < beams.length; i++) {
-    var beam = beams[i];
-    beam.y -= beam.speed;
-    beam.pulse += beam.pulseSpeed;
+  var t = clock.getElapsedTime() * WAVE_SPEED;
+  var posArr = geometry.attributes.position.array;
+  var opArr = geometry.attributes.aOpacity.array;
+  var i = 0;
 
-    if (beam.y + beam.length < -100) {
-      resetBeam(beam, i);
+  for (var gy = 0; gy < GRID_H; gy++) {
+    for (var gx = 0; gx < GRID_W; gx++) {
+      var px = (gx - GRID_W / 2) * SPACING;
+      var py = (gy - GRID_H / 2) * SPACING;
+
+      var wave1 = Math.sin(px * 0.8 + t * 1.2) * WAVE_AMP;
+      var wave2 = Math.sin(py * 0.6 + t * 0.8) * WAVE_AMP * 0.7;
+      var wave3 = Math.sin((px + py) * 0.5 + t) * WAVE_AMP * 0.4;
+      var z = wave1 + wave2 + wave3;
+
+      posArr[i * 3 + 2] = z;
+
+      var dist = Math.sqrt(px * px + py * py);
+      var edgeFade = Math.max(0, 1 - dist / 14);
+      var heightGlow = 0.15 + Math.abs(z) * 0.25;
+      opArr[i] = edgeFade * heightGlow;
+
+      i++;
     }
-    drawBeam(beam);
   }
 
-  animFrame = requestAnimationFrame(animate);
+  geometry.attributes.position.needsUpdate = true;
+  geometry.attributes.aOpacity.needsUpdate = true;
+
+  renderer.render(scene, camera);
 }
 
 animate();
+
+window.addEventListener('resize', function() {
+  camera.aspect = window.innerWidth / window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
 })();
 </script>
 </body>
