@@ -11,16 +11,16 @@
   Dark holographic aesthetic, cyan + gold
 ═══════════════════════════════════════════════*/
 :root {
-  --bg: #050508;
-  --bg-card: #0a0a10;
-  --cyan: #00f0ff;
-  --cyan-dim: rgba(0,240,255,.12);
-  --cyan-glow: rgba(0,240,255,.3);
-  --gold: #e8c547;
-  --gold-dim: rgba(232,197,71,.1);
-  --gold-glow: rgba(232,197,71,.25);
-  --text: #e8e6e0;
-  --text-dim: rgba(232,230,224,.35);
+  --bg: #0a0a0a;
+  --bg-card: #111111;
+  --accent: #c8ff00;
+  --accent-dim: rgba(200,255,0,.12);
+  --accent-glow: rgba(200,255,0,.3);
+  --gold: #C6A559;
+  --gold-dim: rgba(198,165,89,.1);
+  --gold-glow: rgba(198,165,89,.25);
+  --text: #f0ede8;
+  --text-dim: rgba(240,237,232,.35);
   --font-display: 'Syne', sans-serif;
   --font-body: 'Space Mono', monospace;
 }
@@ -57,8 +57,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   pointer-events: none;
   opacity: .04;
   background-image:
-    linear-gradient(var(--cyan) 1px, transparent 1px),
-    linear-gradient(90deg, var(--cyan) 1px, transparent 1px);
+    linear-gradient(var(--accent) 1px, transparent 1px),
+    linear-gradient(90deg, var(--accent) 1px, transparent 1px);
   background-size: 60px 60px;
   mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 20%, transparent 70%);
   -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 20%, transparent 70%);
@@ -77,20 +77,20 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   letter-spacing: .12em; color: #fff;
   text-transform: uppercase;
 }
-.nav-logo span { color: var(--cyan); }
+.nav-logo span { color: var(--accent); }
 
 /*─── HAMBURGER ────────────────────────────*/
 .ham-btn {
   width: 4.8rem; height: 4rem;
-  border-radius: .6rem; border: 1px solid rgba(0,240,255,.2);
+  border-radius: .6rem; border: 1px solid rgba(200,255,0,.2);
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .4rem;
-  background: rgba(5,5,8,.85); backdrop-filter: blur(16px);
+  background: rgba(10,10,10,.85); backdrop-filter: blur(16px);
   position: relative; z-index: 600;
   transition: border-color .3s;
   mix-blend-mode: normal;
 }
 .ham-btn span {
-  display: block; width: 1.6rem; height: 1.5px; background: var(--cyan);
+  display: block; width: 1.6rem; height: 1.5px; background: var(--accent);
   transition: transform .4s cubic-bezier(.215,.61,.355,1), opacity .3s;
 }
 .ham-btn.open span:nth-child(1) { transform: translateY(.32rem) rotate(45deg); }
@@ -104,9 +104,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   width: min(26rem, 85vw);
   background: rgba(8,8,14,.96);
   backdrop-filter: blur(30px);
-  border: 1px solid var(--cyan-dim);
+  border: 1px solid var(--accent-dim);
   border-radius: .8rem;
-  box-shadow: 0 1.2rem 4rem rgba(0,0,0,.6), 0 0 40px rgba(0,240,255,.05);
+  box-shadow: 0 1.2rem 4rem rgba(0,0,0,.6), 0 0 40px rgba(200,255,0,.05);
   padding: .8rem;
   opacity: 0; visibility: hidden;
   transform: translateY(-.8rem) scale(.97);
@@ -119,8 +119,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   font-family: var(--font-body); font-size: 1.2rem;
   color: rgba(255,255,255,.6); transition: background .25s, color .25s;
 }
-.dm-link:hover { background: var(--cyan-dim); color: var(--cyan); }
-.dm-divider { height: 1px; background: rgba(0,240,255,.08); margin: .3rem 1.4rem; }
+.dm-link:hover { background: var(--accent-dim); color: var(--accent); }
+.dm-divider { height: 1px; background: rgba(200,255,0,.08); margin: .3rem 1.4rem; }
 
 /*─── HERO ─────────────────────────────────*/
 .hero {
@@ -162,7 +162,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   pointer-events: none;
 }
 .glitch::before {
-  color: var(--cyan);
+  color: var(--accent);
   clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
   animation: glitchTop 3s infinite linear alternate-reverse;
 }
@@ -198,14 +198,14 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .hero-scroll {
   position: absolute; bottom: 4rem;
   display: flex; flex-direction: column; align-items: center; gap: 1rem;
-  font-size: 1rem; color: var(--cyan);
+  font-size: 1rem; color: var(--accent);
   letter-spacing: .15em; text-transform: uppercase;
   opacity: 0;
   animation: pulse-down 2s ease-in-out infinite;
 }
 .hero-scroll .line {
   width: 1px; height: 4rem;
-  background: linear-gradient(to bottom, var(--cyan), transparent);
+  background: linear-gradient(to bottom, var(--accent), transparent);
 }
 @keyframes pulse-down {
   0%, 100% { transform: translateY(0); }
@@ -217,7 +217,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   position: absolute;
   width: 50vw; height: 50vw;
   max-width: 700px; max-height: 700px;
-  border: 1px solid var(--cyan-dim);
+  border: 1px solid var(--accent-dim);
   border-radius: 50%;
   opacity: 0;
   animation: hexSpin 40s linear infinite;
@@ -231,7 +231,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .hex-ring::after {
   content: '';
   position: absolute; inset: 60px;
-  border: 1px solid rgba(0,240,255,.04);
+  border: 1px solid rgba(200,255,0,.04);
   border-radius: 50%;
 }
 @keyframes hexSpin { to { transform: rotate(360deg); } }
@@ -256,7 +256,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .holo-text .tag {
   font-family: var(--font-body);
   font-size: 1rem; letter-spacing: .25em;
-  text-transform: uppercase; color: var(--cyan);
+  text-transform: uppercase; color: var(--accent);
   margin-bottom: 2rem; display: block;
 }
 .holo-text h2 {
@@ -282,7 +282,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 .holo-frame {
   position: absolute; inset: 0;
-  border: 1px solid var(--cyan-dim);
+  border: 1px solid var(--accent-dim);
   border-radius: 50%;
   animation: holoPulse 4s ease-in-out infinite;
 }
@@ -292,7 +292,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   animation-duration: 3.5s;
 }
 .holo-frame:nth-child(3) {
-  inset: 30%; border-color: var(--cyan-dim);
+  inset: 30%; border-color: var(--accent-dim);
   animation-delay: -2s;
   animation-duration: 3s;
 }
@@ -307,20 +307,20 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   transform: translate(-50%, -50%);
   width: 140px; height: 140px;
   border-radius: 50%;
-  background: radial-gradient(circle, var(--cyan-dim) 0%, transparent 70%);
-  box-shadow: 0 0 60px var(--cyan-glow), 0 0 120px rgba(0,240,255,.1);
+  background: radial-gradient(circle, var(--accent-dim) 0%, transparent 70%);
+  box-shadow: 0 0 60px var(--accent-glow), 0 0 120px rgba(200,255,0,.1);
   animation: coreGlow 3s ease-in-out infinite;
 }
 @keyframes coreGlow {
-  0%, 100% { box-shadow: 0 0 60px var(--cyan-glow), 0 0 120px rgba(0,240,255,.1); }
-  50% { box-shadow: 0 0 80px var(--cyan-glow), 0 0 160px rgba(0,240,255,.15); }
+  0%, 100% { box-shadow: 0 0 60px var(--accent-glow), 0 0 120px rgba(200,255,0,.1); }
+  50% { box-shadow: 0 0 80px var(--accent-glow), 0 0 160px rgba(200,255,0,.15); }
 }
 
 .holo-data {
   position: absolute;
   font-family: var(--font-body);
   font-size: 1rem;
-  color: var(--cyan);
+  color: var(--accent);
   letter-spacing: .06em;
   opacity: .5;
   white-space: nowrap;
@@ -378,7 +378,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 .spec-card {
   background: var(--bg-card);
-  border: 1px solid rgba(0,240,255,.06);
+  border: 1px solid rgba(200,255,0,.06);
   border-radius: 1.2rem;
   padding: 4rem 3rem;
   text-align: center;
@@ -389,14 +389,14 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   transition: border-color .4s, box-shadow .4s;
 }
 .spec-card:hover {
-  border-color: var(--cyan-dim);
-  box-shadow: 0 0 40px rgba(0,240,255,.06);
+  border-color: var(--accent-dim);
+  box-shadow: 0 0 40px rgba(200,255,0,.06);
 }
 .spec-card::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, var(--cyan), transparent);
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
   opacity: 0;
   transition: opacity .4s;
 }
@@ -405,19 +405,19 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .spec-icon {
   width: 4.8rem; height: 4.8rem;
   margin: 0 auto 2.4rem;
-  border: 1px solid var(--cyan-dim);
+  border: 1px solid var(--accent-dim);
   border-radius: .8rem;
   display: flex; align-items: center; justify-content: center;
-  color: var(--cyan);
+  color: var(--accent);
   font-size: 2rem;
 }
 .spec-value {
   font-family: var(--font-display);
   font-size: clamp(3.6rem, 4vw, 5rem);
   font-weight: 800; line-height: 1;
-  color: var(--cyan);
+  color: var(--accent);
   margin-bottom: .6rem;
-  text-shadow: 0 0 30px var(--cyan-glow);
+  text-shadow: 0 0 30px var(--accent-glow);
 }
 .spec-unit {
   font-family: var(--font-body);
@@ -447,7 +447,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .gallery-header .tag {
   font-family: var(--font-body);
   font-size: 1rem; letter-spacing: .25em;
-  text-transform: uppercase; color: var(--cyan);
+  text-transform: uppercase; color: var(--accent);
   margin-bottom: 2rem; display: block;
 }
 .gallery-header h2 {
@@ -470,7 +470,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   overflow: hidden;
   aspect-ratio: 16/10;
   background: var(--bg-card);
-  border: 1px solid rgba(0,240,255,.05);
+  border: 1px solid rgba(200,255,0,.05);
   opacity: 0;
   transform: translateY(50px);
 }
@@ -488,7 +488,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
   background:
-    radial-gradient(circle at 30% 40%, rgba(0,240,255,.06) 0%, transparent 50%),
+    radial-gradient(circle at 30% 40%, rgba(200,255,0,.06) 0%, transparent 50%),
     radial-gradient(circle at 70% 60%, rgba(232,197,71,.04) 0%, transparent 50%),
     var(--bg-card);
   position: relative;
@@ -496,7 +496,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .gallery-placeholder::before {
   content: '';
   width: 50px; height: 50px;
-  border: 1px solid var(--cyan-dim);
+  border: 1px solid var(--accent-dim);
   border-radius: 50%;
   animation: placeholderPulse 3s ease-in-out infinite;
 }
@@ -565,16 +565,16 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   font-size: 1.3rem; font-weight: 700;
   letter-spacing: .1em; text-transform: uppercase;
   color: var(--bg);
-  background: var(--cyan);
+  background: var(--accent);
   border-radius: .5rem;
   position: relative;
   overflow: hidden;
   transition: transform .3s, box-shadow .3s;
-  box-shadow: 0 0 30px var(--cyan-glow);
+  box-shadow: 0 0 30px var(--accent-glow);
 }
 .cta-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 0 50px var(--cyan-glow), 0 8px 30px rgba(0,240,255,.2);
+  box-shadow: 0 0 50px var(--accent-glow), 0 8px 30px rgba(200,255,0,.2);
 }
 .cta-btn::after {
   content: '';
@@ -590,7 +590,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 /* CTA decorative rings */
 .cta-ring {
   position: absolute;
-  border: 1px solid var(--cyan-dim);
+  border: 1px solid var(--accent-dim);
   border-radius: 50%;
   pointer-events: none;
 }
@@ -612,7 +612,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .site-footer {
   position: relative; z-index: 10;
   padding: 4rem 5vw;
-  border-top: 1px solid rgba(0,240,255,.06);
+  border-top: 1px solid rgba(200,255,0,.06);
 }
 .footer-inner {
   display: flex; justify-content: space-between; align-items: center;
@@ -623,7 +623,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   letter-spacing: .12em; text-transform: uppercase;
   color: rgba(255,255,255,.2);
 }
-.footer-brand span { color: var(--cyan); opacity: .4; }
+.footer-brand span { color: var(--accent); opacity: .4; }
 .footer-copy {
   font-size: 1.1rem; color: rgba(255,255,255,.12);
   letter-spacing: .04em;
@@ -634,7 +634,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   width: 100%; max-width: 1200px;
   margin: 0 auto;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--cyan-dim), rgba(232,197,71,.08), transparent);
+  background: linear-gradient(90deg, transparent, var(--accent-dim), rgba(232,197,71,.08), transparent);
   position: relative; z-index: 10;
 }
 
