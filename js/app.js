@@ -87,8 +87,8 @@
         loaderBar.style.width = pct + "%";
         loaderPercent.textContent = pct + "%";
         if (loaded === FRAME_COUNT) {
-          // Pre-cache bg colors for key frames
-          for (let i = 0; i < FRAME_COUNT; i += 20) {
+          // Pre-cache bg colors every 5 frames for smoother transitions
+          for (let i = 0; i < FRAME_COUNT; i += 5) {
             if (frames[i]) sampleBgColor(frames[i], i);
           }
           resolve();
@@ -299,8 +299,8 @@
         if (index !== lastFrameIndex) {
           currentFrame = index;
           lastFrameIndex = index;
-          // Use cached bg color
-          const colorKey = Math.floor(index / 20) * 20;
+          // Use cached bg color (every 5 frames for smooth transitions)
+          const colorKey = Math.floor(index / 5) * 5;
           if (bgColorCache[colorKey]) bgColor = bgColorCache[colorKey];
           if (!pendingDraw) {
             pendingDraw = true;
@@ -311,7 +311,7 @@
           }
         }
 
-        // ── 4. Section animations ──
+        // ── 4. Section animations with parallax depth ──
         for (let i = 0; i < sectionData.length; i++) {
           const s = sectionData[i];
           const inRange = p >= s.enter - 0.02 && p <= s.leave + 0.02;
@@ -327,6 +327,14 @@
             s.section.classList.remove("visible");
             s.tl.reverse();
             s.played = false;
+          }
+
+          // Parallax micro-shift while in range
+          if (s.played) {
+            const mid = (s.enter + s.leave) / 2;
+            const offset = (p - mid) * 40;
+            const inner = s.section.querySelector(".section-inner");
+            if (inner) inner.style.transform = "translateY(" + offset + "px)";
           }
         }
 

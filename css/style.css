@@ -340,6 +340,57 @@ body {
   letter-spacing: .04em;
 }
 
+/*─── CINEMATIC OVERLAYS ───────────────────*/
+#grain-overlay {
+  position: fixed; inset: 0; z-index: 5;
+  pointer-events: none;
+  opacity: .035;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size: 128px 128px;
+  animation: grainDrift 0.4s steps(3) infinite;
+}
+@keyframes grainDrift {
+  0%   { transform: translate(0, 0); }
+  33%  { transform: translate(-2px, 1px); }
+  66%  { transform: translate(1px, -2px); }
+  100% { transform: translate(0, 0); }
+}
+
+#vignette-overlay {
+  position: fixed; inset: 0; z-index: 5;
+  pointer-events: none;
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, transparent 50%, rgba(10,10,10,.7) 100%);
+}
+
+/*─── GLOW EFFECTS ────────────────────────*/
+.section-label {
+  text-shadow: 0 0 20px rgba(200,255,0,.15);
+}
+.section-heading {
+  text-shadow: 0 0 40px rgba(255,255,255,.03);
+}
+.stat-number {
+  text-shadow: 0 0 30px rgba(200,255,0,.2);
+}
+.cta-button {
+  box-shadow: 0 0 30px rgba(200,255,0,.15), 0 4px 16px rgba(0,0,0,.3);
+}
+.cta-button:hover {
+  box-shadow: 0 0 50px rgba(200,255,0,.3), 0 8px 30px rgba(200,255,0,.25);
+}
+
+/*─── PARALLAX DEPTH ON SECTIONS ──────────*/
+.scroll-section .section-inner {
+  transition: transform .15s ease-out;
+}
+.scroll-section.visible .section-label {
+  animation: subtlePulse 3s ease-in-out infinite;
+}
+@keyframes subtlePulse {
+  0%, 100% { opacity: .7; }
+  50% { opacity: .9; }
+}
+
 /*─── RESPONSIVE — MOBILE ───────────────────*/
 @media (max-width: 768px) {
   .site-header { padding: 1.6rem 2rem; }
