@@ -8,3 +8,6 @@ CLAUDE (1).md
 credentials.json
 token.json
 .vercel
+*.mp4
+*.pdf
+assets/task_ids*.json
