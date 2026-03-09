@@ -104,6 +104,7 @@ input,textarea,select{font-family:inherit;color:inherit;background:transparent;}
 .sb-brand span{
   background:var(--gold-grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;
 }
+.sb-home:hover{background:rgba(198,165,89,.08);border-color:var(--gold);}
 .sb-nav{flex:1;}
 .sb-item{
   display:flex;align-items:center;gap:1.2rem;
@@ -475,6 +476,10 @@ tr:hover td{background:rgba(255,255,255,.015);}
   <!-- SIDEBAR -->
   <aside class="sidebar" id="sidebar">
     <div class="sb-brand">Tester<span>.io</span></div>
+    <a href="index.html" class="sb-home" style="display:flex;align-items:center;gap:.8rem;padding:1.2rem 2rem;margin:0 1.2rem 1.2rem;border-radius:.5rem;font-size:1.15rem;font-weight:600;color:var(--gold);border:1px solid var(--border);text-decoration:none;transition:background .25s,border-color .25s;">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      Back to Home
+    </a>
     <nav class="sb-nav">
       <div class="sb-item active" data-section="overview">
         <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
