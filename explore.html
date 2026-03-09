@@ -35,12 +35,42 @@ body{
   letter-spacing:.12em;text-transform:uppercase;color:#fff;text-decoration:none;
 }
 .nav-logo span{color:var(--accent);}
-.nav-back{
-  font-size:1.1rem;color:rgba(255,255,255,.5);text-decoration:none;
-  letter-spacing:.06em;transition:color .3s;display:flex;align-items:center;gap:.8rem;
+/* HAMBURGER */
+.ham-btn{
+  width:4.8rem;height:4rem;border-radius:.6rem;
+  border:1px solid rgba(255,255,255,.15);
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;
+  background:rgba(10,10,10,.8);backdrop-filter:blur(16px);
+  cursor:pointer;position:relative;z-index:200;transition:border-color .3s;
+  mix-blend-mode:normal;
 }
-.nav-back:hover{color:#fff;}
-.nav-back svg{width:1.6rem;height:1.6rem;stroke:currentColor;fill:none;stroke-width:1.5;}
+.ham-btn span{display:block;width:1.6rem;height:1.5px;background:#fff;transition:transform .4s,opacity .3s;}
+.ham-btn.open span:nth-child(1){transform:translateY(.32rem) rotate(45deg);}
+.ham-btn.open span:nth-child(2){opacity:0;}
+.ham-btn.open span:nth-child(3){transform:translateY(-.32rem) rotate(-45deg);}
+.ham-btn:hover{border-color:var(--accent);}
+
+/* DROPDOWN */
+.dropdown-menu{
+  position:fixed;top:6.5rem;right:4rem;z-index:150;
+  width:min(26rem,85vw);
+  background:rgba(12,12,12,.96);
+  backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);
+  border:1px solid rgba(200,255,0,.12);border-radius:.8rem;
+  box-shadow:0 1.2rem 4rem rgba(0,0,0,.5);
+  padding:.8rem;
+  opacity:0;visibility:hidden;
+  transform:translateY(-.8rem) scale(.97);transform-origin:top right;
+  transition:opacity .3s,visibility .3s,transform .3s;
+}
+.dropdown-menu.open{opacity:1;visibility:visible;transform:translateY(0) scale(1);}
+.dm-link{
+  display:block;padding:1rem 1.4rem;border-radius:.5rem;
+  font-family:var(--font-b);font-size:1.2rem;
+  color:rgba(255,255,255,.7);text-decoration:none;
+  transition:background .25s,color .25s;
+}
+.dm-link:hover{background:rgba(200,255,0,.1);color:var(--accent);}
 
 /* HERO */
 .hero{
@@ -186,11 +216,15 @@ body{
 <!-- NAV -->
 <nav class="nav">
   <a href="/" class="nav-logo">TESTER<span>.io</span></a>
-  <a href="product.html" class="nav-back">
-    <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
-    Camera Dissection
-  </a>
+  <button class="ham-btn" id="ham" aria-label="Menu"><span></span><span></span><span></span></button>
 </nav>
+
+<!-- DROPDOWN MENU -->
+<div class="dropdown-menu" id="menu">
+  <a href="index.html" class="dm-link" onclick="closeMenu()">Home</a>
+  <a href="product.html" class="dm-link" onclick="closeMenu()">Dissection</a>
+  <a href="dashboard.html" class="dm-link" onclick="closeMenu()">Admin</a>
+</div>
 
 <!-- HERO -->
 <section class="hero">
@@ -282,5 +316,26 @@ body{
   <span class="footer-copy">&copy; 2026 All rights reserved</span>
 </footer>
 
+<script>
+(function(){
+  var ham = document.getElementById('ham');
+  var menu = document.getElementById('menu');
+  if (!ham || !menu) return;
+  ham.addEventListener('click', function(){
+    if (menu.classList.contains('open')) closeMenu();
+    else { ham.classList.add('open'); menu.classList.add('open'); }
+  });
+  window.closeMenu = function(){
+    ham.classList.remove('open');
+    menu.classList.remove('open');
+  };
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && menu.classList.contains('open')) closeMenu();
+  });
+  document.addEventListener('click', function(e){
+    if (menu.classList.contains('open') && !menu.contains(e.target) && !ham.contains(e.target)) closeMenu();
+  });
+})();
+</script>
 </body>
 </html>

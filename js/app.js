@@ -125,7 +125,7 @@
     initHeroTransition();
     positionSections();
     initSectionAnimations();
-    initDarkOverlay(0.54, 0.70);
+    initDarkOverlay(0.34, 0.48);
     initMarquee();
     initCounters();
   }
@@ -183,16 +183,24 @@
       },
     });
 
-    // Frame-to-scroll binding
+    // Frame-to-scroll binding — forward then reverse (reassemble)
     ScrollTrigger.create({
       trigger: scrollContainer,
       start: "top top",
       end: "bottom bottom",
       scrub: true,
       onUpdate: (self) => {
-        const accelerated = Math.min(self.progress * FRAME_SPEED, 1);
+        const p = self.progress;
+        // First half (0–0.5): disassemble forward 0→max
+        // Second half (0.5–1): reassemble reverse max→0
+        let frameProgress;
+        if (p <= 0.5) {
+          frameProgress = Math.min(p * 2, 1);
+        } else {
+          frameProgress = Math.max(0, 1 - (p - 0.5) * 2);
+        }
         const index = Math.min(
-          Math.floor(accelerated * FRAME_COUNT),
+          Math.floor(frameProgress * FRAME_COUNT),
           FRAME_COUNT - 1
         );
         if (index !== currentFrame) {
@@ -334,11 +342,11 @@
         scrub: true,
         onUpdate: (self) => {
           const p = self.progress;
-          // Show marquee between 15% and 80%
-          if (p > 0.12 && p < 0.52) {
-            el.style.opacity = Math.min(1, (p - 0.12) / 0.04);
-          } else if (p >= 0.52 && p < 0.56) {
-            el.style.opacity = Math.max(0, 1 - (p - 0.52) / 0.04);
+          // Show marquee between 8% and 42%
+          if (p > 0.08 && p < 0.38) {
+            el.style.opacity = Math.min(1, (p - 0.08) / 0.04);
+          } else if (p >= 0.38 && p < 0.42) {
+            el.style.opacity = Math.max(0, 1 - (p - 0.38) / 0.04);
           } else {
             el.style.opacity = 0;
           }
@@ -360,9 +368,9 @@
         end: "bottom bottom",
         onUpdate: (self) => {
           const p = self.progress;
-          // Animate when stats section is visible (54-70%)
-          if (p >= 0.52 && p <= 0.72) {
-            const localP = Math.min(1, (p - 0.52) / 0.08);
+          // Animate when stats section is visible (34-46%)
+          if (p >= 0.32 && p <= 0.48) {
+            const localP = Math.min(1, (p - 0.32) / 0.08);
             const eased = 1 - Math.pow(1 - localP, 3);
             const val = target * eased;
             el.textContent = decimals > 0 ? val.toFixed(decimals) : Math.round(val);

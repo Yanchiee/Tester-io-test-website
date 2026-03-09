@@ -24,14 +24,19 @@
 <header class="site-header">
   <nav>
     <a href="/" class="nav-logo">TESTER<span>.io</span></a>
-    <div class="nav-links">
-      <a href="index.html">Home</a>
-      <a href="#features">Features</a>
-      <a href="#specs">Specs</a>
-      <a href="explore.html">Explore</a>
-    </div>
+    <button class="ham-btn" id="ham" aria-label="Menu"><span></span><span></span><span></span></button>
   </nav>
 </header>
+
+<!-- DROPDOWN MENU -->
+<div class="dropdown-menu" id="menu">
+  <a href="index.html" class="dm-link" onclick="closeMenu()">Home</a>
+  <a href="explore.html" class="dm-link" onclick="closeMenu()">Explore</a>
+  <a href="dashboard.html" class="dm-link" onclick="closeMenu()">Admin</a>
+  <div class="dm-divider"></div>
+  <a href="#features" class="dm-link" onclick="closeMenu()">Features</a>
+  <a href="#specs" class="dm-link" onclick="closeMenu()">Specs</a>
+</div>
 
 <!-- HERO (standalone 100vh) -->
 <section class="hero-standalone" id="hero">
@@ -41,7 +46,7 @@
     <span>Lens.</span>
     <span>Dissected.</span>
   </h1>
-  <p class="hero-tagline">Precision optics deconstructed frame by frame.<br>See what lies beneath the glass.</p>
+  <p class="hero-tagline">Scroll to watch a precision camera module disassemble — and reassemble — before your eyes. Every layer, every component, revealed.</p>
   <div class="scroll-indicator">
     <span>Scroll to explore</span>
     <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
@@ -66,9 +71,9 @@
 <!-- SCROLL CONTAINER -->
 <div id="scroll-container">
 
-  <!-- Feature 1 -->
+  <!-- Feature 1: Lens Assembly -->
   <section class="scroll-section section-content align-left"
-           data-enter="18" data-leave="32" data-animation="slide-left">
+           data-enter="10" data-leave="20" data-animation="slide-left">
     <div class="section-inner">
       <span class="section-label">002 / Lens Assembly</span>
       <h2 class="section-heading">Multi-Element<br>Precision</h2>
@@ -76,9 +81,9 @@
     </div>
   </section>
 
-  <!-- Feature 2 -->
+  <!-- Feature 2: Sensor Core -->
   <section class="scroll-section section-content align-right"
-           data-enter="30" data-leave="44" data-animation="slide-right">
+           data-enter="18" data-leave="28" data-animation="slide-right">
     <div class="section-inner">
       <span class="section-label">003 / Sensor Core</span>
       <h2 class="section-heading">48MP<br>Stacked BSI</h2>
@@ -86,9 +91,9 @@
     </div>
   </section>
 
-  <!-- Feature 3 -->
+  <!-- Feature 3: Stabilization -->
   <section class="scroll-section section-content align-left"
-           data-enter="42" data-leave="54" data-animation="fade-up">
+           data-enter="26" data-leave="36" data-animation="fade-up">
     <div class="section-inner">
       <span class="section-label">004 / Stabilization</span>
       <h2 class="section-heading">Sensor-Shift<br>OIS</h2>
@@ -98,7 +103,7 @@
 
   <!-- Stats -->
   <section class="scroll-section section-stats"
-           data-enter="54" data-leave="70" data-animation="stagger-up">
+           data-enter="34" data-leave="46" data-animation="stagger-up">
     <div class="stats-grid">
       <div class="stat">
         <span class="stat-number" data-value="48" data-decimals="0">0</span>
@@ -123,21 +128,41 @@
     </div>
   </section>
 
-  <!-- Video Section -->
+  <!-- Fully Disassembled -->
   <section class="scroll-section section-content align-right"
-           data-enter="68" data-leave="82" data-animation="scale-up">
+           data-enter="44" data-leave="54" data-animation="scale-up">
     <div class="section-inner">
-      <span class="section-label">005 / The Dissection</span>
-      <h2 class="section-heading">Watch It<br>Come Apart</h2>
+      <span class="section-label">005 / Fully Exposed</span>
+      <h2 class="section-heading">Every Layer<br>Revealed</h2>
       <p class="section-body">Every component. Every layer. Precision engineering exposed in a way you've never seen before.</p>
+    </div>
+  </section>
+
+  <!-- Reassembly begins -->
+  <section class="scroll-section section-content align-left"
+           data-enter="58" data-leave="70" data-animation="slide-left">
+    <div class="section-inner">
+      <span class="section-label">006 / Reassembly</span>
+      <h2 class="section-heading">Watch It<br>Come Together</h2>
+      <p class="section-body">Component by component, precision by precision — the camera rebuilds itself into a seamless whole.</p>
+    </div>
+  </section>
+
+  <!-- Reassembled -->
+  <section class="scroll-section section-content align-right"
+           data-enter="72" data-leave="84" data-animation="fade-up">
+    <div class="section-inner">
+      <span class="section-label">007 / Complete</span>
+      <h2 class="section-heading">Perfection<br>Restored</h2>
+      <p class="section-body">From fragments to flawless. A testament to engineering that was designed to be taken apart — and put back together again.</p>
     </div>
   </section>
 
   <!-- CTA -->
   <section class="scroll-section section-content section-cta align-left"
-           data-enter="80" data-leave="100" data-animation="clip-reveal" data-persist="true">
+           data-enter="84" data-leave="100" data-animation="clip-reveal" data-persist="true">
     <div class="section-inner">
-      <span class="section-label">006 / Next Step</span>
+      <span class="section-label">008 / Next Step</span>
       <h2 class="section-heading">See More<br>Creations</h2>
       <p class="section-body">Explore our full collection of dissected products and premium engineering breakdowns.</p>
       <a href="explore.html" class="cta-button">Explore Collection</a>
@@ -158,5 +183,26 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3/dist/ScrollTrigger.min.js"></script>
 <script src="js/app.js"></script>
+<script>
+(function(){
+  var ham = document.getElementById('ham');
+  var menu = document.getElementById('menu');
+  if (!ham || !menu) return;
+  ham.addEventListener('click', function(){
+    if (menu.classList.contains('open')) closeMenu();
+    else { ham.classList.add('open'); menu.classList.add('open'); }
+  });
+  window.closeMenu = function(){
+    ham.classList.remove('open');
+    menu.classList.remove('open');
+  };
+  document.addEventListener('keydown', function(e){
+    if (e.key === 'Escape' && menu.classList.contains('open')) closeMenu();
+  });
+  document.addEventListener('click', function(e){
+    if (menu.classList.contains('open') && !menu.contains(e.target) && !ham.contains(e.target)) closeMenu();
+  });
+})();
+</script>
 </body>
 </html>

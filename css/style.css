@@ -83,6 +83,57 @@ body {
 }
 .nav-links a:hover { color: #fff; }
 
+/*─── HAMBURGER BUTTON ─────────────────────*/
+.ham-btn {
+  width: 4.8rem; height: 4rem;
+  border-radius: .6rem; border: 1px solid rgba(255,255,255,.15);
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .4rem;
+  background: rgba(10,10,10,.8); backdrop-filter: blur(16px);
+  cursor: pointer; position: relative; z-index: 600;
+  transition: border-color .3s;
+  mix-blend-mode: normal;
+}
+.ham-btn span {
+  display: block; width: 1.6rem; height: 1.5px; background: #fff;
+  transition: transform .4s cubic-bezier(.215,.61,.355,1), opacity .3s;
+}
+.ham-btn.open span:nth-child(1) { transform: translateY(.32rem) rotate(45deg); }
+.ham-btn.open span:nth-child(2) { opacity: 0; }
+.ham-btn.open span:nth-child(3) { transform: translateY(-.32rem) rotate(-45deg); }
+.ham-btn:hover { border-color: var(--accent); }
+
+/*─── DROPDOWN MENU ────────────────────────*/
+.dropdown-menu {
+  position: fixed;
+  top: 6.5rem; right: 4rem;
+  z-index: 550;
+  width: min(26rem, 85vw);
+  background: rgba(12,12,12,.96);
+  backdrop-filter: blur(30px); -webkit-backdrop-filter: blur(30px);
+  border: 1px solid rgba(200,255,0,.12);
+  border-radius: .8rem;
+  box-shadow: 0 1.2rem 4rem rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.03);
+  padding: .8rem;
+  opacity: 0; visibility: hidden;
+  transform: translateY(-.8rem) scale(.97);
+  transform-origin: top right;
+  transition: opacity .3s cubic-bezier(.215,.61,.355,1),
+              visibility .3s,
+              transform .3s cubic-bezier(.215,.61,.355,1);
+}
+.dropdown-menu.open { opacity: 1; visibility: visible; transform: translateY(0) scale(1); }
+.dm-link {
+  display: block;
+  padding: 1rem 1.4rem; border-radius: .5rem;
+  font-family: var(--font-body);
+  font-size: 1.2rem; font-weight: 400;
+  color: rgba(255,255,255,.7); text-decoration: none;
+  letter-spacing: .02em;
+  transition: background .25s, color .25s;
+}
+.dm-link:hover { background: rgba(200,255,0,.1); color: var(--accent); }
+.dm-divider { height: 1px; background: rgba(255,255,255,.06); margin: .3rem 1.4rem; }
+
 /*─── HERO ──────────────────────────────────*/
 .hero-standalone {
   height: 100vh; position: relative; z-index: 10;
@@ -93,10 +144,11 @@ body {
 }
 .hero-heading {
   font-family: var(--font-display);
-  font-size: clamp(6rem, 12vw, 14rem);
-  font-weight: 800; line-height: .9;
+  font-size: clamp(4.8rem, 8vw, 10rem);
+  font-weight: 800; line-height: .92;
   letter-spacing: -.04em;
   margin-bottom: 2.4rem;
+  max-width: 72rem;
 }
 .hero-heading span {
   display: block;
@@ -104,9 +156,10 @@ body {
   transform: translateY(40px);
 }
 .hero-tagline {
-  font-size: 1.6rem; line-height: 1.7;
-  color: rgba(255,255,255,.4);
-  max-width: 480px;
+  font-size: 1.5rem; line-height: 1.8;
+  color: rgba(255,255,255,.45);
+  max-width: 52rem;
+  letter-spacing: .01em;
 }
 .scroll-indicator {
   position: absolute; bottom: 4rem; left: 5vw;

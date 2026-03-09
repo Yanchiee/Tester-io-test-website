@@ -221,67 +221,64 @@ ul,ol{list-style:none;}
 .nav-btn:hover{transform:translateY(-1px);box-shadow:0 4px 20px rgba(198,165,89,.3);}
 .nav-btn span,.nav-btn svg{position:relative;z-index:1;}
 
-/* Bottom submenu */
-.subnav{
-  position:fixed;bottom:var(--menu-pad);left:var(--menu-pad);right:var(--menu-pad);
-  height:var(--menu-height);display:flex;align-items:center;justify-content:center;
-  z-index:var(--z-frame);pointer-events:none;
-  transition:opacity .4s;
-}
-.subnav a{
-  pointer-events:auto;font-family:'Montserrat',sans-serif;
-  font-size:1rem;font-weight:500;text-transform:uppercase;letter-spacing:.06em;
-  color:rgba(255,255,255,.3);padding:0 1.8rem;height:100%;display:flex;align-items:center;
-  transition:color .3s;position:relative;
-}
-.subnav a:hover{color:var(--cl-gold);}
-.subnav a::after{
-  content:'';position:absolute;bottom:0;left:50%;transform:translateX(-50%);
-  width:0;height:2px;background:var(--cl-gold-gradient);
-  transition:width .35s var(--ease-out-cubic);
-}
-.subnav a:hover::after{width:50%;}
-.subnav-div{width:1px;height:1.2rem;background:rgba(255,255,255,.08);}
 
-/* ═══ MENU OVERLAY ════════════════════════════════════════ */
+/* ═══ MENU DROPDOWN ══════════════════════════════════════ */
 .menu{
-  position:fixed;inset:0;z-index:var(--z-menu);
-  background:var(--cl-black);
-  display:flex;flex-direction:column;justify-content:center;
-  padding:0 var(--grid-side-margin);
+  position:fixed;top:calc(var(--menu-pad) + var(--menu-height) + .8rem);
+  left:var(--menu-pad);
+  z-index:var(--z-menu);
+  width:min(30rem, 88vw);
+  background:rgba(12,12,12,.96);
+  backdrop-filter:blur(30px);-webkit-backdrop-filter:blur(30px);
+  border:1px solid rgba(198,165,89,.12);
+  border-radius:var(--radius);
+  box-shadow:0 1.2rem 4rem rgba(0,0,0,.5), 0 0 0 1px rgba(255,255,255,.03);
+  padding:1rem;
   opacity:0;visibility:hidden;
-  transition:opacity .5s var(--ease-out-cubic),visibility .5s;
+  transform:translateY(-1rem) scale(.97);
+  transform-origin:top left;
+  transition:opacity .3s var(--ease-out-cubic),
+             visibility .3s,
+             transform .3s var(--ease-out-cubic);
 }
-.menu.open{opacity:1;visibility:visible;}
+.menu.open{opacity:1;visibility:visible;transform:translateY(0) scale(1);}
 
-.menu-links{display:flex;flex-direction:column;}
+.menu-links{display:flex;flex-direction:column;gap:.2rem;}
 .menu-link{
   display:flex;align-items:center;justify-content:space-between;
-  padding:1.8rem 0;border-bottom:1px solid rgba(255,255,255,.06);
-  transition:padding-left .4s var(--ease-out-cubic);
+  padding:1rem 1.4rem;border-radius:.5rem;
+  transition:background .25s;
+  border:none;
 }
-.menu-link:first-child{border-top:1px solid rgba(255,255,255,.06);}
-.menu-link:hover{padding-left:2rem;}
+.menu-link:first-child{border-top:none;}
+.menu-link:hover{background:rgba(198,165,89,.1);}
 .menu-link-text{
-  font-size:clamp(3.2rem,5.5vw,6.4rem);font-weight:800;
-  letter-spacing:-.04em;color:var(--cl-white);line-height:.94;
-  transition:color .3s;
+  font-family:'Montserrat',sans-serif;
+  font-size:1.25rem;font-weight:600;
+  letter-spacing:.01em;color:var(--cl-white);line-height:1.3;
+  transition:color .25s;
 }
 .menu-link:hover .menu-link-text{color:var(--cl-gold);}
 .menu-link-label{
-  font-family:'IBM Plex Mono',monospace;font-size:1.1rem;
-  color:rgba(255,255,255,.2);text-transform:uppercase;letter-spacing:.1em;
+  font-family:'IBM Plex Mono',monospace;font-size:.8rem;
+  color:rgba(198,165,89,.3);letter-spacing:.06em;
+  flex-shrink:0;
+}
+.menu-divider{
+  height:1px;background:rgba(255,255,255,.06);
+  margin:.4rem 1.4rem;
 }
 
 .menu-bottom{
-  position:absolute;bottom:var(--menu-pad);
-  left:var(--grid-side-margin);right:var(--grid-side-margin);
-  display:flex;justify-content:space-between;align-items:flex-end;
+  padding:1rem 1.4rem .6rem;
+  border-top:1px solid rgba(255,255,255,.05);
+  margin-top:.4rem;
+  display:flex;justify-content:space-between;align-items:center;
 }
-.menu-bottom-group{display:flex;gap:2rem;}
+.menu-bottom-group{display:flex;gap:1.6rem;}
 .menu-bottom-group a{
-  font-family:'Montserrat',sans-serif;font-size:1rem;font-weight:500;
-  color:rgba(255,255,255,.25);text-transform:uppercase;letter-spacing:.08em;
+  font-family:'Montserrat',sans-serif;font-size:.85rem;font-weight:500;
+  color:rgba(255,255,255,.2);text-transform:uppercase;letter-spacing:.06em;
   transition:color .2s;
 }
 .menu-bottom-group a:hover{color:var(--cl-gold);}
@@ -794,7 +791,7 @@ ul,ol{list-style:none;}
   html{font-size:10px !important;}
 
   /* Nav */
-  .nav-btn,.live,.subnav{display:none;}
+  .nav-btn,.live{display:none;}
   .ham{width:52px;height:44px;min-width:44px;min-height:44px;}
   .logo-icon{width:2.8rem;height:2.8rem;}
   .logo-mark{font-size:1.6rem;}
@@ -899,12 +896,13 @@ ul,ol{list-style:none;}
   .con-resp-box{padding:2.5rem;}
   .con-resp-text{font-size:1.25rem;}
 
-  /* Menu overlay */
-  .menu{padding:0 2rem;}
-  .menu-link{padding:1.4rem 0;}
-  .menu-link-text{font-size:clamp(2.6rem,7vw,4rem);}
-  .menu-bottom{left:2rem;right:2rem;}
-  .menu-bottom-group a{font-size:1rem;min-height:44px;display:flex;align-items:center;}
+  /* Menu dropdown */
+  .menu{width:calc(100vw - 20px);left:10px;right:10px;padding:.8rem;}
+  .menu-link{padding:1.1rem 1.2rem;}
+  .menu-link-text{font-size:1.2rem;}
+  .menu-link-label{font-size:.75rem;}
+  .menu-bottom{padding:.8rem 1.2rem .5rem;}
+  .menu-bottom-group a{font-size:.9rem;min-height:44px;display:flex;align-items:center;}
 
   /* Buttons - minimum touch targets */
   .btn{min-height:48px;}
@@ -965,16 +963,26 @@ ul,ol{list-style:none;}
   text-shadow:0 0 40px rgba(198,165,89,.2);
 }
 
-/* ═══ SPIRAL BACKGROUND ═══════════════════════════════ */
-.spiral-bg{
+/* ═══ BEAMS BACKGROUND ═══════════════════════════════ */
+.beams-bg{
   position:fixed;inset:0;z-index:0;overflow:hidden;
   pointer-events:none;
 }
-.spiral-bg canvas{
-  position:absolute;
-  top:50%;left:50%;
-  transform:translate(-50%,-50%);
-  opacity:.45;
+.beams-bg canvas{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  filter:blur(15px);
+}
+.beams-overlay{
+  position:fixed;inset:0;z-index:0;
+  background:rgba(10,10,10,.05);
+  backdrop-filter:blur(50px);-webkit-backdrop-filter:blur(50px);
+  pointer-events:none;
+  animation:beamsOverlayPulse 10s ease-in-out infinite;
+}
+@keyframes beamsOverlayPulse{
+  0%,100%{opacity:.05;}
+  50%{opacity:.15;}
 }
 .hero{position:relative;z-index:1;}
 .hero>*{position:relative;z-index:2;}
@@ -982,8 +990,9 @@ ul,ol{list-style:none;}
 </head>
 <body>
 
-<!-- ═══ SPIRAL BACKGROUND (full-page) ═════════════════ -->
-<div class="spiral-bg"><canvas id="spiralCanvas"></canvas></div>
+<!-- ═══ BEAMS BACKGROUND (full-page) ══════════════════ -->
+<div class="beams-bg"><canvas id="beamsCanvas"></canvas></div>
+<div class="beams-overlay"></div>
 
 <!-- ═══ PRELOADER ══════════════════════════════════════ -->
 <div id="loader">
@@ -1029,18 +1038,6 @@ ul,ol{list-style:none;}
   </div>
 </nav>
 
-<!-- Submenu bottom -->
-<div class="subnav" id="subnav">
-  <a href="#features">Features</a><div class="subnav-div"></div>
-  <a href="#platform">Platform</a><div class="subnav-div"></div>
-  <a href="#metrics">Metrics</a><div class="subnav-div"></div>
-  <a href="#process">Process</a><div class="subnav-div"></div>
-  <a href="#reviews">Reviews</a><div class="subnav-div"></div>
-  <a href="#start">Get Started</a><div class="subnav-div"></div>
-  <a href="product.html">Dissection</a><div class="subnav-div"></div>
-  <a href="explore.html">Explore</a><div class="subnav-div"></div>
-  <a href="dashboard.html">Admin</a>
-</div>
 
 <!-- ═══ MENU OVERLAY ══════════════════════════════════ -->
 <div class="menu" id="menu">
@@ -1051,6 +1048,7 @@ ul,ol{list-style:none;}
     <a href="#process" class="menu-link" onclick="closeMenu()"><span class="menu-link-text">Process</span><span class="menu-link-label">004</span></a>
     <a href="#reviews" class="menu-link" onclick="closeMenu()"><span class="menu-link-text">Reviews</span><span class="menu-link-label">005</span></a>
     <a href="#start" class="menu-link" onclick="closeMenu()"><span class="menu-link-text">Get Started</span><span class="menu-link-label">006</span></a>
+    <div class="menu-divider"></div>
     <a href="product.html" class="menu-link" onclick="closeMenu()"><span class="menu-link-text">Dissection</span><span class="menu-link-label">007</span></a>
     <a href="explore.html" class="menu-link" onclick="closeMenu()"><span class="menu-link-text">Explore</span><span class="menu-link-label">008</span></a>
     <a href="dashboard.html" class="menu-link" onclick="closeMenu()"><span class="menu-link-text">Admin</span><span class="menu-link-label">009</span></a>
@@ -1383,11 +1381,14 @@ var ham=document.getElementById('ham'),
 
 ham.addEventListener('click',function(){
   if(menuEl.classList.contains('open')) closeMenu();
-  else{ham.classList.add('open');menuEl.classList.add('open');document.body.style.overflow='hidden';}
+  else{ham.classList.add('open');menuEl.classList.add('open');}
 });
 window.closeMenu=function(){
-  ham.classList.remove('open');menuEl.classList.remove('open');document.body.style.overflow='';
+  ham.classList.remove('open');menuEl.classList.remove('open');
 };
+document.addEventListener('click',function(e){
+  if(menuEl.classList.contains('open') && !menuEl.contains(e.target) && !ham.contains(e.target)) closeMenu();
+});
 
 
 /* ── CONSOLE ──────────────────────────────── */
@@ -1477,11 +1478,7 @@ var ticking=false;
 window.addEventListener('scroll',function(){
   if(!ticking){
     requestAnimationFrame(function(){
-      var sy=window.scrollY,sub=document.getElementById('subnav');
-      // Subnav fade
-      if(sy>window.innerHeight*.4){sub.style.opacity='0';sub.style.pointerEvents='none';}
-      else{sub.style.opacity='1';sub.style.pointerEvents='';}
-      sub.style.transition='opacity .4s';
+      var sy=window.scrollY;
       // ConBar visibility
       if(sy<150)conBar.classList.remove('show');
       else if(!conPanel.classList.contains('open')&&ld.classList.contains('done'))conBar.classList.add('show');
@@ -1586,234 +1583,103 @@ setInterval(function(){
 })();
 </script>
 
-<!-- ═══ SPIRAL ANIMATION ═════════════════════════════ -->
+<!-- ═══ BEAMS ANIMATION ══════════════════════════════ -->
 <script>
 (function(){
 'use strict';
 
-var canvas = document.getElementById('spiralCanvas');
+var canvas = document.getElementById('beamsCanvas');
 if (!canvas) return;
 var ctx = canvas.getContext('2d');
 if (!ctx) return;
 
-// ── Constants ────────────────────────────────
-var CHANGE_EVENT_TIME = 0.32;
-var CAMERA_Z = -400;
-var CAMERA_TRAVEL = 3400;
-var START_DOT_Y = 28;
-var VIEW_ZOOM = 100;
-var NUM_STARS = 5000;
-var TRAIL_LEN = 80;
+var MINIMUM_BEAMS = 20;
+var beams = [];
+var animFrame = 0;
 
-// ── Brand color ──────────────────────────────
-// Gold: rgb(198,165,89) → used for stars/trail
-var GOLD_R = 198, GOLD_G = 165, GOLD_B = 89;
-
-// ── Sizing ───────────────────────────────────
-var dpr, sz;
-
-function resize() {
-  var w = window.innerWidth;
-  var h = window.innerHeight;
-  dpr = window.devicePixelRatio || 1;
-  sz = Math.max(w, h);
-  canvas.width = sz * dpr;
-  canvas.height = sz * dpr;
-  canvas.style.width = w + 'px';
-  canvas.style.height = h + 'px';
-  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-}
-resize();
-window.addEventListener('resize', resize);
-
-// ── Math helpers ─────────────────────────────
-function ease(p, g) {
-  return p < 0.5
-    ? 0.5 * Math.pow(2 * p, g)
-    : 1 - 0.5 * Math.pow(2 * (1 - p), g);
-}
-function easeOutElastic(x) {
-  var c4 = (2 * Math.PI) / 4.5;
-  if (x <= 0) return 0;
-  if (x >= 1) return 1;
-  return Math.pow(2, -8 * x) * Math.sin((x * 8 - 0.75) * c4) + 1;
-}
-function map(v, a1, b1, a2, b2) {
-  return a2 + (b2 - a2) * ((v - a1) / (b1 - a1));
-}
-function clamp(v, lo, hi) { return Math.min(Math.max(v, lo), hi); }
-function lerp(a, b, t) { return a * (1 - t) + b * t; }
-
-// ── Spiral path ──────────────────────────────
-function spiralPath(p) {
-  p = clamp(1.2 * p, 0, 1);
-  p = ease(p, 1.8);
-  var turns = 6;
-  var theta = 2 * Math.PI * turns * Math.sqrt(p);
-  var r = 170 * Math.sqrt(p);
-  return { x: r * Math.cos(theta), y: r * Math.sin(theta) + START_DOT_Y };
+function createBeam(w, h) {
+  var angle = -35 + Math.random() * 10;
+  return {
+    x: Math.random() * w * 1.5 - w * 0.25,
+    y: Math.random() * h * 1.5 - h * 0.25,
+    width: 30 + Math.random() * 60,
+    length: h * 2.5,
+    angle: angle,
+    speed: 0.6 + Math.random() * 1.2,
+    opacity: 0.12 + Math.random() * 0.16,
+    hue: 190 + Math.random() * 70,
+    pulse: Math.random() * Math.PI * 2,
+    pulseSpeed: 0.02 + Math.random() * 0.03
+  };
 }
 
-// ── Stars ────────────────────────────────────
-var stars = [];
-// Use seeded random for star generation
-var _origRandom = Math.random;
-var _seed = 1234;
-Math.random = function() {
-  _seed = (_seed * 9301 + 49297) % 233280;
-  return _seed / 233280;
-};
-
-for (var i = 0; i < NUM_STARS; i++) {
-  var angle = Math.random() * Math.PI * 2;
-  var dist = 30 * Math.random() + 15;
-  var rotDir = Math.random() > 0.5 ? 1 : -1;
-  var expRate = 1.2 + Math.random() * 0.8;
-  var finalSc = 0.7 + Math.random() * 0.6;
-  var spiralLoc = (1 - Math.pow(1 - Math.random(), 3.0)) / 1.3;
-  var zMin = 0.5 * CAMERA_Z, zMax = CAMERA_TRAVEL + CAMERA_Z;
-  var z = zMin + Math.random() * (zMax - zMin);
-  z = lerp(z, CAMERA_TRAVEL / 2, 0.3 * spiralLoc);
-  var swf = Math.pow(Math.random(), 2.0);
-
-  stars.push({
-    angle: angle, distance: dist, rotDir: rotDir,
-    expRate: expRate, finalSc: finalSc,
-    dx: dist * Math.cos(angle), dy: dist * Math.sin(angle),
-    spiralLoc: spiralLoc, z: z, swf: swf
-  });
+function resetBeam(beam, index) {
+  var column = index % 3;
+  var spacing = canvas.width / 3;
+  beam.y = canvas.height + 100;
+  beam.x = column * spacing + spacing / 2 + (Math.random() - 0.5) * spacing * 0.5;
+  beam.width = 100 + Math.random() * 100;
+  beam.speed = 0.5 + Math.random() * 0.4;
+  beam.hue = 190 + (index * 70) / beams.length;
+  beam.opacity = 0.2 + Math.random() * 0.1;
+  return beam;
 }
-Math.random = _origRandom;
 
-// ── Projected dot ────────────────────────────
-var animTime = { t: 0 };
-
-function projectDot(px, py, pz, sizeFactor) {
-  var t2 = clamp(map(animTime.t, CHANGE_EVENT_TIME, 1, 0, 1), 0, 1);
-  var newCamZ = CAMERA_Z + ease(Math.pow(t2, 1.2), 1.8) * CAMERA_TRAVEL;
-  if (pz > newCamZ) {
-    var depth = pz - newCamZ;
-    var x = VIEW_ZOOM * px / depth;
-    var y = VIEW_ZOOM * py / depth;
-    var sw = 400 * sizeFactor / depth;
-    ctx.beginPath();
-    ctx.arc(x, y, Math.max(sw / 2, 0.3), 0, Math.PI * 2);
-    ctx.fill();
+function resizeCanvas() {
+  var dpr = window.devicePixelRatio || 1;
+  canvas.width = window.innerWidth * dpr;
+  canvas.height = window.innerHeight * dpr;
+  canvas.style.width = window.innerWidth + 'px';
+  canvas.style.height = window.innerHeight + 'px';
+  ctx.scale(dpr, dpr);
+  var total = Math.floor(MINIMUM_BEAMS * 1.5);
+  beams = [];
+  for (var i = 0; i < total; i++) {
+    beams.push(createBeam(canvas.width, canvas.height));
   }
 }
 
-// ── Star render ──────────────────────────────
-function renderStar(s, p) {
-  var sp = spiralPath(s.spiralLoc);
-  var q = p - s.spiralLoc;
-  if (q <= 0) return;
+resizeCanvas();
+window.addEventListener('resize', resizeCanvas);
 
-  var dp = clamp(4 * q, 0, 1);
-  var linE = dp, elE = easeOutElastic(dp), powE = dp * dp;
-  var easing;
-  if (dp < 0.3) easing = lerp(linE, powE, dp / 0.3);
-  else if (dp < 0.7) easing = lerp(powE, elE, (dp - 0.3) / 0.4);
-  else easing = elE;
-
-  var sx, sy;
-  if (dp < 0.3) {
-    sx = lerp(sp.x, sp.x + s.dx * 0.3, easing / 0.3);
-    sy = lerp(sp.y, sp.y + s.dy * 0.3, easing / 0.3);
-  } else if (dp < 0.7) {
-    var mp = (dp - 0.3) / 0.4;
-    var cs = Math.sin(mp * Math.PI) * s.rotDir * 1.5;
-    var bx = sp.x + s.dx * 0.3, by = sp.y + s.dy * 0.3;
-    var tx = sp.x + s.dx * 0.7, ty = sp.y + s.dy * 0.7;
-    var perpX = -s.dy * 0.4 * cs, perpY = s.dx * 0.4 * cs;
-    sx = lerp(bx, tx, mp) + perpX * mp;
-    sy = lerp(by, ty, mp) + perpY * mp;
-  } else {
-    var fp = (dp - 0.7) / 0.3;
-    var bx2 = sp.x + s.dx * 0.7, by2 = sp.y + s.dy * 0.7;
-    var td = s.distance * s.expRate * 1.5;
-    var sTurns = 1.2 * s.rotDir;
-    var sAngle = s.angle + sTurns * fp * Math.PI;
-    var tx2 = sp.x + td * Math.cos(sAngle);
-    var ty2 = sp.y + td * Math.sin(sAngle);
-    sx = lerp(bx2, tx2, fp);
-    sy = lerp(by2, ty2, fp);
-  }
-
-  var vx = (s.z - CAMERA_Z) * sx / VIEW_ZOOM;
-  var vy = (s.z - CAMERA_Z) * sy / VIEW_ZOOM;
-
-  var sm = 1.0;
-  if (dp < 0.6) sm = 1.0 + dp * 0.2;
-  else { var tt = (dp - 0.6) / 0.4; sm = 1.2 * (1 - tt) + s.finalSc * tt; }
-
-  projectDot(vx, vy, s.z, 8.5 * s.swf * sm);
-}
-
-// ── Render frame ─────────────────────────────
-function render() {
-  ctx.fillStyle = '#0a0a0a';
-  ctx.fillRect(0, 0, sz, sz);
-
+function drawBeam(beam) {
   ctx.save();
-  ctx.translate(sz / 2, sz / 2);
+  ctx.translate(beam.x, beam.y);
+  ctx.rotate(beam.angle * Math.PI / 180);
 
-  var t1 = clamp(map(animTime.t, 0, CHANGE_EVENT_TIME + 0.25, 0, 1), 0, 1);
-  var t2 = clamp(map(animTime.t, CHANGE_EVENT_TIME, 1, 0, 1), 0, 1);
+  var pulsingOpacity = beam.opacity * (0.8 + Math.sin(beam.pulse) * 0.2);
+  var gradient = ctx.createLinearGradient(0, 0, 0, beam.length);
+  gradient.addColorStop(0, 'hsla(' + beam.hue + ', 85%, 65%, 0)');
+  gradient.addColorStop(0.1, 'hsla(' + beam.hue + ', 85%, 65%, ' + (pulsingOpacity * 0.5) + ')');
+  gradient.addColorStop(0.4, 'hsla(' + beam.hue + ', 85%, 65%, ' + pulsingOpacity + ')');
+  gradient.addColorStop(0.6, 'hsla(' + beam.hue + ', 85%, 65%, ' + pulsingOpacity + ')');
+  gradient.addColorStop(0.9, 'hsla(' + beam.hue + ', 85%, 65%, ' + (pulsingOpacity * 0.5) + ')');
+  gradient.addColorStop(1, 'hsla(' + beam.hue + ', 85%, 65%, 0)');
 
-  ctx.rotate(-Math.PI * ease(t2, 2.7));
-
-  // Trail — gold with varying alpha
-  for (var i = 0; i < TRAIL_LEN; i++) {
-    var f = map(i, 0, TRAIL_LEN, 1.1, 0.1);
-    var sw = (1.3 * (1 - t1) + 3.0 * Math.sin(Math.PI * t1)) * f;
-    var alpha = clamp(f, 0.05, 0.9);
-    ctx.fillStyle = 'rgba(' + GOLD_R + ',' + GOLD_G + ',' + GOLD_B + ',' + alpha + ')';
-
-    var pt = t1 - 0.00015 * i;
-    var pos = spiralPath(pt);
-    var offset = { x: pos.x + 5, y: pos.y + 5 };
-
-    // Rotate between pos and offset
-    var mx = (pos.x + offset.x) / 2, my = (pos.y + offset.y) / 2;
-    var ddx = pos.x - mx, ddy = pos.y - my;
-    var ang = Math.atan2(ddy, ddx);
-    var o = (i % 2 === 0) ? -1 : 1;
-    var rr = Math.sqrt(ddx * ddx + ddy * ddy);
-    var pAnimT = Math.sin(animTime.t * Math.PI * 2) * 0.5 + 0.5;
-    var bounce = Math.sin(pAnimT * Math.PI) * 0.05 * (1 - pAnimT);
-    var rx = mx + rr * (1 + bounce) * Math.cos(ang + o * Math.PI * easeOutElastic(pAnimT));
-    var ry = my + rr * (1 + bounce) * Math.sin(ang + o * Math.PI * easeOutElastic(pAnimT));
-
-    ctx.beginPath();
-    ctx.arc(rx, ry, Math.max(sw / 2, 0.3), 0, Math.PI * 2);
-    ctx.fill();
-  }
-
-  // Stars — white-gold
-  ctx.fillStyle = 'rgba(255,245,230,0.85)';
-  for (var j = 0; j < stars.length; j++) {
-    renderStar(stars[j], t1);
-  }
-
-  // Start dot
-  if (animTime.t > CHANGE_EVENT_TIME) {
-    ctx.fillStyle = 'rgba(' + GOLD_R + ',' + GOLD_G + ',' + GOLD_B + ',1)';
-    var dy = CAMERA_Z * START_DOT_Y / VIEW_ZOOM;
-    projectDot(0, dy, CAMERA_TRAVEL, 2.5);
-  }
-
+  ctx.fillStyle = gradient;
+  ctx.fillRect(-beam.width / 2, 0, beam.width, beam.length);
   ctx.restore();
 }
 
-// ── GSAP timeline ────────────────────────────
-gsap.to(animTime, {
-  t: 1,
-  duration: 15,
-  repeat: -1,
-  ease: 'none',
-  onUpdate: render
-});
+function animate() {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.filter = 'blur(35px)';
 
+  for (var i = 0; i < beams.length; i++) {
+    var beam = beams[i];
+    beam.y -= beam.speed;
+    beam.pulse += beam.pulseSpeed;
+
+    if (beam.y + beam.length < -100) {
+      resetBeam(beam, i);
+    }
+    drawBeam(beam);
+  }
+
+  animFrame = requestAnimationFrame(animate);
+}
+
+animate();
 })();
 </script>
 </body>
