@@ -1,0 +1,286 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Explore — Tester.io Collection</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
+<style>
+/*═══════════════════════════════════════════════
+  Explore Page — Grid Gallery with Hover Reveals
+  Brutalist-meets-editorial aesthetic
+═══════════════════════════════════════════════*/
+:root {
+  --bg: #050505;
+  --text: #f0ede8;
+  --accent: #c8ff00;
+  --font-d: 'Syne', sans-serif;
+  --font-b: 'Space Mono', monospace;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{font-size:10px;-webkit-font-smoothing:antialiased;}
+body{
+  font-family:var(--font-b);background:var(--bg);color:var(--text);
+  min-height:100vh;overflow-x:hidden;
+}
+
+/* NAV */
+.nav{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  padding:2.4rem 4rem;display:flex;justify-content:space-between;align-items:center;
+  mix-blend-mode:difference;
+}
+.nav-logo{
+  font-family:var(--font-d);font-size:1.4rem;font-weight:800;
+  letter-spacing:.12em;text-transform:uppercase;color:#fff;text-decoration:none;
+}
+.nav-logo span{color:var(--accent);}
+.nav-back{
+  font-size:1.1rem;color:rgba(255,255,255,.5);text-decoration:none;
+  letter-spacing:.06em;transition:color .3s;display:flex;align-items:center;gap:.8rem;
+}
+.nav-back:hover{color:#fff;}
+.nav-back svg{width:1.6rem;height:1.6rem;stroke:currentColor;fill:none;stroke-width:1.5;}
+
+/* HERO */
+.hero{
+  height:60vh;display:flex;flex-direction:column;justify-content:flex-end;
+  padding:0 5vw 6rem;position:relative;
+}
+.hero-label{
+  font-size:.95rem;letter-spacing:.2em;text-transform:uppercase;
+  color:var(--accent);opacity:.7;margin-bottom:2rem;
+}
+.hero h1{
+  font-family:var(--font-d);font-size:clamp(5rem,10vw,10rem);
+  font-weight:800;line-height:.9;letter-spacing:-.04em;
+}
+.hero p{
+  font-size:1.5rem;color:rgba(255,255,255,.35);margin-top:2rem;max-width:500px;line-height:1.7;
+}
+.hero-line{
+  position:absolute;bottom:0;left:5vw;right:5vw;height:1px;
+  background:linear-gradient(90deg,var(--accent),transparent);
+}
+
+/* GRID */
+.grid-section{padding:8rem 5vw;}
+.grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:2px;
+}
+.card{
+  position:relative;overflow:hidden;cursor:pointer;
+  aspect-ratio:1/1;background:var(--bg);
+}
+.card-bg{
+  position:absolute;inset:0;
+  background-size:cover;background-position:center;
+  filter:grayscale(1) brightness(.3);
+  transition:filter .6s cubic-bezier(.22,1,.36,1),transform .6s cubic-bezier(.22,1,.36,1);
+}
+.card:hover .card-bg{
+  filter:grayscale(0) brightness(.7);
+  transform:scale(1.08);
+}
+.card-content{
+  position:relative;z-index:2;height:100%;
+  display:flex;flex-direction:column;justify-content:flex-end;
+  padding:3rem;
+}
+.card-num{
+  font-family:var(--font-b);font-size:1rem;
+  letter-spacing:.15em;color:var(--accent);opacity:0;
+  transform:translateY(10px);transition:all .4s .1s;
+}
+.card:hover .card-num{opacity:.7;transform:translateY(0);}
+.card-title{
+  font-family:var(--font-d);font-size:2.4rem;font-weight:700;
+  line-height:1.1;margin-top:.8rem;
+  opacity:0;transform:translateY(20px);transition:all .5s .15s;
+}
+.card:hover .card-title{opacity:1;transform:translateY(0);}
+.card-desc{
+  font-size:1.15rem;color:rgba(255,255,255,.5);line-height:1.6;
+  margin-top:1rem;max-width:280px;
+  opacity:0;transform:translateY(15px);transition:all .5s .25s;
+}
+.card:hover .card-desc{opacity:1;transform:translateY(0);}
+
+/* CARD BORDER FLASH */
+.card::after{
+  content:'';position:absolute;inset:0;z-index:3;
+  border:1px solid transparent;transition:border-color .4s;pointer-events:none;
+}
+.card:hover::after{border-color:rgba(200,255,0,.2);}
+
+/* MARQUEE */
+.marquee-section{
+  padding:6rem 0;overflow:hidden;border-top:1px solid rgba(255,255,255,.04);
+  border-bottom:1px solid rgba(255,255,255,.04);
+}
+.marquee-track{
+  display:flex;gap:4rem;
+  animation:slide 20s linear infinite;
+}
+.marquee-track span{
+  font-family:var(--font-d);font-size:6vw;font-weight:800;
+  letter-spacing:.02em;white-space:nowrap;
+  color:transparent;-webkit-text-stroke:1px rgba(255,255,255,.08);
+}
+@keyframes slide{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+
+/* CTA SECTION */
+.cta-section{
+  padding:12rem 5vw;text-align:center;
+}
+.cta-section h2{
+  font-family:var(--font-d);font-size:clamp(3rem,6vw,6rem);
+  font-weight:800;line-height:.95;letter-spacing:-.03em;
+  margin-bottom:2rem;
+}
+.cta-section p{
+  font-size:1.4rem;color:rgba(255,255,255,.35);max-width:480px;
+  margin:0 auto 4rem;line-height:1.7;
+}
+.cta-btn{
+  display:inline-block;padding:1.6rem 4.8rem;
+  font-family:var(--font-d);font-size:1.3rem;font-weight:700;
+  letter-spacing:.08em;text-transform:uppercase;text-decoration:none;
+  color:var(--bg);background:var(--accent);border-radius:.4rem;
+  transition:transform .3s,box-shadow .3s;
+}
+.cta-btn:hover{
+  transform:translateY(-2px);box-shadow:0 8px 30px rgba(200,255,0,.25);
+}
+
+/* FOOTER */
+.footer{
+  padding:4rem 5vw;border-top:1px solid rgba(255,255,255,.04);
+  display:flex;justify-content:space-between;align-items:center;
+}
+.footer-brand{
+  font-family:var(--font-d);font-size:1.2rem;font-weight:800;
+  letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.15);
+}
+.footer-brand span{color:var(--accent);opacity:.4;}
+.footer-copy{font-size:1rem;color:rgba(255,255,255,.12);letter-spacing:.04em;}
+
+/* RESPONSIVE */
+@media(max-width:900px){
+  .grid{grid-template-columns:repeat(2,1fr);}
+  .card-title{font-size:2rem;}
+}
+@media(max-width:520px){
+  .nav{padding:1.6rem 2rem;}
+  .hero{padding:0 6vw 4rem;height:50vh;}
+  .grid{grid-template-columns:1fr;}
+  .card{aspect-ratio:4/3;}
+  .card-content{padding:2.4rem;}
+  .cta-section{padding:8rem 6vw;}
+  .footer{flex-direction:column;gap:1rem;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav">
+  <a href="/" class="nav-logo">TESTER<span>.io</span></a>
+  <a href="product.html" class="nav-back">
+    <svg viewBox="0 0 24 24"><path d="M19 12H5M12 19l-7-7 7-7"/></svg>
+    Camera Dissection
+  </a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <span class="hero-label">Collection</span>
+  <h1>Explore<br>Creations</h1>
+  <p>A curated gallery of precision engineering dissections and product breakdowns.</p>
+  <div class="hero-line"></div>
+</section>
+
+<!-- GRID -->
+<section class="grid-section">
+  <div class="grid">
+
+    <div class="card">
+      <div class="card-bg" style="background-image:url('frames/frame_0015.webp')"></div>
+      <div class="card-content">
+        <span class="card-num">001</span>
+        <h3 class="card-title">Lens Assembly</h3>
+        <p class="card-desc">Multi-element optics aligned to sub-micron precision.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-bg" style="background-image:url('frames/frame_0035.webp')"></div>
+      <div class="card-content">
+        <span class="card-num">002</span>
+        <h3 class="card-title">Sensor Core</h3>
+        <p class="card-desc">48MP stacked BSI with dual-gain architecture.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-bg" style="background-image:url('frames/frame_0055.webp')"></div>
+      <div class="card-content">
+        <span class="card-num">003</span>
+        <h3 class="card-title">Stabilization</h3>
+        <p class="card-desc">Five-axis OIS for tripod-steady handheld shots.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-bg" style="background-image:url('frames/frame_0070.webp')"></div>
+      <div class="card-content">
+        <span class="card-num">004</span>
+        <h3 class="card-title">Housing</h3>
+        <p class="card-desc">Aerospace-grade alloy casing with thermal management.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-bg" style="background-image:url('frames/frame_0090.webp')"></div>
+      <div class="card-content">
+        <span class="card-num">005</span>
+        <h3 class="card-title">Circuit Board</h3>
+        <p class="card-desc">ISP with real-time computational photography pipeline.</p>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-bg" style="background-image:url('frames/frame_0110.webp')"></div>
+      <div class="card-content">
+        <span class="card-num">006</span>
+        <h3 class="card-title">Full Assembly</h3>
+        <p class="card-desc">Every component united in seamless precision.</p>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<section class="marquee-section">
+  <div class="marquee-track">
+    <span>PRECISION</span><span>ENGINEERING</span><span>DISSECTED</span>
+    <span>PRECISION</span><span>ENGINEERING</span><span>DISSECTED</span>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2>Ready to<br>See More?</h2>
+  <p>Watch the full camera dissection experience with scroll-driven frame animation.</p>
+  <a href="product.html" class="cta-btn">View Dissection</a>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <span class="footer-brand">TESTER<span>.io</span></span>
+  <span class="footer-copy">&copy; 2026 All rights reserved</span>
+</footer>
+
+</body>
+</html>
