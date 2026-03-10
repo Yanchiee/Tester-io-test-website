@@ -1,0 +1,693 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Tester.io — World Sights</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* ═══ DESIGN SYSTEM ═══ */
+:root {
+  --cl-black: #0a0a0a;
+  --cl-dark: #111111;
+  --cl-white: #fff;
+  --cl-gold: #C6A559;
+  --cl-gold-light: #E6B979;
+  --cl-gold-gradient: linear-gradient(135deg, #C6A559, #E6B979);
+  --ease-out-cubic: cubic-bezier(.215,.61,.355,1);
+  --ease-out-quint: cubic-bezier(.23,1,.32,1);
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+  font-size: 10px;
+  -webkit-font-smoothing: antialiased;
+  scroll-behavior: auto;
+}
+@media (min-width: 768px) {
+  html { font-size: clamp(6.4px, .625vw, 12px); }
+}
+
+body {
+  font-family: 'Montserrat', sans-serif;
+  background: var(--cl-black);
+  color: var(--cl-white);
+  line-height: 1.5;
+  overflow-x: hidden;
+}
+
+a { color: inherit; text-decoration: none; }
+.mono { font-family: 'IBM Plex Mono', monospace; }
+
+/* ═══ LOADER ═══ */
+#loader {
+  position: fixed; inset: 0; z-index: 9999;
+  background: var(--cl-black);
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  transition: opacity .8s var(--ease-out-cubic), visibility .8s;
+}
+#loader.done { opacity: 0; visibility: hidden; pointer-events: none; }
+
+.ld-status {
+  font-size: 1.2rem; font-weight: 500;
+  letter-spacing: .08em; color: rgba(255,255,255,.3);
+  text-transform: uppercase; margin-bottom: 2rem;
+  text-align: center; line-height: 2;
+}
+.ld-status span { color: var(--cl-gold); }
+
+.ld-wrap { width: min(60rem, 80vw); }
+.ld-track { width: 100%; height: 2px; background: rgba(255,255,255,.06); overflow: hidden; }
+.ld-fill { height: 100%; background: var(--cl-gold-gradient); width: 0%; transition: width .1s linear; }
+.ld-pct {
+  text-align: right; margin-top: 1rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 1.2rem; font-weight: 600;
+  color: var(--cl-gold); letter-spacing: .04em;
+}
+
+/* ═══ NAV ═══ */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 2rem 3rem;
+  background: rgba(10,10,10,.85);
+  backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(198,165,89,.08);
+}
+.nav-logo {
+  font-size: 1.6rem; font-weight: 800;
+  letter-spacing: .04em; text-transform: uppercase;
+}
+.nav-logo span {
+  background: var(--cl-gold-gradient);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.nav-back {
+  display: flex; align-items: center; gap: .8rem;
+  font-size: 1.1rem; font-weight: 500;
+  letter-spacing: .06em; text-transform: uppercase;
+  color: rgba(255,255,255,.5);
+  transition: color .3s;
+}
+.nav-back:hover { color: var(--cl-gold); }
+.nav-back svg { width: 1.4rem; height: 1.4rem; }
+
+/* ═══ SCROLL PROGRESS BAR ═══ */
+.scroll-progress {
+  position: fixed; top: 0; left: 0; z-index: 101;
+  height: 2px; width: 0%;
+  background: var(--cl-gold-gradient);
+  transition: width .05s linear;
+}
+
+/* ═══ HERO INTRO ═══ */
+.hero-intro {
+  min-height: 100vh;
+  display: flex; flex-direction: column;
+  align-items: center; justify-content: center;
+  text-align: center;
+  padding: 12rem 3rem 8rem;
+  position: relative;
+}
+.hero-intro::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 20rem;
+  background: linear-gradient(to bottom, transparent, var(--cl-black));
+  pointer-events: none;
+}
+.hero-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 1.1rem; font-weight: 500;
+  letter-spacing: .12em; text-transform: uppercase;
+  color: var(--cl-gold); margin-bottom: 2rem;
+  opacity: 0; transform: translateY(2rem);
+  animation: fadeUp .8s var(--ease-out-cubic) .3s forwards;
+}
+.hero-title {
+  font-size: clamp(4rem, 10vw, 12rem);
+  font-weight: 900; line-height: 1.05;
+  letter-spacing: -.02em;
+  opacity: 0; transform: translateY(3rem);
+  animation: fadeUp .8s var(--ease-out-cubic) .5s forwards;
+}
+.hero-title span {
+  display: block;
+  background: var(--cl-gold-gradient);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-subtitle {
+  font-size: clamp(1.4rem, 2vw, 1.8rem);
+  font-weight: 400; color: rgba(255,255,255,.5);
+  max-width: 50rem; margin-top: 2.5rem;
+  opacity: 0; transform: translateY(2rem);
+  animation: fadeUp .8s var(--ease-out-cubic) .7s forwards;
+}
+.scroll-hint {
+  margin-top: 5rem;
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 1rem; letter-spacing: .1em;
+  text-transform: uppercase; color: rgba(255,255,255,.25);
+  opacity: 0; animation: fadeUp .8s var(--ease-out-cubic) 1s forwards;
+}
+.scroll-hint::after {
+  content: '';
+  display: block; width: 1px; height: 4rem;
+  background: linear-gradient(to bottom, rgba(198,165,89,.4), transparent);
+  margin: 1rem auto 0;
+  animation: pulse 2s ease-in-out infinite;
+}
+
+@keyframes fadeUp {
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: .3; }
+  50% { opacity: 1; }
+}
+
+/* ═══ SCROLL ANIMATION SECTION ═══ */
+.scroll-container {
+  position: relative;
+  height: 500vh; /* scroll runway */
+}
+.sticky-wrapper {
+  position: sticky;
+  top: 0;
+  height: 100vh;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#frame-canvas,
+#eiffel-canvas {
+  position: absolute;
+  top: 0; left: 0;
+  width: 100vw;
+  height: 100vh;
+  object-fit: cover;
+}
+
+/* ═══ PHASE OVERLAYS ═══ */
+.phase-overlay {
+  position: absolute;
+  padding: 2.5rem 3rem;
+  background: rgba(10,10,10,.6);
+  backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(198,165,89,.15);
+  border-radius: 1.2rem;
+  max-width: 36rem;
+  opacity: 0;
+  transform: translateY(2rem);
+  transition: opacity .5s var(--ease-out-cubic), transform .5s var(--ease-out-cubic);
+  pointer-events: none;
+}
+.phase-overlay.visible {
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+}
+.phase-label {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 1rem; font-weight: 600;
+  letter-spacing: .1em; text-transform: uppercase;
+  color: var(--cl-gold); margin-bottom: .8rem;
+}
+.phase-title {
+  font-size: 2.2rem; font-weight: 700;
+  line-height: 1.2; margin-bottom: .8rem;
+}
+.phase-desc {
+  font-size: 1.3rem; color: rgba(255,255,255,.6);
+  line-height: 1.6;
+}
+
+#phase-1 { top: 15%; left: 5%; }
+#phase-2 { top: 20%; right: 5%; }
+#phase-3 { bottom: 20%; left: 5%; }
+#phase-4 { bottom: 15%; right: 5%; }
+
+@media (max-width: 768px) {
+  #phase-1, #phase-2, #phase-3, #phase-4 {
+    left: 5%; right: 5%; max-width: none;
+  }
+  #phase-1 { top: 8%; }
+  #phase-2 { top: auto; bottom: 8%; }
+  #phase-3 { top: 8%; bottom: auto; }
+  #phase-4 { top: auto; bottom: 8%; }
+}
+
+/* ═══ INFO SECTION ═══ */
+.info-section {
+  padding: clamp(8rem, 15vw, 16rem) 3rem;
+  text-align: center;
+  position: relative;
+}
+.info-section::before {
+  content: '';
+  position: absolute; top: 0; left: 50%;
+  transform: translateX(-50%);
+  width: 1px; height: 8rem;
+  background: linear-gradient(to bottom, transparent, rgba(198,165,89,.3));
+}
+.info-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(28rem, 1fr));
+  gap: 3rem;
+  max-width: 100rem;
+  margin: 5rem auto 0;
+}
+.info-card {
+  padding: 3.5rem;
+  background: rgba(255,255,255,.03);
+  border: 1px solid rgba(198,165,89,.1);
+  border-radius: 1.2rem;
+  text-align: left;
+  transition: border-color .3s, transform .3s;
+}
+.info-card:hover {
+  border-color: rgba(198,165,89,.3);
+  transform: translateY(-.5rem);
+}
+.info-card-num {
+  font-family: 'IBM Plex Mono', monospace;
+  font-size: 1rem; font-weight: 600;
+  color: var(--cl-gold); letter-spacing: .08em;
+  margin-bottom: 1.5rem;
+}
+.info-card-title {
+  font-size: 2rem; font-weight: 700;
+  margin-bottom: 1rem;
+}
+.info-card-text {
+  font-size: 1.3rem; color: rgba(255,255,255,.5);
+  line-height: 1.7;
+}
+
+/* ═══ BACK TO HOME ═══ */
+.back-home {
+  display: flex; align-items: center; justify-content: center;
+  padding: 6rem 3rem 8rem;
+}
+.back-home a {
+  display: inline-flex; align-items: center; gap: 1rem;
+  padding: 1.6rem 4rem;
+  font-size: 1.2rem; font-weight: 600;
+  letter-spacing: .06em; text-transform: uppercase;
+  border: 1px solid rgba(198,165,89,.3);
+  border-radius: 6rem;
+  color: var(--cl-gold);
+  transition: all .3s;
+}
+.back-home a:hover {
+  background: rgba(198,165,89,.1);
+  border-color: var(--cl-gold);
+}
+
+/* ═══ FOOTER ═══ */
+.ft {
+  padding: 3rem;
+  border-top: 1px solid rgba(255,255,255,.06);
+  text-align: center;
+  font-size: 1.1rem; color: rgba(255,255,255,.25);
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ LOADER ═══ -->
+<div id="loader">
+  <div class="ld-status">Loading Frames<br><span id="loadCount">0 / 0</span></div>
+  <div class="ld-wrap">
+    <div class="ld-track"><div class="ld-fill" id="loadFill"></div></div>
+    <div class="ld-pct" id="loadPct">0%</div>
+  </div>
+</div>
+
+<!-- ═══ SCROLL PROGRESS ═══ -->
+<div class="scroll-progress" id="scrollProgress"></div>
+
+<!-- ═══ NAV ═══ -->
+<nav class="nav">
+  <a href="index.html" class="nav-back">
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+    Back
+  </a>
+  <div class="nav-logo">Tester<span>.io</span></div>
+  <div class="mono" style="font-size:1rem;color:rgba(255,255,255,.3);letter-spacing:.08em;">WORLD SIGHTS</div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero-intro">
+  <div class="hero-label mono">Architectural Wonders</div>
+  <h1 class="hero-title">World<span>Sights</span></h1>
+  <p class="hero-subtitle">Scroll through iconic landmarks reimagined — from blueprint to reality, brought to life through immersive 3D animation.</p>
+  <div class="scroll-hint mono">Scroll to explore</div>
+</section>
+
+<!-- ═══ LA SAGRADA FAMILIA — SCROLL ANIMATION ═══ -->
+<section class="scroll-container" id="sagrada-scroll">
+  <div class="sticky-wrapper">
+    <canvas id="frame-canvas"></canvas>
+
+    <!-- Phase overlays -->
+    <div class="phase-overlay" id="phase-1">
+      <div class="phase-label mono">Phase 01 — Blueprint</div>
+      <div class="phase-title">The Vision</div>
+      <div class="phase-desc">Antoni Gaudi's original blueprint — a masterwork of Gothic and Art Nouveau architecture, conceived in 1882.</div>
+    </div>
+
+    <div class="phase-overlay" id="phase-2">
+      <div class="phase-label mono">Phase 02 — Foundation</div>
+      <div class="phase-title">Taking Shape</div>
+      <div class="phase-desc">The structural skeleton emerges. Hyperbolic paraboloids and ruled surfaces form an organic framework unlike anything before.</div>
+    </div>
+
+    <div class="phase-overlay" id="phase-3">
+      <div class="phase-label mono">Phase 03 — Construction</div>
+      <div class="phase-title">Rising Higher</div>
+      <div class="phase-desc">Eighteen towers ascend — twelve for the Apostles, four for the Evangelists, one for the Virgin Mary, and the tallest for Jesus Christ.</div>
+    </div>
+
+    <div class="phase-overlay" id="phase-4">
+      <div class="phase-label mono">Phase 04 — Completion</div>
+      <div class="phase-title">The Masterpiece</div>
+      <div class="phase-desc">After over 140 years of construction, the basilica stands complete — a testament to human ambition and artistic genius.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ INFO SECTION ═══ -->
+<section class="info-section">
+  <h2 style="font-size:clamp(3rem,6vw,6rem);font-weight:800;line-height:1.1;">
+    La Sagrada<br>
+    <span style="background:var(--cl-gold-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Familia</span>
+  </h2>
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-card-num mono">001</div>
+      <div class="info-card-title">Architect</div>
+      <div class="info-card-text">Designed by Antoni Gaudi, who dedicated 43 years of his life to the project, the last 15 exclusively.</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-num mono">002</div>
+      <div class="info-card-title">Construction</div>
+      <div class="info-card-text">Began in 1882 and still under construction — one of the longest-running architectural projects in history.</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-num mono">003</div>
+      <div class="info-card-title">Height</div>
+      <div class="info-card-text">The tallest tower (Jesus Christ) will reach 172.5 meters, making it the tallest religious building in Europe.</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-num mono">004</div>
+      <div class="info-card-title">UNESCO Heritage</div>
+      <div class="info-card-text">Designated a UNESCO World Heritage Site in 1984, recognizing its outstanding universal architectural value.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ EIFFEL TOWER — SCROLL ANIMATION ═══ -->
+<section class="scroll-container" id="eiffel-scroll">
+  <div class="sticky-wrapper">
+    <canvas id="eiffel-canvas"></canvas>
+
+    <div class="phase-overlay" id="eiffel-phase-1">
+      <div class="phase-label mono">Phase 01 — Blueprint</div>
+      <div class="phase-title">The Iron Lady</div>
+      <div class="phase-desc">Gustave Eiffel's radical vision — a 300-metre iron lattice tower, designed as the entrance arch for the 1889 World's Fair.</div>
+    </div>
+
+    <div class="phase-overlay" id="eiffel-phase-2">
+      <div class="phase-label mono">Phase 02 — Framework</div>
+      <div class="phase-title">Engineering Marvel</div>
+      <div class="phase-desc">18,038 pieces of wrought iron joined by 2.5 million rivets. The tower took just 2 years, 2 months, and 5 days to build.</div>
+    </div>
+
+    <div class="phase-overlay" id="eiffel-phase-3">
+      <div class="phase-label mono">Phase 03 — Assembly</div>
+      <div class="phase-title">Rising Above Paris</div>
+      <div class="phase-desc">Three observation levels connected by elevators and stairs. At completion, it was the tallest man-made structure in the world.</div>
+    </div>
+
+    <div class="phase-overlay" id="eiffel-phase-4">
+      <div class="phase-label mono">Phase 04 — Icon</div>
+      <div class="phase-title">Symbol of France</div>
+      <div class="phase-desc">From controversial structure to global icon — the most-visited paid monument in the world, welcoming nearly 7 million visitors annually.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ EIFFEL INFO SECTION ═══ -->
+<section class="info-section">
+  <h2 style="font-size:clamp(3rem,6vw,6rem);font-weight:800;line-height:1.1;">
+    Eiffel<br>
+    <span style="background:var(--cl-gold-gradient);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Tower</span>
+  </h2>
+  <div class="info-grid">
+    <div class="info-card">
+      <div class="info-card-num mono">001</div>
+      <div class="info-card-title">Engineer</div>
+      <div class="info-card-text">Designed by Gustave Eiffel's engineering company. The structural calculations were done by Maurice Koechlin and Emile Nouguier.</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-num mono">002</div>
+      <div class="info-card-title">Construction</div>
+      <div class="info-card-text">Built from 1887 to 1889 for the Exposition Universelle — completed in a record 26 months with 300 workers on site.</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-num mono">003</div>
+      <div class="info-card-title">Height</div>
+      <div class="info-card-text">Standing at 330 metres including antennas, it remained the world's tallest structure for 41 years until the Chrysler Building.</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-num mono">004</div>
+      <div class="info-card-title">Weight</div>
+      <div class="info-card-text">The iron structure weighs 7,300 tonnes. It is repainted every 7 years, requiring 60 tonnes of paint across three graduated shades.</div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ BACK HOME ═══ -->
+<div class="back-home">
+  <a href="index.html">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M19 12H5"/><path d="m12 19-7-7 7-7"/></svg>
+    Back to Home
+  </a>
+</div>
+
+<footer class="ft">
+  <p>&copy; 2026 Tester.io — World Sights Collection</p>
+</footer>
+
+<!-- ═══ SCROLL ANIMATION ENGINE ═══ -->
+<script>
+(function() {
+  'use strict';
+
+  const BATCH_SIZE = 15;
+
+  // ── ANIMATION CONFIGS ──
+  const animations = [
+    {
+      id: 'sagrada',
+      canvasId: 'frame-canvas',
+      containerId: 'sagrada-scroll',
+      framePath: 'sights-frames/frame-',
+      frameExt: '.webp',
+      totalFrames: 120,
+      srcW: 720, srcH: 1280,
+      phases: [
+        { id: 'phase-1', start: 0.05, end: 0.22 },
+        { id: 'phase-2', start: 0.26, end: 0.44 },
+        { id: 'phase-3', start: 0.48, end: 0.66 },
+        { id: 'phase-4', start: 0.70, end: 0.90 },
+      ]
+    },
+    {
+      id: 'eiffel',
+      canvasId: 'eiffel-canvas',
+      containerId: 'eiffel-scroll',
+      framePath: 'eiffel-frames/frame-',
+      frameExt: '.webp',
+      totalFrames: 120,
+      srcW: 720, srcH: 1280,
+      phases: [
+        { id: 'eiffel-phase-1', start: 0.05, end: 0.22 },
+        { id: 'eiffel-phase-2', start: 0.26, end: 0.44 },
+        { id: 'eiffel-phase-3', start: 0.48, end: 0.66 },
+        { id: 'eiffel-phase-4', start: 0.70, end: 0.90 },
+      ]
+    }
+  ];
+
+  // ── LOADER ELEMENTS ──
+  const loader = document.getElementById('loader');
+  const loadFill = document.getElementById('loadFill');
+  const loadPct = document.getElementById('loadPct');
+  const loadCount = document.getElementById('loadCount');
+
+  // ── PRE-PROCESS: remove black background from a loaded image ──
+  const _tmpCanvas = document.createElement('canvas');
+  const _tmpCtx = _tmpCanvas.getContext('2d');
+
+  function removeBlackBG(img, w, h) {
+    _tmpCanvas.width = w;
+    _tmpCanvas.height = h;
+    _tmpCtx.clearRect(0, 0, w, h);
+    _tmpCtx.drawImage(img, 0, 0, w, h);
+    const imageData = _tmpCtx.getImageData(0, 0, w, h);
+    const d = imageData.data;
+    for (let i = 0; i < d.length; i += 4) {
+      const brightness = d[i] * 0.299 + d[i+1] * 0.587 + d[i+2] * 0.114;
+      if (brightness < 28) {
+        d[i+3] = 0;
+      } else if (brightness < 50) {
+        // Feather edge for smooth blending
+        d[i+3] = Math.round(((brightness - 28) / 22) * 255);
+      }
+    }
+    _tmpCtx.putImageData(imageData, 0, 0);
+
+    const processed = new Image();
+    processed.src = _tmpCanvas.toDataURL();
+    return processed;
+  }
+
+  // ── LOAD A SINGLE FRAME (deferred — returns a loader function) ──
+  function createFrameLoader(anim, index) {
+    return function() {
+      return new Promise((resolve) => {
+        const img = new Image();
+        const num = String(index + 1).padStart(4, '0');
+        img.src = anim.framePath + num + anim.frameExt;
+        img.onload = () => {
+          const processed = removeBlackBG(img, anim.srcW, anim.srcH);
+          processed.onload = () => { anim.frames[index] = processed; resolve(); };
+          processed.onerror = () => { anim.frames[index] = img; resolve(); };
+          // If already loaded from data URL
+          if (processed.complete) { anim.frames[index] = processed; resolve(); }
+        };
+        img.onerror = () => { anim.frames[index] = null; resolve(); };
+      });
+    };
+  }
+
+  // ── BATCH PRELOAD ALL ──
+  async function preloadAll() {
+    // Build deferred loaders for all animations
+    const loaders = [];
+    animations.forEach(anim => {
+      anim.frames = [];
+      for (let i = 0; i < anim.totalFrames; i++) {
+        loaders.push(createFrameLoader(anim, i));
+      }
+    });
+
+    const total = loaders.length;
+    loadCount.textContent = '0 / ' + total;
+    let loaded = 0;
+
+    for (let i = 0; i < total; i += BATCH_SIZE) {
+      const batch = loaders.slice(i, i + BATCH_SIZE).map(fn => fn());
+      await Promise.all(batch);
+      loaded = Math.min(i + BATCH_SIZE, total);
+
+      const pct = Math.round((loaded / total) * 100);
+      loadFill.style.width = pct + '%';
+      loadPct.textContent = pct + '%';
+      loadCount.textContent = loaded + ' / ' + total;
+    }
+
+    loader.classList.add('done');
+    animations.forEach(initAnim);
+  }
+
+  // ── INIT ONE SCROLL ANIMATION ──
+  function initAnim(anim) {
+    const canvas = document.getElementById(anim.canvasId);
+    const ctx = canvas.getContext('2d');
+    const container = document.getElementById(anim.containerId);
+    const progressBar = document.getElementById('scrollProgress');
+
+    // Resolve phase elements
+    const phases = anim.phases.map(p => ({
+      el: document.getElementById(p.id), start: p.start, end: p.end
+    }));
+
+    let currentFrame = 0;
+    let drawnFrame = -1;
+
+    // Size canvas to viewport
+    let fw, fh;
+    function resize() {
+      fw = window.innerWidth;
+      fh = window.innerHeight;
+      canvas.width = fw;
+      canvas.height = fh;
+      drawnFrame = -1; // force redraw
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function getProgress() {
+      const rect = container.getBoundingClientRect();
+      return Math.max(0, Math.min(1, -rect.top / (rect.height - window.innerHeight)));
+    }
+
+    function drawContain(img) {
+      const ratio = Math.min(fw / anim.srcW, fh / anim.srcH);
+      const dw = anim.srcW * ratio;
+      const dh = anim.srcH * ratio;
+      const dx = (fw - dw) / 2;
+      const dy = (fh - dh) / 2;
+      ctx.clearRect(0, 0, fw, fh);
+      ctx.drawImage(img, dx, dy, dw, dh);
+    }
+
+    window.addEventListener('scroll', function() {
+      const progress = getProgress();
+      currentFrame = Math.min(Math.floor(progress * anim.totalFrames), anim.totalFrames - 1);
+
+      for (const phase of phases) {
+        if (progress >= phase.start && progress <= phase.end) {
+          phase.el.classList.add('visible');
+        } else {
+          phase.el.classList.remove('visible');
+        }
+      }
+
+      // Global progress bar
+      const pageProgress = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+      progressBar.style.width = (pageProgress * 100) + '%';
+    }, { passive: true });
+
+    function tick() {
+      if (currentFrame !== drawnFrame && anim.frames[currentFrame]) {
+        drawContain(anim.frames[currentFrame]);
+        drawnFrame = currentFrame;
+      }
+      requestAnimationFrame(tick);
+    }
+
+    if (anim.frames[0]) {
+      drawContain(anim.frames[0]);
+      drawnFrame = 0;
+    }
+    tick();
+  }
+
+  // ── KICK OFF ──
+  preloadAll();
+
+})();
+</script>
+</body>
+</html>
