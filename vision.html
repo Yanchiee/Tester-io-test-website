@@ -13,14 +13,16 @@
 :root {
   --bg: #0a0a0a;
   --bg-card: #111111;
-  --accent: #c8ff00;
-  --accent-dim: rgba(200,255,0,.12);
-  --accent-glow: rgba(200,255,0,.3);
+  --accent: #C6A559;
+  --accent-light: #E6B979;
+  --accent-dim: rgba(198,165,89,.12);
+  --accent-glow: rgba(198,165,89,.3);
   --gold: #C6A559;
   --gold-dim: rgba(198,165,89,.1);
   --gold-glow: rgba(198,165,89,.25);
+  --gold-gradient: linear-gradient(135deg, #C6A559, #E6B979);
   --text: #f0ede8;
-  --text-dim: rgba(240,237,232,.35);
+  --text-dim: rgba(240,237,232,.55);
   --font-display: 'Syne', sans-serif;
   --font-body: 'Space Mono', monospace;
 }
@@ -64,10 +66,10 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
     0deg,
     transparent,
     transparent 2px,
-    rgba(0,0,0,.03) 2px,
-    rgba(0,0,0,.03) 4px
+    rgba(0,0,0,.02) 2px,
+    rgba(0,0,0,.02) 4px
   );
-  opacity: .6;
+  opacity: .25;
 }
 
 /*─── GRID OVERLAY ─────────────────────────*/
@@ -76,8 +78,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   pointer-events: none;
   opacity: .04;
   background-image:
-    linear-gradient(var(--accent) 1px, transparent 1px),
-    linear-gradient(90deg, var(--accent) 1px, transparent 1px);
+    linear-gradient(var(--gold) 1px, transparent 1px),
+    linear-gradient(90deg, var(--gold) 1px, transparent 1px);
   background-size: 60px 60px;
   mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 20%, transparent 70%);
   -webkit-mask-image: radial-gradient(ellipse 60% 50% at 50% 50%, black 20%, transparent 70%);
@@ -87,29 +89,30 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .site-header {
   position: fixed; top: 0; left: 0; right: 0; z-index: 500;
   padding: 2rem 4rem;
-  mix-blend-mode: difference;
 }
 .site-header nav { display: flex; align-items: center; justify-content: space-between; }
 .nav-logo {
   font-family: var(--font-display);
   font-size: 1.4rem; font-weight: 800;
-  letter-spacing: .12em; color: #fff;
+  letter-spacing: .12em;
+  background: var(--gold-gradient);
+  -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+  background-clip: text;
   text-transform: uppercase;
 }
-.nav-logo span { color: var(--accent); }
+.nav-logo span { -webkit-text-fill-color: var(--accent-light); }
 
 /*─── HAMBURGER ────────────────────────────*/
 .ham-btn {
   width: 4.8rem; height: 4rem;
-  border-radius: .6rem; border: 1px solid rgba(200,255,0,.2);
+  border-radius: .6rem; border: 1px solid rgba(198,165,89,.2);
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: .4rem;
   background: rgba(10,10,10,.85); backdrop-filter: blur(16px);
   position: relative; z-index: 600;
   transition: border-color .3s;
-  mix-blend-mode: normal;
 }
 .ham-btn span {
-  display: block; width: 1.6rem; height: 1.5px; background: var(--accent);
+  display: block; width: 1.6rem; height: 1.5px; background: var(--gold);
   transition: transform .4s cubic-bezier(.215,.61,.355,1), opacity .3s;
 }
 .ham-btn.open span:nth-child(1) { transform: translateY(.32rem) rotate(45deg); }
@@ -125,7 +128,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   backdrop-filter: blur(30px);
   border: 1px solid var(--accent-dim);
   border-radius: .8rem;
-  box-shadow: 0 1.2rem 4rem rgba(0,0,0,.6), 0 0 40px rgba(200,255,0,.05);
+  box-shadow: 0 1.2rem 4rem rgba(0,0,0,.6), 0 0 40px rgba(198,165,89,.05);
   padding: .8rem;
   opacity: 0; visibility: hidden;
   transform: translateY(-.8rem) scale(.97);
@@ -138,8 +141,8 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   font-family: var(--font-body); font-size: 1.2rem;
   color: rgba(255,255,255,.6); transition: background .25s, color .25s;
 }
-.dm-link:hover { background: var(--accent-dim); color: var(--accent); }
-.dm-divider { height: 1px; background: rgba(200,255,0,.08); margin: .3rem 1.4rem; }
+.dm-link:hover { background: var(--gold-dim); color: var(--gold); }
+.dm-divider { height: 1px; background: rgba(198,165,89,.08); margin: .3rem 1.4rem; }
 
 /*─── HERO ─────────────────────────────────*/
 .hero {
@@ -154,7 +157,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .hero::before {
   content: '';
   position: absolute; inset: 0;
-  background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(10,10,10,.6) 0%, rgba(10,10,10,.92) 100%);
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, rgba(10,10,10,.4) 0%, rgba(10,10,10,.85) 100%);
   z-index: -1;
 }
 
@@ -189,12 +192,12 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   pointer-events: none;
 }
 .glitch::before {
-  color: var(--accent);
+  color: var(--accent-light);
   clip-path: polygon(0 0, 100% 0, 100% 35%, 0 35%);
   animation: glitchTop 3s infinite linear alternate-reverse;
 }
 .glitch::after {
-  color: var(--accent);
+  color: var(--accent-light);
   clip-path: polygon(0 65%, 100% 65%, 100% 100%, 0 100%);
   animation: glitchBottom 2.5s infinite linear alternate-reverse;
 }
@@ -216,7 +219,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 
 .hero-sub {
   font-size: 1.5rem; line-height: 1.8;
-  color: var(--text-dim);
+  color: rgba(240,237,232,.65);
   max-width: 52rem;
   margin-top: 3rem;
   opacity: 0;
@@ -225,14 +228,14 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .hero-scroll {
   position: absolute; bottom: 4rem;
   display: flex; flex-direction: column; align-items: center; gap: 1rem;
-  font-size: 1rem; color: var(--accent);
+  font-size: 1rem; color: var(--gold);
   letter-spacing: .15em; text-transform: uppercase;
   opacity: 0;
   animation: pulse-down 2s ease-in-out infinite;
 }
 .hero-scroll .line {
   width: 1px; height: 4rem;
-  background: linear-gradient(to bottom, var(--accent), transparent);
+  background: linear-gradient(to bottom, var(--gold), transparent);
 }
 @keyframes pulse-down {
   0%, 100% { transform: translateY(0); }
@@ -244,7 +247,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   position: absolute;
   width: 50vw; height: 50vw;
   max-width: 700px; max-height: 700px;
-  border: 1px solid var(--accent-dim);
+  border: 1px solid var(--gold-dim);
   border-radius: 50%;
   opacity: 0;
   animation: hexSpin 40s linear infinite;
@@ -252,13 +255,13 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .hex-ring::before {
   content: '';
   position: absolute; inset: 30px;
-  border: 1px dashed rgba(232,197,71,.08);
+  border: 1px dashed rgba(198,165,89,.08);
   border-radius: 50%;
 }
 .hex-ring::after {
   content: '';
   position: absolute; inset: 60px;
-  border: 1px solid rgba(200,255,0,.04);
+  border: 1px solid rgba(198,165,89,.06);
   border-radius: 50%;
 }
 @keyframes hexSpin { to { transform: rotate(360deg); } }
@@ -283,7 +286,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .holo-text .tag {
   font-family: var(--font-body);
   font-size: 1rem; letter-spacing: .25em;
-  text-transform: uppercase; color: var(--accent);
+  text-transform: uppercase; color: var(--gold);
   margin-bottom: 2rem; display: block;
 }
 .holo-text h2 {
@@ -295,7 +298,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 .holo-text p {
   font-size: 1.4rem; line-height: 1.9;
-  color: var(--text-dim);
+  color: rgba(240,237,232,.65);
   max-width: 420px;
 }
 
@@ -309,17 +312,17 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 .holo-frame {
   position: absolute; inset: 0;
-  border: 1px solid var(--accent-dim);
+  border: 1px solid var(--gold-dim);
   border-radius: 50%;
   animation: holoPulse 4s ease-in-out infinite;
 }
 .holo-frame:nth-child(2) {
-  inset: 15%; border-color: rgba(232,197,71,.1);
+  inset: 15%; border-color: rgba(198,165,89,.1);
   animation-delay: -1s;
   animation-duration: 3.5s;
 }
 .holo-frame:nth-child(3) {
-  inset: 30%; border-color: var(--accent-dim);
+  inset: 30%; border-color: var(--gold-dim);
   animation-delay: -2s;
   animation-duration: 3s;
 }
@@ -335,19 +338,19 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   width: 65%; height: 65%;
   object-fit: contain;
   border-radius: 50%;
-  filter: drop-shadow(0 0 40px var(--accent-glow)) drop-shadow(0 0 80px rgba(200,255,0,.08));
+  filter: drop-shadow(0 0 40px var(--gold-glow)) drop-shadow(0 0 80px rgba(198,165,89,.08));
   animation: coreGlow 3s ease-in-out infinite;
 }
 @keyframes coreGlow {
-  0%, 100% { filter: drop-shadow(0 0 40px var(--accent-glow)) drop-shadow(0 0 80px rgba(200,255,0,.08)); }
-  50% { filter: drop-shadow(0 0 60px var(--accent-glow)) drop-shadow(0 0 120px rgba(200,255,0,.12)); }
+  0%, 100% { filter: drop-shadow(0 0 40px var(--gold-glow)) drop-shadow(0 0 80px rgba(198,165,89,.08)); }
+  50% { filter: drop-shadow(0 0 60px var(--gold-glow)) drop-shadow(0 0 120px rgba(198,165,89,.12)); }
 }
 
 .holo-data {
   position: absolute;
   font-family: var(--font-body);
   font-size: 1rem;
-  color: var(--accent);
+  color: var(--gold);
   letter-spacing: .06em;
   opacity: .5;
   white-space: nowrap;
@@ -383,7 +386,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .section-specs::before {
   content: '';
   position: absolute; inset: 0;
-  background: linear-gradient(180deg, var(--bg) 0%, rgba(10,10,10,.88) 15%, rgba(10,10,10,.88) 85%, var(--bg) 100%);
+  background: linear-gradient(180deg, var(--bg) 0%, rgba(10,10,10,.82) 15%, rgba(10,10,10,.82) 85%, var(--bg) 100%);
 }
 .specs-header {
   position: relative;
@@ -393,7 +396,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 .specs-header .tag {
   font-family: var(--font-body);
-  font-size: 1rem; letter-spacing: .25em;
+  font-size: 1.1rem; letter-spacing: .25em;
   text-transform: uppercase; color: var(--gold);
   margin-bottom: 2rem; display: block;
 }
@@ -413,7 +416,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 .spec-card {
   background: var(--bg-card);
-  border: 1px solid rgba(200,255,0,.06);
+  border: 1px solid rgba(198,165,89,.08);
   border-radius: 1.2rem;
   padding: 4rem 3rem;
   text-align: center;
@@ -424,14 +427,14 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   transition: border-color .4s, box-shadow .4s;
 }
 .spec-card:hover {
-  border-color: var(--accent-dim);
-  box-shadow: 0 0 40px rgba(200,255,0,.06);
+  border-color: var(--gold-dim);
+  box-shadow: 0 0 40px rgba(198,165,89,.06);
 }
 .spec-card::before {
   content: '';
   position: absolute; top: 0; left: 0; right: 0;
   height: 2px;
-  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  background: linear-gradient(90deg, transparent, var(--gold), transparent);
   opacity: 0;
   transition: opacity .4s;
 }
@@ -440,24 +443,24 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .spec-icon {
   width: 4.8rem; height: 4.8rem;
   margin: 0 auto 2.4rem;
-  border: 1px solid var(--accent-dim);
+  border: 1px solid var(--gold-dim);
   border-radius: .8rem;
   display: flex; align-items: center; justify-content: center;
-  color: var(--accent);
+  color: var(--gold);
   font-size: 2rem;
 }
 .spec-value {
   font-family: var(--font-display);
   font-size: clamp(3.6rem, 4vw, 5rem);
   font-weight: 800; line-height: 1;
-  color: var(--accent);
+  color: var(--gold);
   margin-bottom: .6rem;
-  text-shadow: 0 0 30px var(--accent-glow);
+  text-shadow: 0 0 30px var(--gold-glow);
 }
 .spec-unit {
   font-family: var(--font-body);
   font-size: 1.3rem;
-  color: var(--text-dim);
+  color: rgba(240,237,232,.6);
   letter-spacing: .06em;
   margin-bottom: 1.6rem;
 }
@@ -466,7 +469,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   font-size: 1rem;
   letter-spacing: .12em;
   text-transform: uppercase;
-  color: rgba(255,255,255,.2);
+  color: rgba(255,255,255,.35);
 }
 
 /*─── GALLERY SECTION ──────────────────────*/
@@ -482,7 +485,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .gallery-header .tag {
   font-family: var(--font-body);
   font-size: 1rem; letter-spacing: .25em;
-  text-transform: uppercase; color: var(--accent);
+  text-transform: uppercase; color: var(--gold);
   margin-bottom: 2rem; display: block;
 }
 .gallery-header h2 {
@@ -504,14 +507,14 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   overflow: hidden;
   aspect-ratio: 1;
   background: var(--bg-card);
-  border: 1px solid rgba(200,255,0,.05);
+  border: 1px solid rgba(198,165,89,.06);
   opacity: 0;
   transform: translateY(50px);
   transition: border-color .4s, box-shadow .4s;
 }
 .gallery-item:hover {
-  border-color: rgba(200,255,0,.12);
-  box-shadow: 0 0 30px rgba(200,255,0,.05);
+  border-color: rgba(198,165,89,.15);
+  box-shadow: 0 0 30px rgba(198,165,89,.06);
 }
 .gallery-item:nth-child(1) {
   grid-column: 1 / 3;
@@ -536,7 +539,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   background: linear-gradient(to top, rgba(5,5,8,.9), transparent);
   font-family: var(--font-body);
   font-size: 1.1rem;
-  color: var(--text-dim);
+  color: rgba(240,237,232,.6);
   letter-spacing: .06em;
 }
 
@@ -568,7 +571,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 }
 .cta-inner p {
   font-size: 1.4rem; line-height: 1.8;
-  color: var(--text-dim);
+  color: rgba(240,237,232,.6);
   margin-bottom: 4rem;
 }
 .cta-btn {
@@ -578,16 +581,16 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   font-size: 1.3rem; font-weight: 700;
   letter-spacing: .1em; text-transform: uppercase;
   color: var(--bg);
-  background: var(--accent);
+  background: var(--gold-gradient);
   border-radius: .5rem;
   position: relative;
   overflow: hidden;
   transition: transform .3s, box-shadow .3s;
-  box-shadow: 0 0 30px var(--accent-glow);
+  box-shadow: 0 0 30px var(--gold-glow);
 }
 .cta-btn:hover {
   transform: translateY(-3px);
-  box-shadow: 0 0 50px var(--accent-glow), 0 8px 30px rgba(200,255,0,.2);
+  box-shadow: 0 0 50px var(--gold-glow), 0 8px 30px rgba(198,165,89,.2);
 }
 .cta-btn::after {
   content: '';
@@ -603,7 +606,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 /* CTA decorative rings */
 .cta-ring {
   position: absolute;
-  border: 1px solid var(--accent-dim);
+  border: 1px solid var(--gold-dim);
   border-radius: 50%;
   pointer-events: none;
 }
@@ -617,7 +620,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   width: 700px; height: 700px;
   top: 50%; left: 50%;
   transform: translate(-50%, -50%);
-  border-color: rgba(232,197,71,.05);
+  border-color: rgba(198,165,89,.06);
   opacity: .1;
 }
 
@@ -625,7 +628,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
 .site-footer {
   position: relative; z-index: 10;
   padding: 4rem 5vw;
-  border-top: 1px solid rgba(200,255,0,.06);
+  border-top: 1px solid rgba(198,165,89,.08);
 }
 .footer-inner {
   display: flex; justify-content: space-between; align-items: center;
@@ -636,9 +639,9 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   letter-spacing: .12em; text-transform: uppercase;
   color: rgba(255,255,255,.2);
 }
-.footer-brand span { color: var(--accent); opacity: .4; }
+.footer-brand span { color: var(--gold); opacity: .5; }
 .footer-copy {
-  font-size: 1.1rem; color: rgba(255,255,255,.12);
+  font-size: 1.1rem; color: rgba(255,255,255,.2);
   letter-spacing: .04em;
 }
 
@@ -647,7 +650,7 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   width: 100%; max-width: 1200px;
   margin: 0 auto;
   height: 1px;
-  background: linear-gradient(90deg, transparent, var(--accent-dim), rgba(232,197,71,.08), transparent);
+  background: linear-gradient(90deg, transparent, rgba(198,165,89,.15), rgba(198,165,89,.08), transparent);
   position: relative; z-index: 10;
 }
 
